@@ -1,0 +1,8 @@
+=====================================================================================
+==										=====
+	Copy Dua Folder itu ke folder vendor\crocodicstudio\crudbooster\src
+==										=====
+=====================================================================================
+
+Sama Ini gan jngn edit-edit module Pengalaman Perusahaan ya, Soalnya bakal Error karena 
+datanya ketimpa data yang baru harus di setting manual di COntrollernya, Nuhuns

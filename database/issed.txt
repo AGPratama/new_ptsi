@@ -1,0 +1,1 @@
+php artisan iseed cms_apicustom,cms_apikey,cms_dashboard,cms_email_queues,cms_email_templates,cms_logs,cms_menus,cms_menus_privileges,cms_moduls,cms_notifications,cms_privileges,cms_privileges_roles,cms_settings,cms_statistics,cms_statistic_components,cms_users,enumeration,migrations,pelanggan,pengalaman_perusahaan,peralatan,siswa,surat_ijin_usaha,syarat_kualifikasi,tenaga_kerja

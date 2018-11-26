@@ -1,0 +1,106 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading panel-surveyor">
+                <h3 class="panel-title">Master Syarat Kualifikasi</h3>
+                <button type="button" class="toast-close-button pull-right" data-dismiss="dialog" ng-click="$close()">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" ng-submit="submit()">
+                    <div class="col-sm-12 no-padding">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-3">Syarat Kualifikasi</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" ng-model="form.nama" ng-readonly="!control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 no-padding">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-12">
+                                <input type="checkbox" ng-model="form.is_dokumen" ng-disabled="!control"> Document
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group row clearfix">
+                            <label class="col-sm-3"><b>Field Of Syarat Kualifikasi</b></label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-custom" ng-click="addDetails()" type="button" ng-disabled="!control || form.is_dokumen">Add</button>
+                                <label style="line-height: 32px;">
+                                    <input ng-readonly="!control || form.is_dokumen" type="number" ng-model="$parent.DetailsRow" ng-readonly="!control" class="form-control pull-left custom-length" style="width:65px;">&nbsp;Rows
+                                </label>
+                            </div>
+                            <div class="col-md-12">
+                                <table class="table table-hover table-bordered custom-table">
+                                    <thead>
+                                        <tr class="sortable">
+                                            <th class="wd44">No</th>
+                                            <th>Field Name</th>
+                                            <th style="width:225px;">Input Type</th>
+                                            <th>Sequence</th>
+                                            <th class="wd44">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="s in form.details">
+                                            <td class="text-center v-middle"><%$index+1%></td>
+                                            <td class="input-table">
+                                                <input type="text" class="form-control free-text" ng-model="form.details[$index].field_name" ng-readonly="!control || form.is_dokumen" required>
+                                            </td>
+                                            <td class="input-table">
+                                                <ui-select ng-model="form.details[$index].InputType" lass="form-control" theme="bootstrap"  ng-disabled="!control || form.is_dokumen">
+                                                    <ui-select-match placeholder="Select Input Type"><% $select.selected.value %></ui-select-match>
+                                                    <ui-select-choices repeat="list in listInputType | filter: $select.search">
+                                                        <!-- <div ng-bind-html="list.value | highlight: $select.search"></div> -->
+                                                        <div><% list.value %></div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </td>
+                                            <td class="input-table">
+                                                <input type="number" class="form-control input-number" ng-model="form.details[$index].sequence" ng-readonly="!control || form.is_dokumen" required>
+                                            </td>
+                                            <td class="text-center v-middle" ng-class="{'no-event':!control || form.is_dokumen}">
+                                                <i class="fa fa-trash color-red cursor-pointer" ng-click="deleteRow($index)"></i>
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="form.details == undefined || form.details.length==0" class="ng-scope" style="">
+                                            <td colspan="7" class="text-center">Data Not Found</td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    <div class="col-sm-12 no-padding">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-3"></label>
+                            <div class="col-md-9">
+                                <!-- Control Button -->
+                                <div ng-show="control">
+                                    <button ng-disabled="loading" type="submit" class="btn btn-custom margin-left pull-right col-xs-6 col-md-2">
+                                        <i class="fa fa-save"></i> Save</button>
+                                    <button ng-disabled="loading" ng-show='edits == false' type="button" class="btn btn-default pull-right col-xs-6 col-md-2"
+                                        ng-click="$close()">
+                                        <i class="fa fa-close"></i> Cancel</button>
+                                    <button ng-click="control = !control" type="button" ng-show='edits == true' class="btn btn-default pull-right col-xs-6 col-md-2">
+                                        <i class="fa fa-close"></i> Cancel</button>
+                                </div>
+                                <div ng-show="!control">
+                                    <button ng-disabled="loading" ng-click="edits = true;control = !control;add=false;"
+                                        type="button" class="btn btn-custom margin-left pull-right col-xs-6 col-md-2">
+                                        <i class="fa fa-edit"></i> Edit</button>
+                                    <button ng-disabled="loading" class="btn btn-default pull-right col-xs-6 col-md-2"
+                                        type="button" ng-click="$close()">
+                                        <i class="fa fa-arrow-left"></i> Close</button>
+                                </div>
+                                <!-- Control Button End -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="hideButton" ng-click="control = false;edit = true;" type="button" ng-show='hideButton'></button>

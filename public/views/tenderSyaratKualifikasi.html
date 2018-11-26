@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading panel-surveyor">
+                <h3 class="panel-title">Syarat Kualifikasi</h3>
+                <button type="button" class="toast-close-button pull-right" data-dismiss="dialog" ng-click="$close()">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" ng-submit="doEdit()">
+                    <div class="col-sm-12 no-padding">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-3">Syarat Kualifikasi</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" ng-model="form.master_syarat_kualifikasi.nama"
+                                    ng-readonly="true" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 no-padding">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-3">Sequence</label>
+                            <div class="col-md-9">
+                                <input type="number" ng-model="form.sequence" class="form-control input-number" ng-disabled="!control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row clearfix" ng-if="!form.master_syarat_kualifikasi.is_dokumen">
+                        <label class="col-sm-3"><b>Data Of
+                                <%form.master_syarat_kualifikasi.nama%></b></label>
+                        <div class="col-sm-9">
+                            <button class="btn btn-custom" ng-click="addDetails()" type="button" ng-disabled="!control || form.master_syarat_kualifikasi.is_dokumen">Add</button>
+                            <label style="line-height: 32px;">
+                                <input ng-readonly="!control || form.is_dokumen" type="number" ng-model="$parent.DetailsRow"
+                                    ng-readonly="!control" class="form-control pull-left custom-length" style="width:65px;">&nbsp;Rows
+                            </label>
+                        </div>
+                        <div class="col-md-12">
+                            <table class="table table-hover table-bordered custom-table">
+                                <thead>
+                                    <tr class="sortable">
+                                        <th class="wd44">No</th>
+                                        <th ng-repeat="s in form.master_syarat_kualifikasi.details">
+                                            <%s.field_name%>
+                                        </th>
+                                        <th class="wd44">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-bind-html="getDataDetails()" compile-template>
+                                </tbody>
+                                <tbody ng-if="form.details == undefined || form.details.length==0">
+                                    <tr class="ng-scope" style="">
+                                        <td colspan="100" class="text-center">Data Not Found</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 no-padding">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-3"></label>
+                            <div class="col-md-9">
+                                <!-- Control Button -->
+                                <div ng-show="control">
+                                    <button ng-disabled="loading" type="submit" class="btn btn-custom margin-left pull-right col-xs-6 col-md-2">
+                                        <i class="fa fa-save"></i> Save</button>
+                                    <button ng-disabled="loading" ng-show='edits == false' type="button" class="btn btn-default pull-right col-xs-6 col-md-2"
+                                        ng-click="$close()">
+                                        <i class="fa fa-close"></i> Cancel</button>
+                                    <button ng-click="control = !control" type="button" ng-show='edits == true' class="btn btn-default pull-right col-xs-6 col-md-2">
+                                        <i class="fa fa-close"></i> Cancel</button>
+                                </div>
+                                <div ng-show="!control">
+                                    <button ng-disabled="loading" ng-click="edits = true;control = !control;add=false;"
+                                        type="button" class="btn btn-custom margin-left pull-right col-xs-6 col-md-2">
+                                        <i class="fa fa-edit"></i> Edit</button>
+                                    <button ng-disabled="loading" class="btn btn-default pull-right col-xs-6 col-md-2"
+                                        type="button" ng-click="$close()">
+                                        <i class="fa fa-arrow-left"></i> Close</button>
+                                </div>
+                                <!-- Control Button End -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="hideButton" ng-click="control = false;edit = true;" type="button" ng-show='hideButton'></button>

@@ -1,0 +1,21 @@
+alter table siswa add column created_by int(12) unsigned NOT NULL;
+alter table siswa add column  created_at datetime DEFAULT NULL;
+alter table siswa add column updated_by int(12) unsigned default NULL;
+alter table siswa add column  updated_at datetime DEFAULT NULL;
+
+CREATE INDEX fki_siswa_updated_by_fk
+    ON siswa(updated_by);
+ALTER TABLE siswa
+    ADD CONSTRAINT siswa_updated_by_fk FOREIGN KEY (updated_by)
+    REFERENCES users (id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION;
+
+
+CREATE INDEX fki_siswa_class_fk
+    ON siswa(class_id);
+ALTER TABLE siswa
+    ADD CONSTRAINT siswa_class_fk FOREIGN KEY (class_id)
+    REFERENCES kelas (id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION;

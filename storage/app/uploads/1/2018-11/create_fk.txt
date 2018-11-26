@@ -1,0 +1,21 @@
+alter table pengalaman_uraian_kerja add column created_by int(12) unsigned NOT NULL;
+alter table pengalaman_uraian_kerja add column  created_at datetime DEFAULT NULL;
+alter table pengalaman_uraian_kerja add column updated_by int(12) unsigned default NULL;
+alter table pengalaman_uraian_kerja add column  updated_at datetime DEFAULT NULL;
+
+CREATE INDEX fki_pengalaman_uraian_kerja_updated_by_fk
+    ON pengalaman_uraian_kerja(updated_by);
+ALTER TABLE pengalaman_uraian_kerja
+    ADD CONSTRAINT pengalaman_uraian_kerja_updated_by_fk FOREIGN KEY (updated_by)
+    REFERENCES cms_users (id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION;
+
+
+CREATE INDEX fki_pengalaman_uraian_kerja_pengguna_jasa_id_fk
+    ON pengalaman_uraian_kerja(pengguna_jasa_id);
+ALTER TABLE pengalaman_uraian_kerja
+    ADD CONSTRAINT fki_pengalaman_uraian_kerja_pengguna_jasa_id_fk FOREIGN KEY (created_by)
+    REFERENCES cms_users (id)
+    ON UPDATE CASCADE
+    ON DELETE NO ACTION;
