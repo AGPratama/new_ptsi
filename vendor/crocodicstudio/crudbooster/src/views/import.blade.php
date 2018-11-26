@@ -11,7 +11,7 @@
     @endif
 
 
-    @if(Request::get('file') && Request::get('import'))
+    @if(Request::get('file'))
 
         <ul class='nav nav-tabs'>
             <li style="background:#eeeeee"><a style="color:#111"

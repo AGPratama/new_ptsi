@@ -1494,10 +1494,12 @@ class CBController extends Controller
             return response()->json(['progress' => $prog, 'last_error' => Cache::get('error_'.$file_md5)]);
         }
 
-        $select_column = Session::get('select_column');
+        foreach($this->col as $k=>$v){
+            $select_column[] = $v['name'];
+        }
+
         $select_column = array_filter($select_column);
         $table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
-
         $file = base64_decode(Request::get('file'));
         $file = storage_path('app/'.$file);
 
@@ -1519,7 +1521,7 @@ class CBController extends Controller
         foreach ($rows as $value) {
             $a = [];
             foreach ($select_column as $sk => $s) {
-                $colname = $table_columns[$sk];
+                $colname = $s;
 
                 if (CRUDBooster::isForeignKey2($colname)) {
 
