@@ -144,6 +144,9 @@
                         <label>File XLS / CSV</label>
                         <input type='file' name='userfile' class='form-control' required/>
                         <div class='help-block'>File type supported only : XLS, XLSX, CSV</div>
+                        <div>
+                            <a href="{{ CRUDBooster::mainpath('template') }}" class="btn btn-default">Download Template</a>
+                        </div>
                     </div>
                 </div><!-- /.box-body -->
 

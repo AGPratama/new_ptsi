@@ -633,7 +633,7 @@ class CBController extends Controller
         $papersize = Request::input('page_size');
         $paperorientation = Request::input('page_orientation');
         $response = $this->getIndex();
-
+        
         if (Request::input('default_paper_size')) {
             DB::table('cms_settings')->where('name', 'default_paper_size')->update(['content' => $papersize]);
         }
@@ -1429,6 +1429,33 @@ class CBController extends Controller
         Session::put('current_row_id', $id);
 
         return view('crudbooster::default.form', compact('row', 'page_menu', 'page_title', 'command', 'id'));
+    }
+
+    public function getTemplateData()
+    {
+        $this->cbLoader();
+        $module = CRUDBooster::getCurrentModule();
+        $data['table'] = $this->table;
+        $data['table_pk'] = $this->data['table'];
+        $data['page_title'] = $module->name;
+        $data['page_description'] = trans('crudbooster.default_module_description');
+        $data['columns'] = $this->columns_table;
+
+        return $data;
+    }
+
+    public function getTemplate(){
+        $this->cbLoader();
+        $filename = 'Template '.$this->data['table'];
+        $paperorientation = 'landscape';
+        $response = $this->getTemplateData();
+        Excel::create($filename, function ($excel) use ($response) {
+            $excel->setTitle($filename)->setCreator("crudbooster.com")->setCompany(CRUDBooster::getSetting('appname'));
+            $excel->sheet($filename, function ($sheet) use ($response) {
+                $sheet->setOrientation($paperorientation);
+                $sheet->loadview('crudbooster::template', $response);
+            });
+        })->export('xls');
     }
 
     public function getImportData()
