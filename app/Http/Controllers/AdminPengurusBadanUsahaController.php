@@ -38,8 +38,11 @@
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
-			$this->form[] = ['label'=>'No Ktp','name'=>'no_ktp','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Jabatan','name'=>'jabatan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'No Ktp','name'=>'no_ktp','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'KTP','name'=>'ktp','type'=>'upload','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'NPWP','name'=>'npwp','type'=>'upload','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Bukti Pajak','name'=>'bukti_pajak','type'=>'upload','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM

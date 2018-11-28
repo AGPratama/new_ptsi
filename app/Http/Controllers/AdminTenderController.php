@@ -37,6 +37,7 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			$this->col[] = ["label"=>"No Berita Acara","name"=>"no_berita_acara"];
 			$this->col[] = ["label"=>"Pengguna Jasa","name"=>"pengguna_jasa_id","join"=>"enumeration,value"];
 			$this->col[] = ["label"=>"Metode Kualifikasi","name"=>"metode_kualifikasi_id","join"=>"enumeration,value"];
+            //$this->col[] = ["label"=>"Bidang / Sub Bidang","name"=>"sub_bidang"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
@@ -44,21 +45,24 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			$this->form[] = ['label'=>'Nama Tender','name'=>'nama_tender','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'No Tender','name'=>'no_tender','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'No Berita Acara','name'=>'no_berita_acara','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Pengguna Jasa','name'=>'pengguna_jasa_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key` = \'KategoriPenggunaJasa\''];
+			$this->form[] = ['label'=>'Pengguna Jasa','name'=>'pengguna_jasa_id','type'=>'checkbox','validation'=>'required','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key` = \'KategoriPenggunaJasa\''];
 			$this->form[] = ['label'=>'Metode Kualifikasi','name'=>'metode_kualifikasi_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`Key` = \'MetodeKualifikasi\''];
 			$this->form[] = ['label'=>'No Kualifikasi','name'=>'no_kualifikasi','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Dokumen Tender Text','name'=>'dokumen_tender_text','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Dokument Tender File','name'=>'dokument_tender_file','type'=>'upload','validation'=>'required','width'=>'col-sm-10'];
+            $this->form[] = ['label'=>'Dokument Tender (TOR)','name'=>'dokument_tender_tor','type'=>'upload','validation'=>'required','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nilai Pagu','name'=>'nilai_pagu','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nilai Hps','name'=>'nilai_hps','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Metode Dokumen','name'=>'metode_dokumen_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`Key` = \'MetodeDokumen\''];
 			$this->form[] = ['label'=>'Metode Evaluasi','name'=>'metode_evaluasi_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`Key` = \'MetodeEvaluasi\''];
-			$this->form[] = ['label'=>'Bidbond Text','name'=>'bidbond_text','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Bidbond File','name'=>'bidbond_file','type'=>'upload','validation'=>'required','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Bidbond Text','name'=>'bidbond_text','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Bidbond File','name'=>'bidbond_file','type'=>'upload','validation'=>'required','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Hasil Tender Text','name'=>'hasil_tender_text','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Hasil Tender File','name'=>'hasil_tender_file','type'=>'upload','validation'=>'required','width'=>'col-sm-10'];
+            $this->form[] = ['label'=>'Pengumuman Hasil Tender','name'=>'pengumuman_hasil_tender','type'=>'upload','validation'=>'required','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Ao Name','name'=>'ao_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Lainnya','name'=>'lainnya','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+            //$this->form[] = ['label'=>'Bidang / Sub Bidang','name'=>'sub_bidang','type'=>'checkbox','validation'=>'required','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key` = \'SubBidang\''];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
@@ -414,7 +418,7 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
         $data['command'] = 'edit';
 
             //Please use cbView method instead view method from laravel
-        $this->cbView('tender.custom_add_step2', $data);   
+        $this->cbView('tender.custom_add_step2', $data);
     }
 
     public function getStep3()

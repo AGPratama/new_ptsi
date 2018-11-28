@@ -43,12 +43,14 @@
 			$this->form = [];
 			$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
 			$this->form[] = ['label'=>'Merek','name'=>'merek','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Tahun Pembuatan','name'=>'tahun_pembuatan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Jumlah','name'=>'jumlah','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Kapasitas','name'=>'kapasitas','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Tahun Pembuatan','name'=>'tahun_pembuatan','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Jumlah','name'=>'jumlah','type'=>'number','validation'=>'integer|min:0','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Kapasitas','name'=>'kapasitas','type'=>'number','validation'=>'integer|min:0','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Kondisi','name'=>'kondisi_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KondisiPeralatan\''];
-			$this->form[] = ['label'=>'Lokasi','name'=>'lokasi','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Bukti','name'=>'bukti','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Lokasi','name'=>'lokasi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Kategori Pengguna Jasa','name'=>'kategori_pengguna_jasa_id','type'=>'checkbox','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KategoriPenggunaJasa\''];
+			$this->form[] = ['label'=>'Bukti/Kwitansi','name'=>'bukti','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'PIC Peralatan','name'=>'pic_peralatan','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM

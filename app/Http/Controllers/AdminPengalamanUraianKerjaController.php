@@ -30,18 +30,19 @@
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Nama Pekerjaan","name"=>"nama_pekerjaan"];
+			$this->col[] = ["label"=>"Nama Pekerja","name"=>"nama_pekerja"];
 			$this->col[] = ["label"=>"Nama Perusahaan","name"=>"nama_perusahaan"];
 			$this->col[] = ["label"=>"Tanggal Lahir","name"=>"ttl"];
 			$this->col[] = ["label"=>"Pendidikan Formal","name"=>"pendidikan_formal"];
 			$this->col[] = ["label"=>"Pendidikan Non Formal","name"=>"pendidikan_non_formal"];
 			$this->col[] = ["label"=>"Penguasaan Bahasa","name"=>"penguasaan_bahasa"];
 			$this->col[] = ["label"=>"Posisi Yang Diusulkan","name"=>"posisi_yang_diusulkan"];
+			$this->col[] = ["label"=>"Uraian Tugas","name"=>"uraian_tugas"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Nama Pekerjaan','name'=>'nama_pekerjaan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Nama Pekerja','name'=>'nama_pekerja','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nama Perusahaan','name'=>'nama_perusahaan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Tanggal Lahir','name'=>'ttl','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Pendidikan Formal','name'=>'pendidikan_formal','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
@@ -54,7 +55,9 @@
 			$this->form[] = ['label'=>'Pengguna Jasa','name'=>'pengguna_jasa_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KategoriPenggunaJasa\''];
 			$this->form[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Surat Referensi','name'=>'surat_referensi','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Waktu Pelaksanaan','name'=>'waktu_pelaksanaan','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Waktu Pelaksanaan Start','name'=>'waktu_pelaksanaan_start','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Waktu Pelaksanaan End','name'=>'waktu_pelaksanaan_end','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Uraian Tugas','name'=>'uraian_tugas','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
