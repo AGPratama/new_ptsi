@@ -4,6 +4,8 @@
 	use Request;
 	use DB;
 	use CRUDBooster;
+	use Route;
+	use Illuminate\Http\Request as DRequest;
 
 	class AdminTenagaKerjaController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -70,6 +72,10 @@
 			$this->form[] = ['label'=>'Sertifikat Training','name'=>'sertifikat_training','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'No Sertifikat','name'=>'no_sertifikat','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
+
+			// $columns[] = ['label'=>'tenaga_kerja_id','name'=>'tenaga_kerja_id','type'=>'hidden','required'=>true];
+			// $columns[] = ['label'=>'pengalaman_id','name'=>'pengalaman_id','type'=>'number','required'=>true];
+			// $this->form[] = ['label'=>'Orders Detail','name'=>'orders_detail','type'=>'child','columns'=>$columns,'table'=>'tenaga_kerja_pengalaman','foreign_key'=>'tenaga_kerja_id'];
 
 			# OLD START FORM
 			//$this->form = [];
@@ -312,7 +318,7 @@
 	    */
 	    public function hook_after_add($id) {
 	        //Your code here
-
+			$this->return_url=url('/admin/tenaga_kerja/step2?id='.$id);
 	    }
 
 	    /*
@@ -338,7 +344,7 @@
 	    */
 	    public function hook_after_edit($id) {
 	        //Your code here
-
+			$this->return_url=url('/admin/tenaga_kerja/step2?id='.$id);
 	    }
 
 	    /*
@@ -350,7 +356,8 @@
 	    */
 	    public function hook_before_delete($id) {
 	        //Your code here
-
+			DB::table('tenaga_kerja_pengalaman')->where('tenaga_kerja_id', $id)->delete();
+			DB::table('tenaga_kerja_uraian')->where('tenaga_kerja_id', $id)->delete();
 	    }
 
 	    /*
@@ -368,6 +375,163 @@
 
 
 	    //By the way, you can still create your own method in here... :)
+		public function getAdd()
+	    {
+	            //Create an Auth
+	        if (!CRUDBooster::isCreate() && $this->global_privilege == false || $this->button_add == false) {
+	            CRUDBooster::redirect(CRUDBooster::adminPath(), trans("crudbooster.denied_access"));
+	        }
 
+	        $data = [];
+	        $data['page_title'] = trans("crudbooster.add_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name]);
+	        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
+	        $data['command'] = 'add';
+
+	            //Please use cbView method instead view method from laravel
+	        $this->cbView('tenagakerja.custom_add', $data);
+	    }
+
+		public function getEdit($id)
+	    {
+	        $this->cbLoader();
+	        $data = [];
+	        $data['row'] = DB::table($this->table)->where($this->primary_key, $id)->first();
+
+	        if (! CRUDBooster::isRead() && $this->global_privilege == false || $this->button_edit == false) {
+	            CRUDBooster::insertLog(trans("crudbooster.log_try_edit", [
+	                'name' => $data['row']->{$this->title_field},
+	                'module' => CRUDBooster::getCurrentModule()->name,
+	            ]));
+	            CRUDBooster::redirect(CRUDBooster::adminPath(), trans('crudbooster.denied_access'));
+	        }
+
+	        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
+	        $data['page_title'] = trans("crudbooster.edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name, 'name' => $data['row']->{$this->title_field}]);
+	        $data['command'] = 'edit';
+	        Session::put('current_row_id', $id);
+
+	        $this->cbView('tenagakerja.custom_add', $data);
+	    }
+
+	    public function getStep2(DRequest $request)
+	    {
+	        if (!CRUDBooster::isCreate() && $this->global_privilege == false || $this->button_add == false) {
+	            CRUDBooster::redirect(CRUDBooster::adminPath(), trans("crudbooster.denied_access"));
+	        }
+
+	        $data = [];
+	        $data['page_title'] = trans("crudbooster.edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name]);
+	        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
+	        $data['command'] = 'edit';
+			$data['pengalaman_kerja'] = DB::table('pengalaman_uraian_kerja')->get();
+			$data['tenaga_kerja_id'] = $_GET['id'];
+			$tableName = 'tenaga_kerja_pengalaman';
+			//ketika edit
+			$data['checked_val'] = [];
+			$cekData = DB::table($tableName)->where('tenaga_kerja_id', $_GET['id'])->exists();
+			if($cekData){
+				$check_val = DB::table($tableName)->select('pengalaman_id')->where('tenaga_kerja_id', $_GET['id'])->get();
+				$arr_checked = [];
+				foreach($check_val as $c){
+					$arr_checked[] = $c->pengalaman_id;
+				}
+				$data['checked_val'] = $arr_checked;
+				//print_r($data['checked_val']);die();
+			}
+
+			//if($request->input('tenaga_kerja_id')){
+			if($request->input('submit')){
+				//print_r($request->input());die();
+				$rules = [
+				    'tenaga_kerja_id' => 'required',
+				    'pengalaman_id' => 'required',
+				];
+
+				if($request->validate($rules)){
+					$tk_id = $request->input('tenaga_kerja_id');
+					$p_id = $request->input('pengalaman_id');
+
+					$cek = DB::table($tableName)->where('tenaga_kerja_id', $tk_id)->exists();
+					if($cek){
+						$query = DB::table($tableName)->where('tenaga_kerja_id', $tk_id)->delete();
+					}
+
+					foreach($p_id as $p){
+						$value=[
+						 	'tenaga_kerja_id' => $tk_id,
+							'pengalaman_id' => $p
+						];
+						$query = DB::table($tableName)->insert($value);
+					}
+
+					if($query){
+						return redirect('admin/tenaga_kerja/step3?id='.$tk_id);
+					}
+				}
+			}
+
+			    //Please use cbView method instead view method from laravel
+	        $this->cbView('tenagakerja.custom_add_step2', $data);
+	    }
+
+	    public function getStep3(DRequest $request)
+	    {
+	        if (!CRUDBooster::isCreate() && $this->global_privilege == false || $this->button_add == false) {
+	            CRUDBooster::redirect(CRUDBooster::adminPath(), trans("crudbooster.denied_access"));
+	        }
+
+	        $data = [];
+	        $data['page_title'] = trans("crudbooster.edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name]);
+	        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
+	        $data['command'] = 'edit';
+			$tableName = 'tenaga_kerja_uraian';
+
+			$data['uraian_tugas'] = DB::table('daftar_uraian_tugas')->get();
+			$data['tenaga_kerja_id'] = $_GET['id'];
+			//ketika edit
+			$data['checked_val'] = [];
+			$cekData = DB::table($tableName)->where('tenaga_kerja_id', $_GET['id'])->exists();
+			if($cekData){
+				$check_val = DB::table($tableName)->select('uraian_id')->where('tenaga_kerja_id', $_GET['id'])->get();
+				$arr_checked = [];
+				foreach($check_val as $c){
+					$arr_checked[] = $c->uraian_id;
+				}
+				$data['checked_val'] = $arr_checked;
+				//print_r($data['checked_val']);die();
+			}
+
+			//if($request->input('tenaga_kerja_id')){
+			if($request->input('submit')){
+				$rules = [
+				    'tenaga_kerja_id' => 'required',
+				    'uraian_id' => 'required',
+				];
+
+				if($request->validate($rules)){
+					$tk_id = $request->input('tenaga_kerja_id');
+					$p_id = $request->input('uraian_id');
+
+					$cek = DB::table($tableName)->where('tenaga_kerja_id', $tk_id)->exists();
+					if($cek){
+						$query = DB::table($tableName)->where('tenaga_kerja_id', $tk_id)->delete();
+					}
+
+					foreach($p_id as $p){
+						$value=[
+						 	'tenaga_kerja_id' => $tk_id,
+							'uraian_id' => $p
+						];
+						$query = DB::table($tableName)->insert($value);
+					}
+
+					if($query){
+						return redirect('admin/tenaga_kerja');
+					}
+				}
+			}
+	        //Please use cbView method instead view method from laravel
+	        $this->cbView('tenagakerja.custom_add_step3', $data);
+	    }
 
 	}
