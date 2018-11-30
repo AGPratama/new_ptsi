@@ -13,7 +13,7 @@ class CreateTenagaKerjaSertifikat extends Migration
      */
     public function up()
     {
-        Schema::table('tenaga_kerja_sertifikat', function (Blueprint $table) {
+        Schema::create('tenaga_kerja_sertifikat', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('tenaga_kerja_id')->nullable();
 			$table->string('sertifikat')->nullable();
