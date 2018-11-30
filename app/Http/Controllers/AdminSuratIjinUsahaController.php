@@ -51,7 +51,7 @@
 			$this->form[] = ['label'=>'Jenis Ijin Usaha','name'=>'jenis_ijin_usaha','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Kualifikasi','name'=>'kualifikasi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Keterangan','name'=>'keterangan','type'=>'textarea','validation'=>'min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Surat Ijin Usaha','name'=>'surat_ijin_usaha','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Surat Ijin Usaha','name'=>'surat_ijin','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM

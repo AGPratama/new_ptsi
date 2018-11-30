@@ -34,9 +34,9 @@
 			$this->col = [];
 			$this->col[] = ["label"=>"Nama Paket Perusahaan","name"=>"nama_paket_perusahaan","position"=>1];
 			$this->col[] = ["label"=>"Lokasi Proyek","name"=>"lokasi_proyek","position"=>1];
-			$this->col[] = ["label"=>"Pemberi Tugas/Pejabat Pembuat Komitmen","name"=>null,"colspan"=>"2","position"=>1];
+			$this->col[] = ["label"=>"Pemberi Tugas/Pejabat Pembuat Komitmen","name"=>null,"colspan"=>"3","position"=>1];
 			$this->col[] = ["label"=>"Nama","name"=>"nama_pengguna_jasa","position"=>2];
-			//$this->col[] = ["label"=>"Kategori Pengguna Jasa","name"=>"kategori_id","join"=>"enumeration,value"];
+			$this->col[] = ["label"=>"Kategori Pengguna Jasa","name"=>"kategori_id","join"=>"enumeration,value", "position"=>2];
 			$this->col[] = ["label"=>"Alamat/ Telpon","name"=>"alamat_pengguna_jasa","position"=>2];
 			$this->col[] = ["label"=>"Periode","name"=>null,"colspan"=>"2","position"=>1];
 			$this->col[] = ["label"=>"Dari","name"=>"periode_kerja_dari","position"=>2];
@@ -57,8 +57,8 @@
 			$this->form[] = ['label'=>'Bidang/Sub Pekerjaan','name'=>'bidang','type'=>'checkbox','validation'=>'min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'SubBidang\''];
 			$this->form[] = ['label'=>'Lokasi Proyek','name'=>'lokasi_proyek','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nama Pengguna Jasa','name'=>'nama_pengguna_jasa','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Kategori Pengguna Jasa','name'=>'kategori_id','type'=>'select2','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KategoriPenggunaJasa\''];
-			$this->form[] = ['label'=>'Alamat Pengguna Jasa','name'=>'alamat_pengguna_jasa','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Kategori Pengguna Jasa','name'=>'kategori_id','type'=>'radio','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KategoriPenggunaJasa\''];
+			$this->form[] = ['label'=>'Alamat Pengguna Jasa','name'=>'alamat_pengguna_jasa','type'=>'textarea','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'No Telp Pengguna Jasa','name'=>'no_telp_pengguna_jasa','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Periode Kerja Dari','name'=>'periode_kerja_dari','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Periode Kerja Sampai','name'=>'periode_kerja_sampai','type'=>'date','validation'=>'required','width'=>'col-sm-10'];

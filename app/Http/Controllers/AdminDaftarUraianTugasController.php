@@ -33,7 +33,7 @@
 			$this->col[] = ["label"=>"Nama Posisi","name"=>"nama_posisi"];
 			$this->col[] = ["label"=>"Nama Proyek","name"=>"nama_proyek"];
 			$this->col[] = ["label"=>"Uraian Tugas","name"=>"uraian_tugas"];
-			$this->col[] = ["label"=>"Pengguna Jasa","name"=>"kategori_pengguna_jasa_id"];
+			$this->col[] = ["label"=>"Pengguna Jasa","name"=>"kategori_id","join"=>"enumeration,value"];
 			$this->col[] = ["label"=>"Bidang / Sub Bidang","name"=>"sub_bidang_id"];
 			//$this->col[] = ["label"=>"Waktu Pelaksanaan","name"=>"waktu_pelaksanaan"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
@@ -43,7 +43,7 @@
 			$this->form[] = ['label'=>'Nama Posisi','name'=>'nama_posisi','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nama Proyek','name'=>'nama_proyek','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Uraian Tugas','name'=>'uraian_tugas','type'=>'textarea','validation'=>'required|string|min:5|max:5000','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Kategori Pengguna Jasa','name'=>'kategori_pengguna_jasa_id','type'=>'checkbox','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KategoriPenggunaJasa\''];
+			$this->form[] = ['label'=>'Kategori Pengguna Jasa','name'=>'kategori_id','type'=>'radio','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KategoriPenggunaJasa\''];
 			$this->form[] = ['label'=>'Bidang/Sub Bidang','name'=>'sub_bidang_id','type'=>'checkbox','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'SubBidang\''];
 			//$this->form[] = ['label'=>'Waktu Pelaksanaan','name'=>'waktu_pelaksanaan','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
