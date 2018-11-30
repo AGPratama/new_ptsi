@@ -80,7 +80,7 @@
 
                 foreach ($selects_data as $d) {
                     $val = $d->{$datatable_field};
-                    $checked = (is_array($value) && in_array($val, $value)) ? "checked" : "";
+                    $checked = (is_array($value) && in_array($d->id, $value)) ? "checked" : "";
                     if ($val == '' || ! $d->id) continue;
 
                     echo "

@@ -48,7 +48,7 @@
 			$this->form[] = ['label'=>'Kapasitas','name'=>'kapasitas','type'=>'number','validation'=>'integer|min:0','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Kondisi','name'=>'kondisi_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KondisiPeralatan\''];
 			$this->form[] = ['label'=>'Lokasi','name'=>'lokasi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Kategori Pengguna Jasa','name'=>'kategori_id','type'=>'radio','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KategoriPenggunaJasa\''];
+			$this->form[] = ['label'=>'Kategori Pengguna Jasa','name'=>'kategori_pengguna_jasa_id','type'=>'checkbox','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KategoriPenggunaJasa\''];
 			$this->form[] = ['label'=>'Bukti/Kwitansi','name'=>'bukti','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'PIC Peralatan','name'=>'pic_peralatan','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE

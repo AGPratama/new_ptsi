@@ -1043,7 +1043,7 @@ class CBController extends Controller
                         $table_checkbox = explode(',', $ro['datatable'])[0];
                         $field_checkbox = explode(',', $ro['datatable'])[1];
                         $table_checkbox_pk = CB::pk($table_checkbox);
-                        $data_checkbox = DB::table($table_checkbox)->whereIn($table_checkbox_pk, $inputdata)->pluck($field_checkbox)->toArray();
+                        $data_checkbox = DB::table($table_checkbox)->whereIn($table_checkbox_pk, $inputdata)->pluck('id')->toArray();
                         $this->arr[$name] = implode(";", $data_checkbox);
                     } else {
                         $this->arr[$name] = implode(";", $inputdata);
@@ -1233,7 +1233,6 @@ class CBController extends Controller
     {
         $this->cbLoader();
         $row = DB::table($this->table)->where($this->primary_key, $id)->first();
-
         if (! CRUDBooster::isRead() && $this->global_privilege == false || $this->button_edit == false) {
             CRUDBooster::insertLog(trans("crudbooster.log_try_edit", [
                 'name' => $row->{$this->title_field},
