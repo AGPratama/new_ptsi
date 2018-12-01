@@ -4,6 +4,7 @@
 	use Request;
 	use DB;
 	use CRUDBooster;
+	use Illuminate\View\View;
 
 	class AdminPengalamanPerusahaanController extends \crocodicstudio\crudbooster\controllers\CBController {
 	    public function cbInit() {
@@ -48,24 +49,30 @@
 			$this->col[] = ["label"=>"Kontrak","name"=>"tanggal_selesai_kontrak","position"=>2];
 			$this->col[] = ["label"=>"BA / Serah Terima","name"=>"tanggal_bast","position"=>2];
 			$this->col[] = ["label"=>"Tahun","name"=>"tahun","position"=>1];
-			$this->col[] = ["label"=>"Bidang / Sub Bidang","name"=>"bidang","position"=>1];
+			$this->col[] = ["label"=>"Bidang / Sub Bidang","name"=>"bidang","join"=>"enumeration,value","position"=>1];
+			$this->col[] = ['label'=>'Doc Contract','name'=>'document_contract',"visible"=>false];
+			$this->col[] = ['label'=>'BAST','name'=>'file_bast',"visible"=>false];
+			$this->col[] = ['label'=>'Attachment','position'=>1,'callback'=>function($row){
+				$datas['row'] = $row;
+				return View('pengalamanperusahaan.attachment', $datas);
+			}];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'Nama Paket Perusahaan','name'=>'nama_paket_perusahaan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Bidang/Sub Pekerjaan','name'=>'bidang','type'=>'checkbox','validation'=>'min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'SubBidang\''];
+			$this->form[] = ['label'=>'Bidang/Sub Pekerjaan','name'=>'bidang','type'=>'checkbox','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'SubBidang\''];
 			$this->form[] = ['label'=>'Lokasi Proyek','name'=>'lokasi_proyek','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nama Pengguna Jasa','name'=>'nama_pengguna_jasa','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Kategori Pengguna Jasa','name'=>'kategori_id','type'=>'radio','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KategoriPenggunaJasa\''];
+			$this->form[] = ['label'=>'Kategori Pengguna Jasa','name'=>'kategori_id','type'=>'checkbox','validation'=>'required','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KategoriPenggunaJasa\''];
 			$this->form[] = ['label'=>'Alamat Pengguna Jasa','name'=>'alamat_pengguna_jasa','type'=>'textarea','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'No Telp Pengguna Jasa','name'=>'no_telp_pengguna_jasa','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Periode Kerja Dari','name'=>'periode_kerja_dari','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Periode Kerja Sampai','name'=>'periode_kerja_sampai','type'=>'date','validation'=>'required','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'No Kontrak','name'=>'no_kontrak','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Nilai Kontrak','name'=>'nilai_kontrak','type'=>'money','validation'=>'integer|min:0','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Tanggal Selesai Kontrak','name'=>'tanggal_selesai_kontrak','type'=>'date','validation'=>'date','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Tanggal Bast','name'=>'tanggal_bast','type'=>'date','validation'=>'date','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'No Kontrak','name'=>'no_kontrak','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Nilai Kontrak','name'=>'nilai_kontrak','type'=>'money','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Tanggal Selesai Kontrak','name'=>'tanggal_selesai_kontrak','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Tanggal Bast','name'=>'tanggal_bast','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'No BAST','name'=>'no_bast','type'=>'number','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'BAST','name'=>'file_bast','type'=>'upload','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Document Contract','name'=>'document_contract','type'=>'upload','width'=>'col-sm-10'];
@@ -189,7 +196,12 @@
 	        | $this->script_js = "function() { ... }";
 	        |
 	        */
-	        $this->script_js = NULL;
+	        $this->script_js = "
+				function getAttachmentFile(id){
+					$('#document_contract-'+id).toggle();
+					$('#file_bast-'+id).toggle();
+				}
+			";
 
 
             /*

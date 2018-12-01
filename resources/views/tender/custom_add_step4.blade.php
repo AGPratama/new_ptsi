@@ -20,39 +20,59 @@
 
         <div class="panel-body" style="padding:0;">
             <?php
-                $action = (@$row) ? CRUDBooster::mainpath("edit-save/$row->id") : CRUDBooster::mainpath("add-save");
+                //$action = (@$row) ? CRUDBooster::mainpath("edit-save/$row->id") : CRUDBooster::mainpath("add-save");
                 $return_url = ($return_url) ?: g('return_url');
                 ?>
-            <form class='form-horizontal' method='post' id="form" enctype="multipart/form-data" action='{{$action}}'>
+            <form class='form-horizontal' id="form" enctype="multipart/form-data" method="POST" action="{{CRUDBooster::mainpath('save_surat')}}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type='hidden' name='return_url' value='{{ @$return_url }}' />
-                <input type='hidden' name='ref_mainpath' value='{{ CRUDBooster::mainpath() }}' />
-                <input type='hidden' name='ref_parameter' value='{{urldecode(http_build_query(@$_GET))}}' />
-                @if($hide_form)
-                <input type="hidden" name="hide_form" value='{!! serialize($hide_form) !!}'>
-                @endif
+                <input type="text" name="tender_id" value="{{$tender_id}}" class="hidden">
                 <div class="nav-tabs-custom" style="margin-bottom:0px!important;">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Informasi Umum</a></li>
+                        <li class=""><a href="#tab_1" data-toggle="tab" aria-expanded="false"style="pointer-events: none;cursor:not-allowed">Informasi Umum</a></li>
                         @if($command=='add')
                             <li class=""><a href="#" data-toggle="tab" aria-expanded="false" style="pointer-events: none;cursor:not-allowed">Jadwal Tender</a></li>
                             <li class=""><a href="#" data-toggle="tab" aria-expanded="false" style="pointer-events: none;cursor:not-allowed">Syarat Kualifikasi</a></li>
-                            <li class=""><a href="#" data-toggle="tab" aria-expanded="false" style="pointer-events: none;cursor:not-allowed">Surat Korespondensi</a></li>
+                            <li class="active"><a href="#" data-toggle="tab" aria-expanded="true" >Surat Korespondensi</a></li>
                         @endif
                         @if($command=='edit')
                             <li class=""><a href="{{CRUDBooster::mainpath('step2?id='.$row->id)}}">Jadwal Tender</a></li>
                             <li class=""><a href="{{CRUDBooster::mainpath('step3?id='.$row->id)}}">Syarat Kualifikasi</a></li>
-                            <li class=""><a href="{{CRUDBooster::mainpath('step4?id='.$row->id)}}">Surat Korespondensi</a></li>
+                            <li class="active"><a <a href="#" data-toggle="tab" aria-expanded="true">Surat Korespondensi</a></li>
                         @endif
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
                             <div class="box-body" id="parent-form-area">
-                                @if($command == 'detail')
-                                @include("crudbooster::default.form_detail")
-                                @else
-                                @include("crudbooster::default.form_body")
-                                @endif
+                                @foreach($list_surat as $ls)
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="{{$ls->id}}" name="surat_id[{{$ls->id}}]" class="check-surat" @if(in_array($ls->id, $checked_val)) checked @endif> {{$ls->name}}
+                                        </label>
+                                        <?php
+                                        $style="";
+                                        $link="#";
+                                        if(isset($arr_input)){
+                                            if(array_key_exists ( $ls->id , $arr_input )){
+                                                $style = "hidden";
+                                                $link = url($arr_input[$ls->id]);
+                                        ?>
+                                            <div id="control-{{$ls->id}}">
+                                                <a href="{{$link}}" target="_blank" class="btn btn-success style">View</a>
+                                                <a href="#"  class="btn btn-danger delete-input" data-id="{{$ls->id}}">delete</a>
+                                            </div>
+                                        <?php
+                                            }
+
+                                        } ?>
+
+                                        <div id="upload-{{$ls->id}}" class="upload {{$style}}">
+                                            <input type="file" name="surat_korespondesi[{{$ls->id}}]" class="form-control">
+                                        </div>
+                                        <div id="download-{{$ls->id}}">
+                                            <a href="{{url($ls->location)}}" class="btn btn-default">Download</a>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div><!-- /.box-body -->
                         </div>
                         <!-- /.tab-pane -->
@@ -88,7 +108,7 @@
                             @endif --}}
 
                             @if($button_save && $command != 'detail')
-                            <input type="submit" name="submit" value='Step2' class='btn btn-primary'>
+                            <input type="submit" name="submit" value='Finish' class='btn btn-primary'>
                             @endif
 
                             @endif
@@ -105,3 +125,37 @@
 </div>
 <!--END AUTO MARGIN-->
 @endsection
+@push('bottom')
+<script type="text/javascript">
+$(function () {
+    $('.check-surat').each(function(){
+        var id = $(this).val();
+        if($(this).is(':checked')){
+            $('#upload-'+id).show();
+            $('#download-'+id).hide();
+        }else{
+            $('#upload-'+id).hide();
+            $('#download-'+id).show();
+        }
+    });
+    $(document).on("click",".check-surat",function() {
+        var id = $(this).val();
+        if($(this).is(':checked')){
+            $('#upload-'+id).show();
+            $('#download-'+id).hide();
+        }else{
+            $('#upload-'+id).hide();
+            $('#download-'+id).show();
+        }
+    });
+
+    $(document).on("click",".delete-input",function() {
+        var id = $(this).attr("data-id");
+        $('#upload-'+id).removeClass('hidden');
+        $('#control-'+id).addClass('hidden');
+    });
+
+});
+</script>
+
+@endpush

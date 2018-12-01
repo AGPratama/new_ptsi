@@ -33,11 +33,20 @@
 			$this->col[] = ["label"=>"Ijin Usaha","name"=>"ijin_usaha"];
 			$this->col[] = ["label"=>"No Ijin Usaha","name"=>"no_ijin_usaha"];
 			$this->col[] = ["label"=>"Tanggal Terbit","name"=>"tanggal_terbit"];
-			$this->col[] = ["label"=>"Berlaku Sampai","name"=>"berlaku_sampai"];
+			$this->col[] = ["label"=>"Berlaku Sampai","name"=>"berlaku_sampai",
+				'callback'=>function($row){
+					if($this->countExpire($row->berlaku_sampai) <= 2){
+						return $row->berlaku_sampai.'<br><span class="alert-danger">Masa Berlaku Kurang dari 2 Bulan</span>';
+					}else{
+						return $row->berlaku_sampai;
+					}
+				}
+			];
 			$this->col[] = ["label"=>"Instansi Pemberi","name"=>"instansi_pemberi"];
 			$this->col[] = ["label"=>"Jenis Ijin Usaha","name"=>"jenis_ijin_usaha"];
             $this->col[] = ["label"=>"Kualifikasi","name"=>"kualifikasi"];
 			$this->col[] = ['label'=>'Keterangan','name'=>'keterangan',"visible" => false];
+
 
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
@@ -47,7 +56,7 @@
 			$this->form[] = ['label'=>'No Ijin Usaha','name'=>'no_ijin_usaha','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Tanggal Terbit','name'=>'tanggal_terbit','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Berlaku Sampai','name'=>'berlaku_sampai','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Instansi Pemberi','name'=>'instansi_pemberi','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Instansi Pemberi','name'=>'instansi_pemberi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Jenis Ijin Usaha','name'=>'jenis_ijin_usaha','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Kualifikasi','name'=>'kualifikasi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Keterangan','name'=>'keterangan','type'=>'textarea','validation'=>'min:1|max:255','width'=>'col-sm-10'];
@@ -144,7 +153,6 @@
 	        |
 	        */
 	        $this->table_row_color = array();
-
 
 	        /*
 	        | ----------------------------------------------------------------------
@@ -342,6 +350,11 @@
 
 
 	    //By the way, you can still create your own method in here... :)
-
+		public function countExpire($date){
+			$date1 = date_create(date("Y-m-d"));
+			$date2 = date_create($date);
+			$diff = date_diff($date1,$date2);
+			return $diff->format("%R%y%m");
+		}
 
 	}

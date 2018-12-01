@@ -6,6 +6,7 @@
 	use CRUDBooster;
 	use Route;
 	use Illuminate\Http\Request as DRequest;
+	use Illuminate\View\View;
 
 	class AdminTenagaKerjaController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -33,7 +34,8 @@
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
 			$this->col[] = ["label"=>"Nama","name"=>"nama"];
-			$this->col[] = ["label"=>"Jabatan","name"=>"jabatan"];
+			//$this->col[] = ["label"=>"Jabatan","name"=>"jabatan"];
+			$this->col[] = ["label"=>"Alamat","name"=>"jabatan"];
             $this->col[] = ["label"=>"Tanggal Lahir","name"=>"tanggal_lahir"];
             $this->col[] = ['label'=>'Tempat Lahir','name'=>'tempat_lahir',"visible"=>false];
 			$this->col[] = ["label"=>"Pendidikan","name"=>"pendidikan_formal"];
@@ -47,16 +49,34 @@
 			$this->col[] = ['label'=>'Institusi','name'=>'institusi',"visible"=>false];
 			$this->col[] = ['label'=>'Pendidikan Non Formal','name'=>'pendidikan_non_formal',"visible"=>false];
 			$this->col[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian',"visible"=>false];
-			$this->col[] = ['label'=>'Sertifikat Training','name'=>'sertifikat_training',"visible"=>false];
+			$this->col[] = ['label'=>'Sertifikat Training','name'=>'sertifikat_training'];
 			$this->col[] = ['label'=>'No Sertifikat','name'=>'no_sertifikat',"visible"=>false];
-			$this->col[] = ['label'=>'KTP','name'=>'ktp'];
+			$this->col[] = ['label'=>'TKDN/PTSI','name'=>'tkdn_ptsi'];
+			$this->col[] = ['label'=>'Nomor Sertifikat TKDN Migas','name'=>'no_sertifikat_tkdn_migas'];
+			$this->col[] = ['label'=>'Tanggal Sertifikat TKDN Migas','name'=>'tgl_sertifikat_tkdn_migas'];
+			$this->col[] = ['label'=>'Masa Berlaku Sertifikat TKDN Migas','name'=>'masa_berlaku_tkdn_migas'];
+			$this->col[] = ['label'=>'SKA/Brevet','name'=>'ska'];
+			$this->col[] = ['label'=>'Nomor SKA/Brevet','name'=>'no_ska'];
+			$this->col[] = ['label'=>'Tanggal SKA/Brevet','name'=>'tgl_ska'];
+			$this->col[] = ['label'=>'Masa Berlaku SKA/Brevet','name'=>'masa_berlaku_ska'];
+			$this->col[] = ['label'=>'Asosiasi','name'=>'asosiasi'];
+			$this->col[] = ['label'=>'Referensi','name'=>'referensi'];
+			$this->col[] = ['label'=>'KTP','name'=>'ktp',"visible"=>false];
+			$this->col[] = ['label'=>'KTP','name'=>'npwp',"visible"=>false];
+			$this->col[] = ['label'=>'KTP','name'=>'bukti_pajak',"visible"=>false];
+			$this->col[] = ['label'=>'Attachment','callback'=>function($row){
+				$datas['row'] = $row;
+				$datas['sertifikat'] = DB::table('tenaga_kerja_sertifikat')->where('tenaga_kerja_id',$row->id)->get();
+				return View('tenagakerja.attachment', $datas);
+			}];
 
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
-			$this->form[] = ['label'=>'Jabatan','name'=>'jabatan','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Jabatan','name'=>'jabatan','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Jabatan','name'=>'jabatan','type'=>'textarea','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Tempat Lahir','name'=>'tempat_lahir','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Tanggal Lahir','name'=>'tanggal_lahir','type'=>'date','validation'=>'date','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'No Ktp','name'=>'no_ktp','type'=>'number','validation'=>'required|digits:16','width'=>'col-sm-10'];
@@ -83,7 +103,7 @@
 			$this->form[] = ['label'=>'SKA/Brevet','name'=>'ska','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'No SKA/Brevet','name'=>'no_ska','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Tanggal SKA/Brevet','name'=>'tgl_ska','type'=>'date','validation'=>'date','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Masa Berlaku SKA/Brevet','name'=>'masa_berlaku_tkdn_migas','type'=>'date','validation'=>'date','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Masa Berlaku SKA/Brevet','name'=>'masa_berlaku_ska','type'=>'date','validation'=>'date','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Asosiasi','name'=>'asosiasi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Referensi','name'=>'referensi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 
@@ -210,7 +230,26 @@
 	        | $this->script_js = "function() { ... }";
 	        |
 	        */
-	        $this->script_js = NULL;
+	        $this->script_js = "
+				$(document).on('click','#btn-add-table-sertifikatdetail', function(e){
+					e.preventDefault();
+					if($('.sertifikat')){
+						var count = $('.sertifikat').length;
+						if(count >= 15){
+							$('#btn-add-table-sertifikatdetail').attr('disabled');
+							alert('Jumlah Maksimal Sertifikat yang Dapat Di Upload Hanya 15.');
+						}else{
+							$('#btn-add-table-sertifikatdetail').removeAttr('disabled');
+						}
+					}
+				});
+
+				function getAttachmentFile(id){
+					//alert($('#select-attachment-'+id).val());
+					var val = $('#select-attachment-'+id).val();
+					$('#modal-trigger-'+id).attr('data-target','#'+val+'-'+id);
+				}
+			";
 
 
             /*
@@ -411,7 +450,8 @@
 	        $this->cbLoader();
 	        $data = [];
 	        $data['row'] = DB::table($this->table)->where($this->primary_key, $id)->first();
-			$data['coloumn'] = DB::table('tenaga_kerja_sertifikat')->where('tenaga_kerja_id', $id)->get();
+			$data['data_child'] = DB::table('tenaga_kerja_sertifikat')->where('tenaga_kerja_id', $id)->get();
+			//print_r($data['form']);die();
 			// $data['row'] = DB::table($this->table)
 			// ->join('tenaga_kerja_sertifikat', 'tenaga_kerja.id', '=', 'tenaga_kerja_sertifikat.tenaga_kerja_id')
 			// ->where('tenaga_kerja.id', $id)->get();

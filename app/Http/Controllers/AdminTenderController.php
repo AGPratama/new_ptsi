@@ -5,6 +5,8 @@ use Request;
 use DB;
 use CRUDBooster;
 use Route;
+use Illuminate\Http\Request as DRequest;
+use Illuminate\Support\Facades\Storage;
 
 class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBController
 {
@@ -32,11 +34,18 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"No Tender","name"=>"no_tender"];
+			$this->col[] = ["label"=>"No Tender","name"=>"no_tender",'callback'=>function($row){
+				if($this->countExpire($row->tanggal_terkirim) <= 2){
+					return $row->id.'<br><span class="alert-danger">Due Date < dari 2 hari</span>';
+				}else{
+					return $row->id;
+				}
+			}];
 			$this->col[] = ["label"=>"Nama Tender","name"=>"nama_tender"];
 			$this->col[] = ["label"=>"No Berita Acara","name"=>"no_berita_acara"];
 			$this->col[] = ["label"=>"Pengguna Jasa","name"=>"pengguna_jasa_id","join"=>"enumeration,value"];
 			$this->col[] = ["label"=>"Metode Kualifikasi","name"=>"metode_kualifikasi_id","join"=>"enumeration,value"];
+			$this->col[] = ["label"=>"Tanggal Terkirim","name"=>"tanggal_terkirim",'visible'=>false];
             //$this->col[] = ["label"=>"Bidang / Sub Bidang","name"=>"sub_bidang"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
@@ -57,7 +66,7 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			$this->form[] = ['label'=>'Metode Evaluasi','name'=>'metode_evaluasi_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`Key` = \'MetodeEvaluasi\''];
 			//$this->form[] = ['label'=>'Bidbond Text','name'=>'bidbond_text','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Bidbond File','name'=>'bidbond_file','type'=>'upload','validation'=>'required','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Hasil Tender Text','name'=>'hasil_tender_text','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Hasil Tender Text','name'=>'hasil_tender_text','type'=>'checkbox','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key` = \'HasilTender\''];
 			$this->form[] = ['label'=>'Hasil Tender File','name'=>'hasil_tender_file','type'=>'upload','validation'=>'required','width'=>'col-sm-10'];
             $this->form[] = ['label'=>'Pengumuman Hasil Tender','name'=>'pengumuman_hasil_tender','type'=>'upload','validation'=>'required','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Ao Name','name'=>'ao_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
@@ -276,7 +285,7 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
      */
     public function hook_query_index(&$query)
     {
-            //Your code here
+        $query->orderBy('tanggal_terkirim','desc');
     }
 
         /*
@@ -435,4 +444,95 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
         //Please use cbView method instead view method from laravel
         $this->cbView('tender.custom_add_step3', $data);
     }
+
+	public function getStep4(DRequest $request){
+		if (!CRUDBooster::isCreate() && $this->global_privilege == false || $this->button_add == false) {
+            CRUDBooster::redirect(CRUDBooster::adminPath(), trans("crudbooster.denied_access"));
+        }
+
+        $data = [];
+        $data['page_title'] = trans("crudbooster.edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name]);
+        $data['page_menu'] = Route::getCurrentRoute()->getActionName();
+        $data['command'] = 'edit';
+		$data['list_surat'] = DB::table('surat_korespondesi')->get();
+		$data['tender_id'] = $_GET['id'];
+		//ketika edit
+		$tableName = 'tender_surat_korespondensi';
+		$data['checked_val'] = [];
+		$cekData = DB::table($tableName)->where('tender_id', $_GET['id'])->exists();
+		if($cekData){
+			$check_val = DB::table($tableName)->where('tender_id', $_GET['id'])->get();
+			$arr_checked = [];
+			$arr_input = [];
+			foreach($check_val as $c){
+				$arr_checked[] = $c->surat_id;
+				$arr_input[$c->surat_id] = $c->surat_korespondensi;
+			}
+			$data['checked_val'] = $arr_checked;
+			$data['arr_input'] = $arr_input;
+			//print_r($data['arr_input']);die();
+		}
+
+        //Please use cbView method instead view method from laravel
+        $this->cbView('tender.custom_add_step4', $data);
+	}
+
+	public function postSave_surat(DRequest $request){
+		$this->cbLoader();
+        if (! CRUDBooster::isCreate() && $this->global_privilege == false) {
+            CRUDBooster::insertLog(trans('crudbooster.log_try_add_save', [
+                'name' => Request::input($this->title_field),
+                'module' => CRUDBooster::getCurrentModule()->name,
+            ]));
+            CRUDBooster::redirect(CRUDBooster::adminPath(), trans("crudbooster.denied_access"));
+        }
+		$tableName = 'tender_surat_korespondensi';
+		if($request->input('submit')){
+			$rules = [
+				'tender_id' => 'required',
+				'surat_id' => 'required',
+				//'surat_korespondensi' => 'required',
+			];
+			if($request->validate($rules)){
+				//echo "tes2";die();
+				$t_id = $request->input('tender_id');
+				$s_id = $request->input('surat_id');
+				$s_k = $request->file('surat_korespondesi');
+
+
+				foreach($s_k as $i=>$s){
+
+					$cek = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $i]])->exists();
+					if($cek){
+						$insertedval = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $i]])->get();
+						foreach($insertedval as $val){
+							storage::delete($val->surat_korespondensi);
+						}
+						DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $i]])->delete();
+					}
+
+					$filename = time().$s_k[$i]->getClientOriginalName();
+					$path = Storage::putFileAs('uploads/'.$t_id, $s_k[$i], $filename);
+
+					$value=[
+						'tender_id' => $t_id,
+						'surat_id' => $s_id[$i],
+						'surat_korespondensi' => $path
+					];
+					$query = DB::table($tableName)->insert($value);
+				}
+
+				//if($query){
+					return redirect('admin/tender');
+				//}
+			}
+		}
+	}
+
+	public function countExpire($date){
+		$date1 = date_create(date("Y-m-d"));
+		$date2 = date_create($date);
+		$diff = date_diff($date1,$date2);
+		return $diff->format("%R%m%a");
+	}
 }

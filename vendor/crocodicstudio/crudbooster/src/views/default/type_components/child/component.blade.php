@@ -526,6 +526,7 @@ $name = str_slug($form['label'], '');
 
                                 <?php
                                 $columns_tbody = [];
+                                $id=isset($row->id) ? $row->id : '';
                                 $data_child = DB::table($form['table'])->where($form['foreign_key'], $id);
                                 foreach ($form['columns'] as $i => $c) {
                                     $data_child->addselect($form['table'].'.'.$c['name']);

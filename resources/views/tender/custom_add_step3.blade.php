@@ -36,6 +36,7 @@
                         <li><a href="{{ CRUDBooster::mainpath('edit/'.$_GET['id']) }}">Informasi Umum</a></li>
                         <li class=""><a href="{{CRUDBooster::mainpath('step2?id='.$_GET['id'])}}">Jadwal Tender</a></li>
                         <li class="active"><a href="#tab_3" data-toggle="tab" aria-expanded="false" >Syarat Kualifikasi</a></li>
+                        <li class=""><a href="#" data-toggle="tab" aria-expanded="false" style="pointer-events: none;cursor:not-allowed">Surat Korespondensi</a></li>
                     </ul>
                     <div class="tab-content">
                         <!-- /.tab-pane -->
@@ -72,7 +73,7 @@
 
                             @if($button_save && $command != 'detail')
                             {{-- <input type="submit" name="submit" value='Finish' class='btn btn-primary'> --}}
-                            <a href="{{CRUDBooster::mainpath()}}" type="button" class='btn btn-primary'>Finish</a>
+                            <a href="{{CRUDBooster::mainpath('step4?id='.$_GET['id'])}}" type="button" class='btn btn-primary'>Step 4</a>
                             @endif
 
                             @endif
