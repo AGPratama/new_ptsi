@@ -17,6 +17,7 @@ class CreateTenagaKerjaSertifikat extends Migration
 			$table->increments('id');
 			$table->integer('tenaga_kerja_id')->nullable();
 			$table->string('sertifikat')->nullable();
+            $table->string('nama_sertifikat')->nullable();
             //
         });
     }

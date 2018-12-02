@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+namespace App\Http\Controllers;
+set_time_limit(120);
 
 	use Session;
 	use Request;
@@ -7,6 +9,7 @@
 	use Route;
 	use Illuminate\Http\Request as DRequest;
 	use Illuminate\View\View;
+	use PhpOffice\PhpWord\Style\Font;
 
 	class AdminTenagaKerjaController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -69,7 +72,11 @@
 				$datas['sertifikat'] = DB::table('tenaga_kerja_sertifikat')->where('tenaga_kerja_id',$row->id)->get();
 				return View('tenagakerja.attachment', $datas);
 			}];
-
+			$this->col[] = ['label'=>'Attachment','callback'=>function($row){
+				$datas['row'] = $row;
+				$datas['penggunajasa'] = DB::table('enumeration')->where('key','KategoriPenggunaJasa')->get();
+				return View('tenagakerja.generatecv', $datas);
+			}];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
@@ -108,7 +115,7 @@
 			$this->form[] = ['label'=>'Referensi','name'=>'referensi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 
 			# END FORM DO NOT REMOVE THIS LINE
-
+			$columns[] = ['label'=>'Nama Sertifikat','name'=>'nama_sertifikat','type'=>'text'];
 			$columns[] = ['label'=>'Sertifikat','name'=>'sertifikat','type'=>'upload'];
 			$this->form[] = ['label'=>'Sertifikat Detail','name'=>'tenaga_kerja_sertifikat','type'=>'child','columns'=>$columns,'table'=>'tenaga_kerja_sertifikat','foreign_key'=>'tenaga_kerja_id'];
 
@@ -248,6 +255,12 @@
 					//alert($('#select-attachment-'+id).val());
 					var val = $('#select-attachment-'+id).val();
 					$('#modal-trigger-'+id).attr('data-target','#'+val+'-'+id);
+				}
+
+				function submitform(id)
+				{
+					var type = $('#typecv-'+id).val();
+					window.open('/admin/tenaga_kerja/generatecv?tenaga_kerja_id='+id+'&typecv='+type, '_blank');
 				}
 			";
 
@@ -593,5 +606,190 @@
 	        //Please use cbView method instead view method from laravel
 	        $this->cbView('tenagakerja.custom_add_step3', $data);
 	    }
+
+		public function getGeneratecv(DRequest $request)
+		{
+			//\PhpOffice\PhpWord\IOFactory::createReader('MsDoc');
+			if($request->input('typecv')){
+				//print_r($request->input());die();
+				$typecv = $request->input('typecv');
+				$id = $request->input('tenaga_kerja_id');
+
+				$data['master'] = DB::table('tenaga_kerja')->where('id',$id)->first();
+				$data['pengalaman'] = DB::table('tenaga_kerja_pengalaman')
+				->where('tenaga_kerja_id',$id)
+				->leftJoin('pengalaman_uraian_kerja', 'pengalaman_uraian_kerja.id', '=', 'pengalaman_id')
+				->leftJoin('enumeration', 'pengalaman_uraian_kerja.pengguna_jasa_id', '=', 'enumeration.id')
+				->get();
+				$data['uraian'] = DB::table('tenaga_kerja_uraian')
+				->where('tenaga_kerja_id',$id)
+				->leftJoin('daftar_uraian_tugas', 'daftar_uraian_tugas.id', '=', 'uraian_id')
+				->get();
+				$data['sertifikat'] = DB::table('tenaga_kerja_sertifikat')->where('tenaga_kerja_id',$id)->get();
+
+				if($typecv == 2){
+					$this->generateBumn($data);
+				}else if($typecv == 3){
+					$this->generateKementrian($data);
+				}else{
+					$this->generateK3s($data);
+				}
+			}
+
+
+		}
+
+		public function generateBumn($data)
+		{
+			//print_r($data);die();
+			$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(__DIR__.'/../../../public/templatecv/sample-template.docx');
+			$templateProcessor->setValue('jabatan', $data['master']->jabatan);
+			$templateProcessor->setValue('nama_konsultan', 'Nama Konsultan');
+			$templateProcessor->setValue('nama', $data['master']->nama);
+			$templateProcessor->setValue('sertifikat', $data['master']->sertifikat);
+			$templateProcessor->setValue('tanggal_lahir', $data['master']->tanggal_lahir);
+			$templateProcessor->setValue('lama_pengalaman_kerja', $data['master']->lama_pengalaman_kerja);
+			$templateProcessor->setValue('asosiasi', $data['master']->asosiasi);
+			$templateProcessor->setValue('uraian_tugas', $data['master']->uraian_tugas);
+			$templateProcessor->setValue('pendidikan_formal', $data['master']->pendidikan_formal);
+			$templateProcessor->setValue('pendidikan_non_formal', $data['master']->pendidikan_non_formal);
+
+			$counter = count($data['pengalaman']);
+			$templateProcessor->cloneRow('c',$counter);
+			for($i=0; $i<$counter; $i++ )
+			{
+				$row = $i+1;
+				$templateProcessor->setValue('c#'.$row, '');
+				$templateProcessor->setValue('waktu_pelaksanaan_start_end#'.$row, $data['pengalaman'][$i]->waktu_pelaksanaan_start.'-'.$data['pengalaman'][$i]->waktu_pelaksanaan_end);
+				$templateProcessor->setValue('posisi_yang_diusulkan#'.$row, $data['pengalaman'][$i]->posisi_yang_diusulkan);
+				$templateProcessor->setValue('nama_proyek#'.$row, $data['pengalaman'][$i]->nama_proyek);
+				$templateProcessor->setValue('lokasi_proyek#'.$row, $data['pengalaman'][$i]->lokasi_proyek);
+				$templateProcessor->setValue('nama_perusahaan#'.$row, $data['pengalaman'][$i]->nama_perusahaan);
+				$templateProcessor->setValue('uraian_tugas_pengalaman#'.$row, $data['pengalaman'][$i]->uraian_tugas);
+			}
+
+			$cs = count($data['sertifikat']);
+			$templateProcessor->cloneRow('d',$cs);
+			$r = 1;
+			foreach($data['sertifikat'] as $s)
+			{
+				$templateProcessor->setValue('d#'.$r, '');
+				$templateProcessor->setValue('sertifikat_child#'.$r, $s->nama_sertifikat);
+				$r++;
+			}
+
+
+			$templateProcessor->setValue('tanggal', date('d-M-Y'));
+			$templateProcessor->setValue('nama', $data['master']->nama);
+			$templateProcessor->setValue('jabatan', $data['master']->jabatan);
+
+			$filename = $data['master']->nama.'-cv-bumn.docx';
+			$templateProcessor->saveAs(__DIR__.'/../../../public/'.$filename);
+			header ( "Expires: Mon, 1 Apr 1974 05:00:00 GMT" );
+			header ( "Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT" );
+			header ( "Cache-Control: no-cache, must-revalidate" );
+			header ( "Pragma: no-cache" );
+			header ('Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document;');
+			header ( "Content-Disposition: attachment; filename=".$filename);
+			readfile($filename);
+			//return redirect('admin/tenaga_kerja');
+		}
+
+		public function generateK3s($data)
+		{
+			$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(__DIR__.'/../../../public/templatecv/template-k3s.docx');
+
+			$templateProcessor->setValue('nama', $data['master']->nama);
+			$templateProcessor->setValue('jabatan', $data['master']->jabatan);
+			$templateProcessor->setValue('ttl', $data['master']->tempat.','.$data['master']->tanggal_lahir);
+			$templateProcessor->setValue('pendidikan_formal', $data['master']->pendidikan_formal);
+			$templateProcessor->setValue('nama', $data['master']->nama);
+
+			$cs = count($data['sertifikat']);
+			$templateProcessor->cloneRow('c',$cs);
+			$r = 1;
+			foreach($data['sertifikat'] as $s)
+			{
+				$templateProcessor->setValue('c#'.$r, '');
+				$templateProcessor->setValue('sertifikat_child#'.$r, $s->nama_sertifikat);
+				$r++;
+			}
+
+			$cp = count($data['pengalaman']);
+			$templateProcessor->cloneRow('d',$cp);
+			$r=1;
+			foreach($data['pengalaman'] as $p)
+			{
+				$templateProcessor->setValue('d#'.$r,'');
+				$templateProcessor->setValue('nama_perusahaan#'.$r,$p->nama_perusahaan);
+				$templateProcessor->setValue('nama_proyek#'.$r,$p->nama_proyek);
+				$templateProcessor->setValue('waktu_pelaksanaan#'.$r,$p->waktu_pelaksanaan_start.'-'.$p->waktu_pelaksanaan_end);
+				$templateProcessor->setValue('posisi_yang_diusulkan#'.$r,$p->posisi_yang_diusulkan);
+				$templateProcessor->setValue('uraian_tugas#'.$r,$p->uraian_tugas);
+				$r++;
+			}
+
+			$templateProcessor->setValue('date', date('M-d-Y'));
+
+			$filename = $data['master']->nama.'-cv-k3s.docx';
+			$filedir = __DIR__.'/../../../public/';
+			$templateProcessor->saveAs($filedir.$filename, true);
+			header ( "Expires: Mon, 1 Apr 1974 05:00:00 GMT" );
+			header ( "Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT" );
+			header ( "Cache-Control: no-cache, must-revalidate" );
+			header ( "Pragma: no-cache" );
+			header ('Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document;');
+			header ( "Content-Disposition: attachment; filename=".$filename);
+			readfile($filename);
+
+			// $headers = [
+            //   	'Content-Type' => 'application/docx',
+           	// ];
+			//
+		   	// return response()->download($filedir.$filename, $filename, $headers);
+		}
+
+		public function generateKementrian($data)
+		{
+			$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(__DIR__.'/../../../public/templatecv/template-kementrian.docx');
+
+			$templateProcessor->setValue('nama', $data['master']->nama);
+			$templateProcessor->setValue('jabatan', $data['master']->jabatan);
+			$templateProcessor->setValue('ttl', $data['master']->tempat.','.$data['master']->tanggal_lahir);
+			$templateProcessor->setValue('pendidikan_formal', $data['master']->pendidikan_formal);
+			$templateProcessor->setValue('tahun', $data['master']->tahun);
+			$templateProcessor->setValue('pendidikan_non_formal', $data['master']->pendidikan_non_formal);
+			$templateProcessor->setValue('status_kepegawaian', $data['master']->status_kepegawaian);
+
+			$cp = count($data['pengalaman']);
+			$templateProcessor->cloneRow('c',$cp);
+			$r=1;
+			foreach($data['pengalaman'] as $p)
+			{
+				$templateProcessor->setValue('c#'.$r,'');
+				$templateProcessor->setValue('nama_perusahaan#'.$r,$p->nama_perusahaan);
+				$templateProcessor->setValue('nama_proyek#'.$r,$p->nama_proyek);
+				$templateProcessor->setValue('waktu_pelaksanaan#'.$r,$p->waktu_pelaksanaan_start.'-'.$p->waktu_pelaksanaan_end);
+				$templateProcessor->setValue('posisi_yang_diusulkan#'.$r,$p->posisi_yang_diusulkan);
+				$templateProcessor->setValue('uraian_tugas#'.$r,$p->uraian_tugas);
+				$templateProcessor->setValue('pengguna_jasa#'.$r, $p->value);
+				$templateProcessor->setValue('status_kepegawaian#'.$r, $p->status_kepegawaian);
+				$templateProcessor->setValue('surat_referensi#'.$r, $p->surat_referensi);
+				$templateProcessor->setValue('lokasi_proyek#'.$r, $p->lokasi_proyek);
+				$r++;
+			}
+
+			$templateProcessor->setValue('date', date('d M Y'));
+
+			$filename = $data['master']->nama.'-cv-kementrian.docx';
+			$templateProcessor->saveAs(__DIR__.'/../../../public/'.$filename);
+			header ( "Expires: Mon, 1 Apr 1974 05:00:00 GMT" );
+			header ( "Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT" );
+			header ( "Cache-Control: no-cache, must-revalidate" );
+			header ( "Pragma: no-cache" );
+			header ('Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document;');
+			header ( "Content-Disposition: attachment; filename=".$filename);
+			readfile($filename);
+		}
 
 	}

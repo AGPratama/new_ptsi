@@ -11,7 +11,8 @@
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
         "mews/captcha": "^2.2",
-        "orangehill/iseed": "dev-master"
+        "orangehill/iseed": "dev-master",
+        "phpoffice/phpword": "^0.15.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
