@@ -15,8 +15,8 @@ class CreateTenagaKerjaPengalamanTable extends Migration
     {
         Schema::create('tenaga_kerja_pengalaman', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('tenaga_kerja_id')->unsigned();
-            $table->integer('pengalaman_id');
+            $table->integer('tenaga_kerja_id')->unsigned()->nullable();
+            $table->integer('pengalaman_id')->nullable();
             $table->timestamps();
         });
     }

@@ -14,8 +14,9 @@ class AddDokumenTenderTorToTenderTable extends Migration
     public function up()
     {
         Schema::table('tender', function (Blueprint $table) {
-            $table->string('dokument_tender_tor');
-            $table->string('pengumuman_hasil_tender');
+            $table->string('dokument_tender_tor')->nullable();
+            $table->string('pengumuman_hasil_tender')->nullable();
+            $table->integer('sub_bidang')->unsigned()->nullable();
         });
     }
 
@@ -29,6 +30,7 @@ class AddDokumenTenderTorToTenderTable extends Migration
         Schema::table('tender', function (Blueprint $table) {
             $table->dropColumn('dokument_tender_tor');
             $table->dropColumn('pengumuman_hasil_tender');
+            $table->dropColumn('tender');
         });
     }
 }

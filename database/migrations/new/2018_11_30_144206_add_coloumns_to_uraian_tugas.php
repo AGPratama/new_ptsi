@@ -15,7 +15,7 @@ class AddColoumnsToUraianTugas extends Migration
     {
         Schema::table('daftar_uraian_tugas', function (Blueprint $table) {
             $table->integer('kategori_id')->unsigned()->nullable();
-            $table->string('sub_bidang_id')->nullable();
+            $table->integer('sub_bidang_id')->unsigned()->nullable();
         });
     }
 
