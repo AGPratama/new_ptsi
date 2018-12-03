@@ -459,7 +459,7 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 		//ketika edit
 		$tableName = 'tender_surat_korespondensi';
 		$data['checked_val'] = [];
-		$cekData = DB::table($tableName)->where('tender_id', $_GET['id'])->exists();
+        $cekData = DB::table($tableName)->where('tender_id', $_GET['id'])->exists();
 		if($cekData){
 			$check_val = DB::table($tableName)->where('tender_id', $_GET['id'])->get();
 			$arr_checked = [];
@@ -471,7 +471,13 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			$data['checked_val'] = $arr_checked;
 			$data['arr_input'] = $arr_input;
 			//print_r($data['arr_input']);die();
+		} else {
+			foreach($data['list_surat'] as $c){
+				$arr_input[$c->id] = $c->name;
+			}
+			$data['arr_input'] = $arr_input;
 		}
+
 
         //Please use cbView method instead view method from laravel
         $this->cbView('tender.custom_add_step4', $data);
