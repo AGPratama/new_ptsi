@@ -5,6 +5,8 @@ use Request;
 use DB;
 use CRUDBooster;
 use Route;
+use Illuminate\Http\Request as DRequest;
+use Illuminate\Support\Facades\Storage;
 
 	class AdminSyaratKualifikasiController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -336,6 +338,12 @@ use Route;
             $this->cbLoader();
             $data = [];
             $data['row'] = DB::table($this->table)->where($this->primary_key, $id)->first();
+			$data['surat'] = DB::table('tender_surat_korespondensi')
+			->select('tender_surat_korespondensi.id as idsuratk', 'name', 'surat_korespondensi', 'surat_id', 'tender_id')
+			->leftJoin('surat_korespondensi', 'surat_korespondensi.id', '=', 'surat_id')
+			->where('tender_id',$id)->get();
+			$data['tender_id'] = $id;
+			$data['message'] = $message;
 
             if (! CRUDBooster::isRead() && $this->global_privilege == false || $this->button_edit == false) {
                 CRUDBooster::insertLog(trans("crudbooster.log_try_edit", [
@@ -352,5 +360,54 @@ use Route;
 
             $this->cbView('syaratkualifikasi.custom_add', $data);
         }
+
+		public function postSave_surat(DRequest $request){
+			$this->cbLoader();
+	        if (! CRUDBooster::isCreate() && $this->global_privilege == false) {
+	            CRUDBooster::insertLog(trans('crudbooster.log_try_add_save', [
+	                'name' => Request::input($this->title_field),
+	                'module' => CRUDBooster::getCurrentModule()->name,
+	            ]));
+	            CRUDBooster::redirect(CRUDBooster::adminPath(), trans("crudbooster.denied_access"));
+	        }
+			$tableName = 'tender_surat_korespondensi';
+			if($request->input('submit')){
+				$rules = [
+					'tender_id' => 'required',
+					'surat_id' => 'required',
+					//'surat_korespondensi' => 'required',
+				];
+				if($request->validate($rules)){
+					//echo "tes2";die();
+					$t_id = $request->input('tender_id');
+					$s_id = $request->input('surat_id');
+					$s_k = $request->file('surat_korespondesi');
+
+
+					foreach($s_k as $i=>$s){
+						$cek = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $i]])->exists();
+						if($cek){
+							$val = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $i]])->first();
+							if($val->surat_korespondensi !== null){
+								storage::delete($val->surat_korespondensi);
+							}
+
+							$filename = time().$s_k[$i]->getClientOriginalName();
+	    					$path = Storage::putFileAs('uploads/'.$t_id, $s_k[$i], $filename);
+
+							$update = DB::table($tableName)
+							->where([['tender_id','=', $t_id],['surat_id','=', $i]])
+							->update(['surat_korespondensi'=>$path]);
+						}
+					}
+
+					//if($query){
+						return redirect('admin/syarat_kualifikasi');
+					//}
+				}else{
+					return redirect()->route('edit',['id'=>$_GET['id'], 'message'=> 'Gagal Upload Surat Korespondensi']);
+				}
+			}
+		}
 
 	}

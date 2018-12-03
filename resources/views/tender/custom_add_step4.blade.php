@@ -49,25 +49,25 @@
                                             <input type="checkbox" value="{{$ls->id}}" name="surat_id[{{$ls->id}}]" class="check-surat" @if(in_array($ls->id, $checked_val)) checked @endif> {{$ls->name}}
                                         </label>
                                         <?php
-                                        $style="";
-                                        $link="#";
-                                        if(isset($arr_input)){
-                                            if(array_key_exists ( $ls->id , $arr_input )){
-                                                $style = "hidden";
-                                                $link = url($arr_input[$ls->id]);
+                                        // $style="";
+                                        // $link="#";
+                                        // if(isset($arr_input)){
+                                        //     if(array_key_exists ( $ls->id , $arr_input )){
+                                        //         $style = "hidden";
+                                        //         $link = url($arr_input[$ls->id]);
                                         ?>
-                                            <div id="control-{{$ls->id}}">
+                                            <!-- <div id="control-{{$ls->id}}">
                                                 <a href="{{$link}}" target="_blank" class="btn btn-success style">View</a>
                                                 <a href="#"  class="btn btn-danger delete-input" data-id="{{$ls->id}}">delete</a>
-                                            </div>
+                                            </div> -->
                                         <?php
-                                            }
+                                        //     }
+                                        //
+                                        // } ?>
 
-                                        } ?>
-
-                                        <div id="upload-{{$ls->id}}" class="upload {{$style}}">
+                                        <!-- <div id="upload-{{$ls->id}}" class="upload {{$style}}">
                                             <input type="file" name="surat_korespondesi[{{$ls->id}}]" class="form-control">
-                                        </div>
+                                        </div> -->
                                         <div id="download-{{$ls->id}}">
                                             <a href="{{url($ls->location)}}" class="btn btn-default">Download</a>
                                         </div>
@@ -128,32 +128,32 @@
 @push('bottom')
 <script type="text/javascript">
 $(function () {
-    $('.check-surat').each(function(){
-        var id = $(this).val();
-        if($(this).is(':checked')){
-            $('#upload-'+id).show();
-            $('#download-'+id).hide();
-        }else{
-            $('#upload-'+id).hide();
-            $('#download-'+id).show();
-        }
-    });
-    $(document).on("click",".check-surat",function() {
-        var id = $(this).val();
-        if($(this).is(':checked')){
-            $('#upload-'+id).show();
-            $('#download-'+id).hide();
-        }else{
-            $('#upload-'+id).hide();
-            $('#download-'+id).show();
-        }
-    });
-
-    $(document).on("click",".delete-input",function() {
-        var id = $(this).attr("data-id");
-        $('#upload-'+id).removeClass('hidden');
-        $('#control-'+id).addClass('hidden');
-    });
+    // $('.check-surat').each(function(){
+    //     var id = $(this).val();
+    //     if($(this).is(':checked')){
+    //         $('#upload-'+id).show();
+    //         $('#download-'+id).hide();
+    //     }else{
+    //         $('#upload-'+id).hide();
+    //         $('#download-'+id).show();
+    //     }
+    // });
+    // $(document).on("click",".check-surat",function() {
+    //     var id = $(this).val();
+    //     if($(this).is(':checked')){
+    //         $('#upload-'+id).show();
+    //         $('#download-'+id).hide();
+    //     }else{
+    //         $('#upload-'+id).hide();
+    //         $('#download-'+id).show();
+    //     }
+    // });
+    //
+    // $(document).on("click",".delete-input",function() {
+    //     var id = $(this).attr("data-id");
+    //     $('#upload-'+id).removeClass('hidden');
+    //     $('#control-'+id).addClass('hidden');
+    // });
 
 });
 </script>

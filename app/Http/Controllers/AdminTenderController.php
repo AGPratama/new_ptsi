@@ -454,7 +454,7 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
         $data['page_title'] = trans("crudbooster.edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name]);
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
         $data['command'] = 'edit';
-		$data['list_surat'] = DB::table('surat_korespondesi')->get();
+		$data['list_surat'] = DB::table('surat_korespondensi')->get();
 		$data['tender_id'] = $_GET['id'];
 		//ketika edit
 		$tableName = 'tender_surat_korespondensi';
@@ -497,29 +497,31 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 				//echo "tes2";die();
 				$t_id = $request->input('tender_id');
 				$s_id = $request->input('surat_id');
-				$s_k = $request->file('surat_korespondesi');
+				//$s_k = $request->file('surat_korespondesi');
 
 
-				foreach($s_k as $i=>$s){
+				foreach($s_id as $i=>$s){
 
-					$cek = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $i]])->exists();
+					$cek = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $s]])->exists();
 					if($cek){
-						$insertedval = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $i]])->get();
-						foreach($insertedval as $val){
-							storage::delete($val->surat_korespondensi);
-						}
-						DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $i]])->delete();
-					}
+						$insertedval = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $s]])->get();
+						// foreach($insertedval as $val){
+						// 	storage::delete($val->surat_korespondensi);
+						// }
+						// DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $i]])->delete();
+					}else{
 
-					$filename = time().$s_k[$i]->getClientOriginalName();
-					$path = Storage::putFileAs('uploads/'.$t_id, $s_k[$i], $filename);
+    					// $filename = time().$s_k[$i]->getClientOriginalName();
+    					// $path = Storage::putFileAs('uploads/'.$t_id, $s_k[$i], $filename);
 
-					$value=[
-						'tender_id' => $t_id,
-						'surat_id' => $s_id[$i],
-						'surat_korespondensi' => $path
-					];
-					$query = DB::table($tableName)->insert($value);
+    					$value=[
+    						'tender_id' => $t_id,
+    						'surat_id' => $s,
+    						//'surat_korespondensi' => $path
+    					];
+    					$query = DB::table($tableName)->insert($value);
+
+                    }
 				}
 
 				//if($query){
