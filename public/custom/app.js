@@ -234,8 +234,8 @@ app.factory('TenderSvc', function ($http, $window) {
     }
 })
 app.factory('JadwalSvc', function ($http, $window) {
-    var baseurl = $window.location.href.split('8000/')[0];
-    baseurl = baseurl + "8000/api/";
+    var baseurl = $window.location.href.split('/')[0];
+    baseurl = baseurl + "/api/";
     return {
         getById: function (id) {
             var url = baseurl + 'tender/' + id;
@@ -248,8 +248,8 @@ app.factory('JadwalSvc', function ($http, $window) {
     }
 })
 app.factory('DashboardSvc', function ($http, $window) {
-    var baseurl = $window.location.href.split('8000/')[0];
-    baseurl = baseurl + "8000/api/";
+    var baseurl = $window.location.href.split('/')[0];
+    baseurl = baseurl + "/api/";
     return {
         getById: function (id) {
             var url = baseurl + 'tender/' + id;

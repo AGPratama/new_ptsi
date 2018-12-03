@@ -20,7 +20,7 @@
 
         <div class="panel-body" style="padding:0;">
             <?php
-                //$action = (@$row) ? CRUDBooster::mainpath("edit-save/$row->id") : CRUDBooster::mainpath("add-save");
+                //$action = (@$row) ? CRUDBooster::mainpath("edit-save/$_GET['id']") : CRUDBooster::mainpath("add-save");
                 $return_url = ($return_url) ?: g('return_url');
                 ?>
             <form class='form-horizontal' id="form" enctype="multipart/form-data" method="POST" action="{{CRUDBooster::mainpath('save_surat')}}">
@@ -35,8 +35,8 @@
                             <li class="active"><a href="#" data-toggle="tab" aria-expanded="true" >Surat Korespondensi</a></li>
                         @endif
                         @if($command=='edit')
-                            <li class=""><a href="{{CRUDBooster::mainpath('step2?id='.$row->id)}}">Jadwal Tender</a></li>
-                            <li class=""><a href="{{CRUDBooster::mainpath('step3?id='.$row->id)}}">Syarat Kualifikasi</a></li>
+                            <li class=""><a href="{{CRUDBooster::mainpath('step2?id='.$_GET['id'])}}">Jadwal Tender</a></li>
+                            <li class=""><a href="{{CRUDBooster::mainpath('step3?id='.$_GET['id'])}}">Syarat Kualifikasi</a></li>
                             <li class="active"><a <a href="#" data-toggle="tab" aria-expanded="true">Surat Korespondensi</a></li>
                         @endif
                     </ul>

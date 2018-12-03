@@ -11,7 +11,7 @@ class suratkorespondensiseeder extends Seeder
      */
     public function run()
     {
-        \DB::table('tender_surat_korespondensi')->insert(array (
+        \DB::table('surat_korespondensi')->insert(array (
             0 =>
             array(
                 'name'=>'Surat Pernyataan',

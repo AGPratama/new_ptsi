@@ -35,7 +35,7 @@
                         @if($command=='edit')
                             <li class="active"><a href="#tab_2" data-toggle="tab" aria-expanded="false">Jadwal Tender</a></li>
                             <li class=""><a href="{{CRUDBooster::mainpath('step3?id='.$_GET['id'])}}">Syarat Kualifikasi</a></li>
-                            <li class=""><a href="{{CRUDBooster::mainpath('step4?id='.$row->id)}}">Surat Korespondensi</a></li>
+                            <li class=""><a href="{{CRUDBooster::mainpath('step4?id='.$_GET['id'])}}">Surat Korespondensi</a></li>
                         @endif
                     </ul>
                     <div class="tab-content">

@@ -287,7 +287,7 @@
                     var data=$scope.form;
                     $http({
                         method: 'POST',  
-                        url: $window.location.href.split('8000/')[0]+"8000/api/tender-syarat-kualifikasi",
+                        url: $window.location.href.split('/')[0]+"/api/tender-syarat-kualifikasi",
                         data: data
                     }).then(async (res)=>{
                         if(res.status == 200){

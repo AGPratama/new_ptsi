@@ -307,7 +307,7 @@
 
                     $http({
                         method: 'POST',
-                        url: $window.location.href.split('8000/')[0]+"8000/api/tender-syarat-kualifikasi",
+                        url: $window.location.href.split('/')[0]+"api/tender-syarat-kualifikasi",
                         headers: { 'Content-Type': undefined },
                         transformRequest: function (data) {
                             var formData = new FormData();
