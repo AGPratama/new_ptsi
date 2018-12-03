@@ -17,7 +17,7 @@ class CreateTenderSuratKorespondensiTable extends Migration
             $table->increments('id');
             $table->integer('tender_id')->unsigned();
             $table->integer('surat_id');
-            $table->varchar('surat_korespondensi')->nullable();
+            $table->string('surat_korespondensi')->nullable();
             $table->timestamps();
         });
     }
