@@ -172,8 +172,10 @@ app.directive("contextMenu", function ($timeout) {
 })
 // Module APi Master Get
 app.factory('MasterSyaratKualifikasiSvc', function ($http, $window) {
-    var baseurl = $window.location.href.split('/')[0];
-    baseurl = baseurl + "/api/";
+    var baseurl = $window.location.href.split('//')[1];
+    https = $window.location.href.split('//')[0];
+    baseurl = baseurl.split('/')[0];
+    baseurl = https + '//' + baseurl + "/api/";
     return {
         getList: function () {
             var url = baseurl + 'master-syarat-kualifikasi';
@@ -202,8 +204,10 @@ app.factory('MasterSyaratKualifikasiSvc', function ($http, $window) {
     }
 })
 app.factory('TenderSvc', function ($http, $window) {
-    var baseurl = $window.location.href.split('/')[0];
-    baseurl = baseurl + "/api/";
+    var baseurl = $window.location.href.split('//')[1];
+    https = $window.location.href.split('//')[0];
+    baseurl = baseurl.split('/')[0];
+    baseurl = https + '//' + baseurl + "/api/";
     return {
         getList: function (id) {
             var url = baseurl + 'tender-syarat-kualifikasi?tender_id=' + id;
@@ -234,8 +238,10 @@ app.factory('TenderSvc', function ($http, $window) {
     }
 })
 app.factory('JadwalSvc', function ($http, $window) {
-    var baseurl = $window.location.href.split('/')[0];
-    baseurl = baseurl + "/api/";
+    var baseurl = $window.location.href.split('//')[1];
+    https = $window.location.href.split('//')[0];
+    baseurl = baseurl.split('/')[0];
+    baseurl = https + '//' + baseurl + "/api/";
     return {
         getById: function (id) {
             var url = baseurl + 'tender/' + id;
@@ -248,8 +254,10 @@ app.factory('JadwalSvc', function ($http, $window) {
     }
 })
 app.factory('DashboardSvc', function ($http, $window) {
-    var baseurl = $window.location.href.split('/')[0];
-    baseurl = baseurl + "/api/";
+    var baseurl = $window.location.href.split('//')[1];
+    https = $window.location.href.split('//')[0];
+    baseurl = baseurl.split('/')[0];
+    baseurl = https + '//' + baseurl + "/api/";
     return {
         getById: function (id) {
             var url = baseurl + 'tender/' + id;

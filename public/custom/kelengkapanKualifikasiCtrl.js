@@ -15,7 +15,7 @@
             return JadwalSvc.getById(id).then((res)=>{
                 if(res.status==200){
                     console.log(res.data);
-                    $scope.data=angular.copy(res.data.data);
+                    $scope.data2=angular.copy(res.data.data);
                     $scope.isLoading=false;
                     $loading.finish('save');
                 }
@@ -295,6 +295,10 @@
             })
         }
         $scope.doEdit=()=>{
+            var baseurl = $window.location.href.split('//')[1];
+            https = $window.location.href.split('//')[0];
+            baseurl = baseurl.split('/')[0];
+            baseurl = https + '//' + baseurl + "/api/";
             $loading.start('save');
             if(!$scope.form.master_syarat_kualifikasi.is_dokumen){
                 update();
@@ -307,7 +311,7 @@
 
                     $http({
                         method: 'POST',
-                        url: $window.location.href.split('/')[0]+"api/tender-syarat-kualifikasi",
+                        url: baseurl+"tender-syarat-kualifikasi",
                         headers: { 'Content-Type': undefined },
                         transformRequest: function (data) {
                             var formData = new FormData();

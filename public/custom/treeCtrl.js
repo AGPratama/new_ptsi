@@ -277,6 +277,11 @@
             })
         }
         $scope.doEdit=()=>{
+            var baseurl = $window.location.href.split('//')[1];
+            https = $window.location.href.split('//')[0];
+            baseurl = baseurl.split('/')[0];
+            baseurl = https + '//' + baseurl + "/api/";
+
             $loading.start('save');
             if(!$scope.form.master_syarat_kualifikasi.is_dokumen){
                 update();
@@ -287,7 +292,7 @@
                     var data=$scope.form;
                     $http({
                         method: 'POST',  
-                        url: $window.location.href.split('/')[0]+"/api/tender-syarat-kualifikasi",
+                        url: baseurl+"tender-syarat-kualifikasi",
                         data: data
                     }).then(async (res)=>{
                         if(res.status == 200){
