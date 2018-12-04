@@ -16,15 +16,19 @@
             </div>
             <div class="modal-body center-obj">
                 <?php if ($row->bukti !== null) { ?>
-                    <object data="<?= url($row->bukti) ?>" type="application/pdf" style="width:100%" height="500">
-                        <embed src="<?= url($row->bukti) ?>" style="width:100%" height="500px" />
-                        <p>This browser does not support PDFs. Please download the PDF to view it:
-                            <a href="<?= url($row->bukti) ?>">Download PDF</a>.</p>
-                        </embed>
-                    </object>
+                    <?php if(strpos($row->bukti, 'pdf')!==FALSE){ ?>
+                        <object data="<?= url($row->bukti) ?>" type="application/pdf" style="width:100%" height="500">
+                            <embed src="<?= url($row->bukti) ?>" style="width:100%" height="500px" />
+                            <p>This browser does not support PDFs. Please download the PDF to view it:
+                                <a href="<?= url($row->bukti) ?>">Download PDF</a>.</p>
+                            </embed>
+                        </object>
+                    <?php } else if(strpos($row->bukti, 'pdf')===FALSE){ ?>
+                        <img class="img-responsive" src="<?= url($row->bukti) ?>">
+                    <?php } ?>
                 <?php }else{ ?>
                     <h4 class="text-center">Tidak Ada Data</h4>
-                <?php } ?>
+            <?php } ?>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -39,12 +43,16 @@
             </div>
             <div class="modal-body center-obj">
                 <?php if ($row->pic_peralatan !== null) { ?>
-                    <object data="<?= url($row->pic_peralatan) ?>" type="application/pdf" style="width:100%" height="500">
-                        <embed src="<?= url($row->pic_peralatan) ?>" style="width:100%" height="500px" />
-                        <p>This browser does not support PDFs. Please download the PDF to view it:
-                            <a href="<?= url($row->pic_peralatan) ?>">Download PDF</a>.</p>
-                        </embed>
-                    </object>
+                    <?php if(strpos($row->pic_peralatan, 'pdf')!==FALSE){ ?>
+                        <object data="<?= url($row->pic_peralatan) ?>" type="application/pdf" style="width:100%" height="500">
+                            <embed src="<?= url($row->pic_peralatan) ?>" style="width:100%" height="500px" />
+                            <p>This browser does not support PDFs. Please download the PDF to view it:
+                                <a href="<?= url($row->pic_peralatan) ?>">Download PDF</a>.</p>
+                            </embed>
+                        </object>
+                    <?php } else if(strpos($row->pic_peralatan, 'pdf')===FALSE){ ?>
+                        <img class="img-responsive" src="<?= url($row->pic_peralatan) ?>">
+                    <?php } ?>
                 <?php }else{ ?>
                     <h4 class="text-center">Tidak Ada Data</h4>
                 <?php } ?>
