@@ -37,6 +37,12 @@
 			$this->col[] = ["label"=>"Kapasitas","name"=>"kapasitas"];
             $this->col[] = ["label"=>"Kondisi","name"=>"kondisi_id","join"=>"enumeration,value"];
             $this->col[] = ['label'=>'Lokasi','name'=>'lokasi','visible'=>false];
+			$this->col[] = ['label'=>'Bukti','name'=>'bukti','visible'=>false];
+			$this->col[] = ['label'=>'PIC Peralatan','name'=>'pic_peralatan','visible'=>false];
+			$this->col[] = ['label'=>'Attachment','callback'=>function($row){
+				$datas['row'] = $row;
+				return View('peralatan.attachment',$datas);
+			}];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
@@ -161,7 +167,12 @@
 	        | $this->script_js = "function() { ... }";
 	        |
 	        */
-	        $this->script_js = NULL;
+	        $this->script_js = "
+				function getAttachmentFile(id){
+					var val = $('#attach-data-'+id).val();
+					$('#modal-trigger-'+id).attr('data-target','#'+val+'-'+id);
+				}
+			";
 
 
             /*

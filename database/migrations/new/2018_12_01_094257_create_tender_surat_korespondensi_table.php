@@ -15,8 +15,8 @@ class CreateTenderSuratKorespondensiTable extends Migration
     {
         Schema::create('tender_surat_korespondensi', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('tender_id')->unsigned();
-            $table->integer('surat_id');
+            $table->integer('tender_id')->unsigned()->nullable();
+            $table->integer('surat_id')->nullable();
             $table->string('surat_korespondensi')->nullable();
             $table->timestamps();
         });

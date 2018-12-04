@@ -15,8 +15,8 @@ class CreateTenagaKerjaUraianTable extends Migration
     {
         Schema::create('tenaga_kerja_uraian', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('tenaga_kerja_id')->unsigned();
-            $table->integer('uraian_id');
+            $table->integer('tenaga_kerja_id')->unsigned()->nullable();
+            $table->integer('uraian_id')->nullable();
             $table->timestamps();
         });
     }
