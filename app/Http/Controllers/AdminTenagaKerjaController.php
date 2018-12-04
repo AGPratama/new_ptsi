@@ -50,7 +50,6 @@ set_time_limit(120);
 			$this->col[] = ['label'=>'Strata','name'=>'strata_id','join'=>'enumeration,value',"visible"=>false];
 			$this->col[] = ['label'=>'Jurusan','name'=>'jurusan',"visible"=>false];
 			$this->col[] = ['label'=>'Institusi','name'=>'institusi',"visible"=>false];
-			$this->col[] = ['label'=>'Pendidikan Non Formal','name'=>'pendidikan_non_formal',"visible"=>false];
 			$this->col[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian',"visible"=>false];
 			$this->col[] = ['label'=>'Sertifikat Training','name'=>'sertifikat_training'];
 			$this->col[] = ['label'=>'No Sertifikat','name'=>'no_sertifikat',"visible"=>false];
@@ -104,7 +103,10 @@ set_time_limit(120);
 			$this->form[] = ['label'=>'Strata','name'=>'strata_id','type'=>'select2','validation'=>'integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'Strata\''];
 			$this->form[] = ['label'=>'Jurusan','name'=>'jurusan','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Institusi','name'=>'institusi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Pendidikan Non Formal','name'=>'pendidikan_non_formal','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
+
+			$columns_pendidikan[] = ['label'=>'Pendidikan Non Formal','name'=>'nama','type'=>'text'];
+			$this->form[] = ['label'=>'Pendidikan Non Formal','name'=>'tenaga_kerja_pendidikan_non_formal','type'=>'child','columns'=>$columns_pendidikan,'table'=>'tenaga_kerja_pendidikan_non_formal','foreign_key'=>'tenaga_kerja_id'];
+
 			$this->form[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Sertifikat','name'=>'sertifikat','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Sertifikat Training','name'=>'sertifikat_training','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
@@ -123,6 +125,7 @@ set_time_limit(120);
 			$columns[] = ['label'=>'Nama Sertifikat','name'=>'nama_sertifikat','type'=>'text'];
 			$columns[] = ['label'=>'Sertifikat','name'=>'sertifikat','type'=>'upload'];
 			$this->form[] = ['label'=>'Sertifikat Detail','name'=>'tenaga_kerja_sertifikat','type'=>'child','columns'=>$columns,'table'=>'tenaga_kerja_sertifikat','foreign_key'=>'tenaga_kerja_id'];
+
 
 			# OLD START FORM
 			//$this->form = [];
