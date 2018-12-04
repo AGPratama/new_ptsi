@@ -51,7 +51,7 @@
 			$this->form[] = ['label'=>'Merek','name'=>'merek','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Tahun Pembuatan','name'=>'tahun_pembuatan','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Jumlah','name'=>'jumlah','type'=>'number','validation'=>'integer|min:0','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Kapasitas','name'=>'kapasitas','type'=>'number','validation'=>'integer|min:0','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Kapasitas','name'=>'kapasitas','type'=>'text','validation'=>'integer|min:0','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Kondisi','name'=>'kondisi_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KondisiPeralatan\''];
 			$this->form[] = ['label'=>'Lokasi','name'=>'lokasi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Bukti/Kwitansi','name'=>'bukti','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
