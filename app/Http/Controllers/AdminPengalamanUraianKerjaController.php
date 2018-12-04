@@ -30,19 +30,26 @@
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Nama Pekerja","name"=>"nama_pekerjaan"];
+			$this->col[] = ["label"=>"Nama Pekerja","name"=>"nama_pekerjaan","join"=>"tenaga_kerja,nama"];
 			$this->col[] = ["label"=>"Nama Perusahaan","name"=>"nama_perusahaan"];
 			$this->col[] = ["label"=>"Tanggal Lahir","name"=>"ttl"];
 			$this->col[] = ["label"=>"Pendidikan Formal","name"=>"pendidikan_formal"];
-			$this->col[] = ["label"=>"Pendidikan Non Formal","name"=>"pendidikan_non_formal"];
 			$this->col[] = ["label"=>"Penguasaan Bahasa","name"=>"penguasaan_bahasa"];
 			$this->col[] = ["label"=>"Posisi Yang Diusulkan","name"=>"posisi_yang_diusulkan"];
 			$this->col[] = ["label"=>"Uraian Tugas","name"=>"uraian_tugas"];
+			$this->col[] = ['label'=>'Tahun','name'=>'tahun'];
+			$this->col[] = ['label'=>'Nama Proyek','name'=>'nama_proyek'];
+			$this->col[] = ['label'=>'Lokasi Proyek','name'=>'lokasi_proyek'];
+			$this->col[] = ['label'=>'Pengguna Jasa','name'=>'pengguna_jasa_id'];
+			$this->col[] = ['label'=>'Waktu Pelaksanaan Start','name'=>'waktu_pelaksanaan_start'];
+			$this->col[] = ['label'=>'Waktu Pelaksanaan End','name'=>'waktu_pelaksanaan_end'];
+			$this->col[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian'];
+			$this->col[] = ['label'=>'Surat Referensi','name'=>'surat_referensi'];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Nama Pekerja','name'=>'nama_pekerjaan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Nama Pekerja','name'=>'nama_pekerjaan','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10', 'datatable'=>'tenaga_kerja,nama'];
 			$this->form[] = ['label'=>'Nama Perusahaan','name'=>'nama_perusahaan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Tanggal Lahir','name'=>'ttl','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Pendidikan Formal','name'=>'pendidikan_formal','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
