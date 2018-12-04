@@ -23,12 +23,12 @@
                                 <a href="<?= url($row->bukti) ?>">Download PDF</a>.</p>
                             </embed>
                         </object>
-                    <?php } else if(strpos($row->bukti, 'pdf')===FALSE){ ?>
+                    <?php } else { ?>
                         <img class="img-responsive" src="<?= url($row->bukti) ?>">
                     <?php } ?>
                 <?php }else{ ?>
                     <h4 class="text-center">Tidak Ada Data</h4>
-            <?php } ?>
+                <?php } ?>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

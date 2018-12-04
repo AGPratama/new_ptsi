@@ -39,13 +39,13 @@ set_time_limit(120);
 			$this->col[] = ["label"=>"Nama","name"=>"nama"];
 			//$this->col[] = ["label"=>"Jabatan","name"=>"jabatan"];
 			$this->col[] = ["label"=>"Alamat","name"=>"jabatan"];
-            $this->col[] = ["label"=>"Tanggal Lahir","name"=>"tanggal_lahir"];
             $this->col[] = ['label'=>'Tempat Lahir','name'=>'tempat_lahir',"visible"=>false];
+            $this->col[] = ["label"=>"Tanggal Lahir","name"=>"tanggal_lahir"];
+            $this->col[] = ['label'=>'No Ktp','name'=>'no_ktp','visible'=>false];
+            $this->col[] = ['label'=>'No Npwp','name'=>'no_npwp',"visible"=>false];
 			$this->col[] = ["label"=>"Pendidikan","name"=>"pendidikan_formal"];
 			$this->col[] = ["label"=>"Lama Pengalaman Kerja","name"=>"lama_pengalaman_kerja"];
             $this->col[] = ["label"=>"Tahun Ijazah","name"=>"tahun_ijazah"];
-            $this->col[] = ['label'=>'No Ktp','name'=>'no_ktp','visible'=>false];
-            $this->col[] = ['label'=>'No Npwp','name'=>'no_npwp',"visible"=>false];
             $this->col[] = ['label'=>'Teknik / None Teknik','name'=>'teknik_id','join'=>'enumeration,value',"visible"=>false];
 			$this->col[] = ['label'=>'Strata','name'=>'strata_id','join'=>'enumeration,value',"visible"=>false];
 			$this->col[] = ['label'=>'Jurusan','name'=>'jurusan',"visible"=>false];
@@ -54,7 +54,6 @@ set_time_limit(120);
 			$this->col[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian',"visible"=>false];
 			$this->col[] = ['label'=>'Sertifikat Training','name'=>'sertifikat_training'];
 			$this->col[] = ['label'=>'No Sertifikat','name'=>'no_sertifikat',"visible"=>false];
-			$this->col[] = ['label'=>'TKDN/PTSI','name'=>'tkdn_ptsi'];
 			$this->col[] = ['label'=>'Nomor Sertifikat TKDN Migas','name'=>'no_sertifikat_tkdn_migas'];
 			$this->col[] = ['label'=>'Tanggal Sertifikat TKDN Migas','name'=>'tgl_sertifikat_tkdn_migas'];
 			$this->col[] = ['label'=>'Masa Berlaku Sertifikat TKDN Migas','name'=>'masa_berlaku_tkdn_migas'];
@@ -64,15 +63,22 @@ set_time_limit(120);
 			$this->col[] = ['label'=>'Masa Berlaku SKA/Brevet','name'=>'masa_berlaku_ska'];
 			$this->col[] = ['label'=>'Asosiasi','name'=>'asosiasi'];
 			$this->col[] = ['label'=>'Referensi','name'=>'referensi'];
+			$this->col[] = ['label'=>'TKDN/PTSI','name'=>'tkdn_ptsi',"visible"=>false];
 			$this->col[] = ['label'=>'KTP','name'=>'ktp',"visible"=>false];
 			$this->col[] = ['label'=>'KTP','name'=>'npwp',"visible"=>false];
 			$this->col[] = ['label'=>'KTP','name'=>'bukti_pajak',"visible"=>false];
 			$this->col[] = ['label'=>'Attachment','callback'=>function($row){
 				$datas['row'] = $row;
-				$datas['sertifikat'] = DB::table('tenaga_kerja_sertifikat')->where('tenaga_kerja_id',$row->id)->get();
 				return View('tenagakerja.attachment', $datas);
 			}];
-			$this->col[] = ['label'=>'Attachment','callback'=>function($row){
+
+			$this->col[] = ['label'=>'Attachment 2','callback'=>function($row){
+				$datas['row'] = $row;
+				$datas['sertifikat_training'] = DB::table('tenaga_kerja_sertifikat')->where('tenaga_kerja_id',$row->id)->get();
+				return View('tenagakerja.attachment2', $datas);
+			}];
+
+			$this->col[] = ['label'=>'Generate CV','callback'=>function($row){
 				$datas['row'] = $row;
 				$datas['penggunajasa'] = DB::table('enumeration')->where('key','KategoriPenggunaJasa')->get();
 				return View('tenagakerja.generatecv', $datas);
@@ -83,7 +89,6 @@ set_time_limit(120);
 			$this->form = [];
 			$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
 			//$this->form[] = ['label'=>'Jabatan','name'=>'jabatan','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Jabatan','name'=>'jabatan','type'=>'textarea','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Tempat Lahir','name'=>'tempat_lahir','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Tanggal Lahir','name'=>'tanggal_lahir','type'=>'date','validation'=>'date','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'No Ktp','name'=>'no_ktp','type'=>'number','validation'=>'required|digits:16','width'=>'col-sm-10'];
@@ -262,6 +267,11 @@ set_time_limit(120);
 					var type = $('#typecv-'+id).val();
 					window.open('/admin/tenaga_kerja/generatecv?tenaga_kerja_id='+id+'&typecv='+type, '_blank');
 				}
+
+				$('#select-sertifikat').on('change', function(){
+					$('#modal-trigger-sertifikat').attr('data-target','#sertifikat-'+$(this).val())
+				})
+			
 			";
 
 

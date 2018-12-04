@@ -73,27 +73,3 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-<div class="modal fade" id="sertifikat-<?=$row->id?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-            </div>
-            <div class="modal-body center-obj">
-                <div class="row">
-                    <?php foreach ($sertifikat as $key => $value): ?>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 mb10">
-                            <?php if ($value->sertifikat !== null): ?>
-                                <img class="img-responsive" src="<?= $value->sertifikat ?>">
-                            <?php else: ?>
-                                <h4 class="text-center">Tidak Ada Data</h4>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
