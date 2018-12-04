@@ -46,7 +46,12 @@
 			$this->col[] = ["label"=>"Jenis Ijin Usaha","name"=>"jenis_ijin_usaha"];
             $this->col[] = ["label"=>"Kualifikasi","name"=>"kualifikasi"];
 			$this->col[] = ['label'=>'Keterangan','name'=>'keterangan',"visible" => false];
+			$this->col[] = ['label'=>'Surat Ijin','name'=>'surat_ijin',"visible" => false];
 
+			$this->col[] = ['label'=>'Attachment','callback'=>function($row){
+				$datas['row'] = $row;
+				return View('suratijinusaha.attachment', $datas);
+			}];
 
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
