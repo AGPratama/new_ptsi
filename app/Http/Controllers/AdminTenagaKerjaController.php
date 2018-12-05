@@ -66,12 +66,12 @@ set_time_limit(120);
 			$this->col[] = ['label'=>'KTP','name'=>'ktp',"visible"=>false];
 			$this->col[] = ['label'=>'KTP','name'=>'npwp',"visible"=>false];
 			$this->col[] = ['label'=>'KTP','name'=>'bukti_pajak',"visible"=>false];
-			$this->col[] = ['label'=>'Attachment','callback'=>function($row){
+			$this->col[] = ['label'=>'Attachment Personal','callback'=>function($row){
 				$datas['row'] = $row;
 				return View('tenagakerja.attachment', $datas);
 			}];
 
-			$this->col[] = ['label'=>'Attachment 2','callback'=>function($row){
+			$this->col[] = ['label'=>'Attachment Sertf Training','callback'=>function($row){
 				$datas['row'] = $row;
 				$datas['sertifikat_training'] = DB::table('tenaga_kerja_sertifikat')->where('tenaga_kerja_id',$row->id)->get();
 				return View('tenagakerja.attachment2', $datas);
@@ -107,7 +107,14 @@ set_time_limit(120);
 			$columns_pendidikan[] = ['label'=>'Pendidikan Non Formal','name'=>'nama','type'=>'text'];
 			$this->form[] = ['label'=>'Pendidikan Non Formal','name'=>'tenaga_kerja_pendidikan_non_formal','type'=>'child','columns'=>$columns_pendidikan,'table'=>'tenaga_kerja_pendidikan_non_formal','foreign_key'=>'tenaga_kerja_id'];
 
-			$this->form[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
+			$sert_training[] = ['label'=>'Sertifikat Training','name'=>'nama','type'=>'text'];
+			$sert_training[] = ['label'=>'Nomor Sertifikat','name'=>'nomor','type'=>'text'];
+			$sert_training[] = ['label'=>'Tanggal Sertifikat','name'=>'sertifikat_date','type'=>'date','validation'=>'date'];
+			$sert_training[] = ['label'=>'Masa Berlaku Sertifikat','name'=>'sertifikat_end_date','type'=>'date','validation'=>'date'];
+			$sert_training[] = ['label'=>'Attachment','name'=>'sertifikat','type'=>'upload'];
+			$this->form[] = ['label'=>'Sertifikat Training','name'=>'tenaga_kerja_sertifikat_training','type'=>'child','columns'=>$sert_training,'table'=>'tenaga_kerja_sertifikat_training','foreign_key'=>'tenaga_kerja_id'];
+
+			$this->form[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'radio','validation'=>'min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'StatusKepegawaian\''];
 			//$this->form[] = ['label'=>'Sertifikat','name'=>'sertifikat','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Sertifikat Training','name'=>'sertifikat_training','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'No Sertifikat','name'=>'no_sertifikat','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];

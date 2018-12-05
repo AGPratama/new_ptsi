@@ -138,6 +138,8 @@ $name = str_slug($form['label'], '');
                                                 @elseif($col['type']=='textarea')
                                                     <textarea id='{{$name_column}}' name='child-{{$col["name"]}}'
                                                               class='form-control {{$col['required']?"required":""}}' {{($col['readonly']===true)?"readonly":""}} ></textarea>
+                                                @elseif($col['type']=='date')
+                                                    @include("crudbooster::default.type_components.date.component_child")
                                                 @elseif($col['type']=='upload')
                                                     <div id='{{$name_column}}' class="input-group">
                                                         <input type="hidden" class="input-id">
