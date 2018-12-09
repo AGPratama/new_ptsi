@@ -42,38 +42,32 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <div class="box-body" id="parent-form-area">
-                                @foreach($list_surat as $ls)
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" value="{{$ls->id}}" name="surat_id[{{$ls->id}}]" class="check-surat" @if(in_array($ls->id, $checked_val)) checked @endif> {{$ls->name}}
-                                        </label>
-                                        <?php
-                                        // $style="";
-                                        // $link="#";
-                                        // if(isset($arr_input)){
-                                        //     if(array_key_exists ( $ls->id , $arr_input )){
-                                        //         $style = "hidden";
-                                        //         $link = url($arr_input[$ls->id]);
-                                        ?>
-                                            <!-- <div id="control-{{$ls->id}}">
-                                                <a href="{{$link}}" target="_blank" class="btn btn-success style">View</a>
-                                                <a href="#"  class="btn btn-danger delete-input" data-id="{{$ls->id}}">delete</a>
-                                            </div> -->
-                                        <?php
-                                        //     }
-                                        //
-                                        // } ?>
-
-                                        <!-- <div id="upload-{{$ls->id}}" class="upload {{$style}}">
-                                            <input type="file" name="surat_korespondesi[{{$ls->id}}]" class="form-control">
-                                        </div> -->
-                                        <div id="download-{{$ls->id}}">
-                                            <a href="{{url($ls->location)}}" class="btn btn-default">Download</a>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div><!-- /.box-body -->
+                        <table class="table table-bordered table-striped table-hovered">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Nama Surat</th>
+                                            <th>Sequence</th>
+                                            <th>Download</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @php ($i=1)
+                                    @foreach($list_surat as $ut)
+                                        <tr>
+                                            <td>{{$i}}</td>
+                                            <td><input type="checkbox" value="{{$ut->id}}" name="surat_id[{{$ut->id}}]" class="check-surat" @if(in_array($ut->id, $checked_val)) checked @endif> {{$ut->name}}</td>
+                                            <td></td>
+                                            <td>
+                                                <div id="download-{{$ut->id}}">
+                                                    <a href="{{url($ut->location)}}" class="btn btn-default">Download</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @php ($i++)
+                                    @endforeach
+                                    </tbody>
+                                </table>
                         </div>
                         <!-- /.tab-pane -->
                         {{-- <div class="tab-pane" id="tab_2">
