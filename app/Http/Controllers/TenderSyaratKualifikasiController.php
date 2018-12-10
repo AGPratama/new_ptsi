@@ -26,7 +26,7 @@ class TenderSyaratKualifikasiController extends Controller
         if ($request->tender_id != null) {
             $tender = Tender::find($request->tender_id);
             $display_kualifikasi = ($tender->metode_kualifikasi_id==20) 
-                ? ($tender->hasil_tender_text==40) ? 1 : 2
+                ? ($tender->hasil_tender_text==35) ? 1 : 2
                 : 3;
             if($display_kualifikasi != 3){
                 $data = MasterSyaratKualifikasi::where('display', $display_kualifikasi)->get();
