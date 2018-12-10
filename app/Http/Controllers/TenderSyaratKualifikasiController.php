@@ -24,9 +24,20 @@ class TenderSyaratKualifikasiController extends Controller
     public function index(Request $request)
     {
         if ($request->tender_id != null) {
-            $data = MasterSyaratKualifikasi::all();
+            $tender = Tender::find($request->tender_id);
+            $display_kualifikasi = ($tender->metode_kualifikasi_id==20) 
+                ? ($tender->hasil_tender_text==40) ? 1 : 2
+                : 3;
+            if($display_kualifikasi != 3){
+                $data = MasterSyaratKualifikasi::where('display', $display_kualifikasi)->get();
+            } else {
+                $data = MasterSyaratKualifikasi::all();
+            }
             foreach ($data as $row) {
-                $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details')->where('master_syarat_kualifikasi_id', $row->id)->where('tender_id',$request->tender_id)->where('active',1)->first();
+                $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details')
+                    ->where('master_syarat_kualifikasi_id', $row->id)
+                    ->where('tender_id',$request->tender_id)
+                    ->where('active',1)->first();
                 $row->complete = false;
                 if ($tender_syarat_kualifikasi == null) {
                     $row->active = false;
