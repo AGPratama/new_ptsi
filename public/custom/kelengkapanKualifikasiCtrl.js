@@ -2,7 +2,7 @@
     'use strict';
 
     //// JavaScript Code ////
-    function kelengkapanKualifikasiCtrl($log,JadwalSvc,$http,TenderSvc,$compile, $timeout, $scope,surveyor,$window,toastr,$loading,$sce) {
+    function kelengkapanKualifikasiCtrl($log,JadwalSvc,$http,KelengkapanSvc,$compile, $timeout, $scope,surveyor,$window,toastr,$loading,$sce) {
         $scope.getCurrentId = null;
         $scope.privilegeId = 0;
         $scope.getTenderData=(id)=>{
@@ -52,13 +52,13 @@
         $scope.newNode = {};
         $scope.getTreeData=(id)=>{
             $scope.isLoading=true;
-            return TenderSvc.getList(id).then((res)=>{
+            return KelengkapanSvc.getList(id).then((res)=>{
                 if(res.status==200){
                     var temp={
                         "id": "0",
                         "parent": "#",
                         "type": "book",
-                        "text": "Syarat Kualifikasi",
+                        "text": "Syarat Kualifikasi / "+res.data.tender,
                         "state": {
                             "opened": true
                         },
@@ -68,7 +68,7 @@
                         "id": "1",
                         "parent": "#",
                         "type": "book",
-                        "text": "Syarat Kualifikasi",
+                        "text": "Syarat Kualifikasi / "+res.data.tender,
                         "state": {
                             "opened": true
                         },
@@ -115,7 +115,7 @@
                                     "data-custom": "0",
                                     "data-id": $scope.data[i].id.toString(),
                                     "class":"node-inactive"
-                                }
+                                };
                             }else{
                                 $scope.data[i].a_attr = {
                                     "context-menu": "menuOptions",
@@ -135,12 +135,10 @@
                     $scope.data.push(temp);
                     $scope.treeData=$scope.data;
                     $scope.treeConfig.version++;
-                    console.log($scope.treeData,'Ini Data tree');
                     $scope.isLoading=false;
                 }
             }).catch((err)=>{
                 $scope.isLoading=false;
-                console.log(err,'Ini Errror');
             })
         }
         $scope.applyModelChanges = function() {
@@ -225,7 +223,7 @@
         }
         $scope.doSend=(mode)=>{
             $loading.start('save');
-            TenderSvc.SendNotification(mode,$scope.getCurrentId).then(async (res)=>{
+            KelengkapanSvc.SendNotification(mode,$scope.getCurrentId).then(async (res)=>{
                 if(res.status == 200){
                     $loading.finish('save');
                     if(res.data.error_code == 0)
@@ -241,7 +239,7 @@
         }
         $scope.view_object=async ()=>{
             $loading.start('save');
-            TenderSvc.getById($scope.getCurrentId,$scope.currentId).then(async(res)=>{
+            KelengkapanSvc.getById($scope.getCurrentId,$scope.currentId).then(async(res)=>{
                 $scope.form=angular.copy(res.data.data);
                 $scope.form.master_syarat_kualifikasi.details.sort(function(a, b) {
                     return parseFloat(a.sequence) - parseFloat(b.sequence);
@@ -278,7 +276,7 @@
             }
         }
         var update=()=>{
-            TenderSvc.update($scope.form).then((res)=>{
+            KelengkapanSvc.update($scope.form).then((res)=>{
                 if(res.status==200){
                     $scope.getTreeData($scope.getCurrentId);
                     $scope.view_object()

@@ -18,6 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::apiResource('master-syarat-kualifikasi', 'MasterSyaratKualifikasiController');
 Route::apiResource('tender-syarat-kualifikasi', 'TenderSyaratKualifikasiController');
+Route::apiResource('kelengkapan-syarat-kualifikasi', 'KelengkapanSyaratKualifikasiController');
 Route::apiResource('enumeration', 'EnumerationController');
 Route::apiResource('tender', 'TenderController');
 Route::get('tender/send-notif-by-tender/{id}', 'TenderController@send_notif_by_tender')->name('send_notif_by_tender');

@@ -237,6 +237,40 @@ app.factory('TenderSvc', function ($http, $window) {
 
     }
 })
+app.factory('KelengkapanSvc', function ($http, $window) {
+    var baseurl = $window.location.href.split('//')[1];
+    https = $window.location.href.split('//')[0];
+    baseurl = baseurl.split('/')[0];
+    baseurl = https + '//' + baseurl + "/api/";
+    return {
+        getList: function (id) {
+            var url = baseurl + 'kelengkapan-syarat-kualifikasi?tender_id=' + id;
+            return $http.get(url);
+        },
+        getById: function (tenderid, masterid) {
+            var url = baseurl + 'kelengkapan-syarat-kualifikasi/show?tender_id=' + tenderid + '&master_syarat_kualifikasi_id=' + masterid;
+            return $http.get(url);
+        },
+        update: function (data) {
+            var url = baseurl + 'kelengkapan-syarat-kualifikasi';
+            return $http.post(url, data)
+        },
+        UpdateMode: (mode, data) => {
+            var url = baseurl + 'kelengkapan-syarat-kualifikasi?mode=' + mode;
+            return $http.post(url, data);
+        },
+        SendNotification: (mode, id) => {
+            var url;
+            if (mode == "tender") {
+                url = baseurl + 'tender/send-notif-by-tender/' + id;
+            } else {
+                url = baseurl + 'tender/send-notif-by-verifikator/' + id;
+            }
+            return $http.get(url);
+        }
+
+    }
+})
 app.factory('JadwalSvc', function ($http, $window) {
     var baseurl = $window.location.href.split('//')[1];
     https = $window.location.href.split('//')[0];

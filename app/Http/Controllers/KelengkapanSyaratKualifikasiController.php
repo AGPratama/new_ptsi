@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
-class TenderSyaratKualifikasiController extends Controller
+class KelengkapanSyaratKualifikasiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -36,7 +36,7 @@ class TenderSyaratKualifikasiController extends Controller
                 $data = MasterSyaratKualifikasi::all();
             }
             $data_response = [];
-            foreach ($data as $row) {
+            foreach ($data as $k=>$row) {
                 $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details')
                     ->where('master_syarat_kualifikasi_id', $row->id)
                     ->where('tender_id',$request->tender_id)
@@ -44,6 +44,10 @@ class TenderSyaratKualifikasiController extends Controller
                 $row->complete = false;
 
                 if ($tender_syarat_kualifikasi == null) {
+                    if($row->is_leaf != 0){ // if children and not active, hide
+                        unset($data[$k]);
+                        continue;
+                    }
                     $row->active = false;
                 } else {
                     $row->active = true;
@@ -60,10 +64,12 @@ class TenderSyaratKualifikasiController extends Controller
                     $row->verified = $tender_syarat_kualifikasi->verified;
                     $row->sequence = $tender_syarat_kualifikasi->sequence;
                 }
+                $data_response[] = $row;
             }
-            return response()->json(['data' => $data, 'tender'=> $text_kualifikasi]);
+            return response()->json(['data' => $data_response, 'tender'=> $text_kualifikasi]);
         }
     }
+
 
     /**
      * Store a newly created resource in storage.
