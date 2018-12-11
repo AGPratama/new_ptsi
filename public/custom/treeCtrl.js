@@ -36,7 +36,7 @@
                         "id": "0",
                         "parent": "#",
                         "type": "book",
-                        "text": "Syarat Kualifikasi",
+                        "text": "Syarat Kualifikasi / "+res.data.tender,
                         "state": {
                             "opened": true
                         },
@@ -46,7 +46,7 @@
                         "id": "1",
                         "parent": "#",
                         "type": "book",
-                        "text": "Syarat Kualifikasi",
+                        "text": "Syarat Kualifikasi / "+res.data.tender,
                         "state": {
                             "opened": true
                         },

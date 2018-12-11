@@ -25,14 +25,17 @@ class TenderSyaratKualifikasiController extends Controller
     {
         if ($request->tender_id != null) {
             $tender = Tender::find($request->tender_id);
-            $display_kualifikasi = ($tender->metode_kualifikasi_id==20) 
-                ? ($tender->hasil_tender_text==35) ? 1 : 2
-                : 3;
-            if($display_kualifikasi != 3){
+
+            // if pra
+            if($tender->metode_kualifikasi_id==20){
+                $display_kualifikasi = ($tender->hasil_tender_text==35) ? 1 : 2;
+                $text_kualifikasi = "Pra Kualifikasi";
                 $data = MasterSyaratKualifikasi::where('display', $display_kualifikasi)->get();
             } else {
+                $text_kualifikasi = "Pasca Kualifikasi";
                 $data = MasterSyaratKualifikasi::all();
             }
+
             foreach ($data as $row) {
                 $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details')
                     ->where('master_syarat_kualifikasi_id', $row->id)
@@ -57,7 +60,7 @@ class TenderSyaratKualifikasiController extends Controller
                     $row->sequence = $tender_syarat_kualifikasi->sequence;
                 }
             }
-            return TenderSyaratKualifikasiResource::collection($data);
+            return response()->json(['data' => $data, 'tender'=> $text_kualifikasi]);
         }
     }
 
