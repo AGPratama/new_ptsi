@@ -65,7 +65,10 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			$this->form[] = ['label'=>'Metode Kualifikasi','name'=>'metode_kualifikasi_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`Key` = \'MetodeKualifikasi\''];
 			$this->form[] = ['label'=>'No Kualifikasi','name'=>'no_kualifikasi','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Dokumen Tender Text','name'=>'dokumen_tender_text','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Dokument Tender File','name'=>'dokument_tender_file','type'=>'upload','validation'=>'required','width'=>'col-sm-10'];
+            
+            $columns_tender_file[] = ['label'=>'File','name'=>'dokumen_tender_file','type'=>'upload'];
+			$this->form[] = ['label'=>'Tender File','name'=>'label_tender_file','type'=>'child','columns'=>$columns_tender_file,'table'=>'tender_file','foreign_key'=>'tender_id'];
+
 			$this->form[] = ['label'=>'Nilai Pagu','name'=>'nilai_pagu','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nilai Hps','name'=>'nilai_hps','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Metode Dokumen','name'=>'metode_dokumen_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`Key` = \'MetodeDokumen\''];
