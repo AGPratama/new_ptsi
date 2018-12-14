@@ -95,7 +95,7 @@ class TenderController extends Controller
      */
     public function show($id)
     {
-        return new TenderResource(Tender::with(['penggunajasa','metodeevaluasi','metodekualifikasi','metodedokumen','hasiltender'])->findOrFail($id));
+        return new TenderResource(Tender::with(['penggunajasa','metodeevaluasi','metodekualifikasi','metodedokumen','hasiltender','bidang','ao'])->findOrFail($id));
     }
 
     /**

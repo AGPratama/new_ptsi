@@ -63,9 +63,19 @@
                                             <td><%data2.no_berita_acara%></td>
                                         </tr>
                                         <tr>
+                                            <td>Nama Pengguna Jasa</td>
+                                            <td width="50">:</td>
+                                            <td><%data2.nama_pengguna_jasa%></td>
+                                        </tr>
+                                        <tr>
                                             <td>Kategori Pengguna Jasa</td>
                                             <td width="50">:</td>
                                             <td><%data2.penggunajasa.value%></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bidang / Sub Bidang</td>
+                                            <td width="50">:</td>
+                                            <td><%data2.bidang.value%></td>
                                         </tr>
                                         <tr>
                                             <td>Metode Kualifikasi</td>
@@ -90,13 +100,6 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Dokumen Tender (TOR)</td>
-                                            <td width="50">:</td>
-                                            <td>
-                                                <a href="<?= $app->make('url')->to('/'); ?>/<%data2.dokument_tender_tor%>"  class="btn btn-primary btn-xs"> Download</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
                                             <td>Nilai Pagu</td>
                                             <td>:</td>
                                             <td><%data2.nilai_pagu%></td>
@@ -117,16 +120,9 @@
                                             <td><%data2.metodeevaluasi.value%></td>
                                         </tr>
                                         <tr>
-                                            <td>Hasil Tender</td>
+                                            <td>Status Tender</td>
                                             <td>:</td>
                                             <td><%data2.hasiltender.value%></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Hasil Tender File</td>
-                                            <td width="50">:</td>
-                                            <td>
-                                                <a href="<?= $app->make('url')->to('/'); ?>/<%data2.hasil_tender_file%>"  class="btn btn-primary btn-xs"> Download</a>
-                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Pengumuman Hasil Tender</td>
@@ -138,7 +134,7 @@
                                         <tr>
                                             <td>Ao Name</td>
                                             <td>:</td>
-                                            <td><%data2.ao_name%></td>
+                                            <td><%data2.ao.value%></td>
                                         </tr>
                                         <tr>
                                             <td>Lainnya</td>

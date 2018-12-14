@@ -37,4 +37,14 @@ class Tender extends Model
     {
         return $this->belongsTo('App\Enumeration', 'hasil_tender_text');
     }
+
+    public function bidang()
+    {
+        return $this->belongsTo('App\Enumeration', 'sub_bidang');
+    }
+
+    public function ao()
+    {
+        return $this->belongsTo('App\Enumeration', 'ao_name');
+    }
 }
