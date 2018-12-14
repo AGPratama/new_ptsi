@@ -461,7 +461,7 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
         $data['page_title'] = trans("crudbooster.edit_data_page_title", ['module' => CRUDBooster::getCurrentModule()->name]);
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
         $data['command'] = 'edit';
-		$data['list_surat'] = DB::table('surat_korespondensi')->get();
+        $data['list_surat'] = DB::table('surat_korespondensi')->get();
 		$data['tender_id'] = $_GET['id'];
 		//ketika edit
 		$tableName = 'tender_surat_korespondensi';
@@ -477,15 +477,19 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 				$arr_seq[$c->surat_id] = $c->sequence;
 			}
 			$data['checked_val'] = $arr_checked;
-			$data['arr_input'] = $arr_input;
 			$data['arr_seq'] = $arr_seq;
 			//print_r($data['arr_input']);die();
-		} else {
-			foreach($data['list_surat'] as $c){
-				$arr_input[$c->id] = $c->name;
-			}
-			$data['arr_input'] = $arr_input;
-		}
+            foreach($data['list_surat'] as &$c){
+                $c->seq = $arr_seq[$c->id];
+            }
+
+            $sorted = $data['list_surat']->sortBy(function ($a, $b){
+                return !empty($a->seq) ? $a->seq : 9999;
+            });
+            $data['list_surat'] = $sorted->values()->all();
+        } 
+
+        $data['arr_input'] = $arr_input;
 
         //Please use cbView method instead view method from laravel
         $this->cbView('tender.custom_add_step4', $data);
@@ -514,31 +518,21 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 				$s_id = $request->input('surat_id');
 				$seq = $request->input('sequence');
 				//$s_k = $request->file('surat_korespondesi');
-                $existing = DB::table($tableName)->where([['tender_id','=', $t_id]])->get();
-                $keep = [];
-                foreach($s_id as $i=>$s){
-                    $cek = $existing->filter(function($item){
-                        return $item->surat_id == $s;
-                    });
-					// $cek = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $s]])->exists();
-					if($cek){
-                        $value=[
-    						'tender_id' => $t_id,
-                            'surat_id' => $s,
-                            'sequence' => $seq[$s]
-    						//'surat_korespondensi' => $path
-                        ];
-    					$query = DB::table($tableName)->insert($value);
-					}else{
-                        $insertedval = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $s]])->get();
-						foreach($insertedval as $val){
-							storage::delete($val->surat_korespondensi);
-						}
-						DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $s]])->delete();
-    					// $filename = time().$s_k[$i]->getClientOriginalName();
-    					// $path = Storage::putFileAs('uploads/'.$t_id, $s_k[$i], $filename);
 
-                    }
+                $insertedval = DB::table($tableName)->where([['tender_id','=', $t_id]])->get();
+                foreach($insertedval as $val){
+                    storage::delete($val->surat_korespondensi);
+                }
+                DB::table($tableName)->where([['tender_id','=', $t_id]])->delete();
+        
+                foreach($s_id as $i=>$s){
+                    $value=[
+                        'tender_id' => $t_id,
+                        'surat_id' => $s,
+                        'sequence' => $seq[$s]
+                        //'surat_korespondensi' => $path
+                    ];
+                    $query = DB::table($tableName)->insert($value);
 				}
 
 				//if($query){
