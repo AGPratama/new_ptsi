@@ -67,7 +67,7 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			$this->form[] = ['label'=>'Dokumen Tender Text','name'=>'dokumen_tender_text','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
             
             $columns_tender_file[] = ['label'=>'File','name'=>'dokumen_tender_file','type'=>'upload'];
-			$this->form[] = ['label'=>'Tender File','name'=>'label_tender_file','type'=>'child','columns'=>$columns_tender_file,'table'=>'tender_file','foreign_key'=>'tender_id'];
+			$this->form[] = ['label'=>'Tender File','name'=>'dokumen_tender_file','type'=>'child','columns'=>$columns_tender_file,'table'=>'tender_file','foreign_key'=>'tender_id'];
 
 			$this->form[] = ['label'=>'Nilai Pagu','name'=>'nilai_pagu','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nilai Hps','name'=>'nilai_hps','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
@@ -76,8 +76,10 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			$this->form[] = ['label'=>'Status Tender','name'=>'hasil_tender_text','type'=>'radio','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key` = \'HasilTender\''];
             $this->form[] = ['label'=>'Pengumuman Hasil Tender','name'=>'pengumuman_hasil_tender','type'=>'upload','validation'=>'required','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Ao Name','name'=>'ao_name','type'=>'select2','validation'=>'required','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'AOName\''];
-			$this->form[] = ['label'=>'Lainnya','name'=>'lainnya','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			# END FORM DO NOT REMOVE THIS LINE
+
+            $columns_lainnya[] = ['label'=>'Lainnya','name'=>'lainnya','type'=>'text'];
+			$this->form[] = ['label'=>'Lainnya','name'=>'lainnya','type'=>'child','columns'=>$columns_lainnya,'table'=>'tender_lainnya','foreign_key'=>'tender_id'];
+            # END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
@@ -472,9 +474,11 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			foreach($check_val as $c){
 				$arr_checked[] = $c->surat_id;
 				$arr_input[$c->surat_id] = $c->surat_korespondensi;
+				$arr_seq[$c->surat_id] = $c->sequence;
 			}
 			$data['checked_val'] = $arr_checked;
 			$data['arr_input'] = $arr_input;
+			$data['arr_seq'] = $arr_seq;
 			//print_r($data['arr_input']);die();
 		} else {
 			foreach($data['list_surat'] as $c){
@@ -482,7 +486,6 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			}
 			$data['arr_input'] = $arr_input;
 		}
-
 
         //Please use cbView method instead view method from laravel
         $this->cbView('tender.custom_add_step4', $data);
@@ -501,36 +504,39 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 		if($request->input('submit')){
 			$rules = [
 				'tender_id' => 'required',
-				'surat_id' => 'required',
+                'surat_id' => 'required',
+                'sequence' => 'required'
 				//'surat_korespondensi' => 'required',
 			];
 			if($request->validate($rules)){
 				//echo "tes2";die();
 				$t_id = $request->input('tender_id');
 				$s_id = $request->input('surat_id');
+				$seq = $request->input('sequence');
 				//$s_k = $request->file('surat_korespondesi');
-
-
-				foreach($s_id as $i=>$s){
-
-					$cek = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $s]])->exists();
+                $existing = DB::table($tableName)->where([['tender_id','=', $t_id]])->get();
+                $keep = [];
+                foreach($s_id as $i=>$s){
+                    $cek = $existing->filter(function($item){
+                        return $item->surat_id == $s;
+                    });
+					// $cek = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $s]])->exists();
 					if($cek){
-						$insertedval = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $s]])->get();
-						// foreach($insertedval as $val){
-						// 	storage::delete($val->surat_korespondensi);
-						// }
-						// DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $i]])->delete();
+                        $value=[
+    						'tender_id' => $t_id,
+                            'surat_id' => $s,
+                            'sequence' => $seq[$s]
+    						//'surat_korespondensi' => $path
+                        ];
+    					$query = DB::table($tableName)->insert($value);
 					}else{
-
+                        $insertedval = DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $s]])->get();
+						foreach($insertedval as $val){
+							storage::delete($val->surat_korespondensi);
+						}
+						DB::table($tableName)->where([['tender_id','=', $t_id],['surat_id','=', $s]])->delete();
     					// $filename = time().$s_k[$i]->getClientOriginalName();
     					// $path = Storage::putFileAs('uploads/'.$t_id, $s_k[$i], $filename);
-
-    					$value=[
-    						'tender_id' => $t_id,
-    						'surat_id' => $s,
-    						//'surat_korespondensi' => $path
-    					];
-    					$query = DB::table($tableName)->insert($value);
 
                     }
 				}

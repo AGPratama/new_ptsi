@@ -33,15 +33,15 @@
                 @endif
                 <div class="nav-tabs-custom" style="margin-bottom:0px!important;">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Informasi Umum</a></li>
-                        <!-- @if($command=='add')
-                            <li class=""><a href="#" data-toggle="tab" aria-expanded="false" style="pointer-events: none;cursor:not-allowed">Pengalaman Kerja</a></li>
+                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Pengalaman Kerja</a></li>
+                        @if($command=='add')
+                            <li class=""><a href="#" data-toggle="tab" aria-expanded="false" style="pointer-events: none;cursor:not-allowed">Pengalaman Perusahaan</a></li>
                             <li class=""><a href="#" data-toggle="tab" aria-expanded="false" style="pointer-events: none;cursor:not-allowed">Uraian Tugas</a></li>
                         @endif
                         @if($command=='edit')
-                            <li class=""><a href="{{CRUDBooster::mainpath('step2?id='.$row->id)}}">Pengalaman Kerja</a></li>
+                            <li class=""><a href="{{CRUDBooster::mainpath('step2?id='.$row->id)}}">Pengalaman Perusahaan</a></li>
                             <li class=""><a href="{{CRUDBooster::mainpath('step3?id='.$row->id)}}">Uraian Tugas</a></li>
-                        @endif -->
+                        @endif
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">

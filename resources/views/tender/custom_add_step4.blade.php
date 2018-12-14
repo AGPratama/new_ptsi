@@ -57,7 +57,7 @@
                                         <tr>
                                             <td>{{$i}}</td>
                                             <td><input type="checkbox" value="{{$ut->id}}" name="surat_id[{{$ut->id}}]" class="check-surat" @if(in_array($ut->id, $checked_val)) checked @endif> {{$ut->name}}</td>
-                                            <td></td>
+                                            <td><input type="text" value="{{$arr_seq[$ut->id]}}" name="sequence[{{$ut->id}}]"></td>
                                             <td>
                                                 <div id="download-{{$ut->id}}">
                                                     <a href="{{url($ut->location)}}" class="btn btn-default">Download</a>
