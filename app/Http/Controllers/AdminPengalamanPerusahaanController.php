@@ -33,7 +33,7 @@
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Nama Paket Perusahaan","name"=>"nama_paket_perusahaan","position"=>1];
+			$this->col[] = ["label"=>"Nama Paket Pekerjaan","name"=>"nama_paket_perusahaan","position"=>1];
 			$this->col[] = ["label"=>"Lokasi Proyek","name"=>"lokasi_proyek","position"=>1];
 			$this->col[] = ["label"=>"Pemberi Tugas/Pejabat Pembuat Komitmen","name"=>null,"colspan"=>"3","position"=>1];
 			$this->col[] = ["label"=>"Nama","name"=>"nama_pengguna_jasa","position"=>2];
@@ -60,7 +60,7 @@
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Nama Paket Perusahaan','name'=>'nama_paket_perusahaan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Nama Paket Pekerjaan','name'=>'nama_paket_perusahaan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Bidang/Sub Pekerjaan','name'=>'bidang','type'=>'radio','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'SubBidang\''];
 			$this->form[] = ['label'=>'Lokasi Proyek','name'=>'lokasi_proyek','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nama Pengguna Jasa','name'=>'nama_pengguna_jasa','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
@@ -81,7 +81,7 @@
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'Nama Paket Perusahaan','name'=>'nama_paket_perusahaan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Nama Paket Pekerjaan','name'=>'nama_paket_perusahaan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Bidang/Sub Pekerjaan','name'=>'bidang','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Lokasi Proyek','name'=>'lokasi_proyek','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Nama Pengguna Jasa','name'=>'nama_pengguna_jasa','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];

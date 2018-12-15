@@ -130,4 +130,14 @@ class TenderController extends Controller
     {
         //
     }
+
+    public function get_tenaga_kerja(Request $req){
+
+        $id = $req->input('tenaga_kerja_id');
+        echo '<pre>';
+        print_r($id);
+        echo '</pre>';
+        exit();
+    }
+
 }

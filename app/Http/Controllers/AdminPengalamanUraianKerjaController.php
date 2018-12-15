@@ -31,36 +31,49 @@
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			// $this->col[] = ["label"=>"Nama Pekerja","name"=>"nama_pekerjaan","join"=>"tenaga_kerja,nama"];
-			// $this->col[] = ["label"=>"Nama Perusahaan","name"=>"nama_perusahaan"];
-			// $this->col[] = ["label"=>"Tanggal Lahir","name"=>"ttl"];
-			// $this->col[] = ["label"=>"Pendidikan Formal","name"=>"pendidikan_formal"];
-			// $this->col[] = ["label"=>"Penguasaan Bahasa","name"=>"penguasaan_bahasa"];
+			$this->col[] = ["label"=>"Nama Pekerja","name"=>"nama_pekerjaan","join"=>"tenaga_kerja,nama"];
+			$this->col[] = ["label"=>"Nama Perusahaan","name"=>"nama_perusahaan"];
+			$this->col[] = ["label"=>"Tempat Lahir","name"=>"tempat_lahir"];
+			$this->col[] = ["label"=>"Tanggal Lahir","name"=>"ttl"];
+			$this->col[] = ["label"=>"Pendidikan Formal","name"=>"pendidikan_formal"];
+			$this->col[] = ["label"=>"Penguasaan Bahasa","name"=>"penguasaan_bahasa"];
+			$this->col[] = ["label"=>"Pendidikan Non Formal","name"=>"pendidikan_non_formal"];
 			$this->col[] = ["label"=>"Posisi Yang Diusulkan","name"=>"posisi_yang_diusulkan"];
-			$this->col[] = ["label"=>"Uraian Tugas","name"=>"uraian_tugas"];
 			$this->col[] = ['label'=>'Tahun','name'=>'tahun'];
 			$this->col[] = ['label'=>'Nama Proyek','name'=>'nama_proyek'];
 			$this->col[] = ['label'=>'Lokasi Proyek','name'=>'lokasi_proyek'];
 			$this->col[] = ['label'=>'Pengguna Jasa','name'=>'pengguna_jasa_id'];
 			$this->col[] = ['label'=>'Waktu Pelaksanaan Start','name'=>'waktu_pelaksanaan_start'];
 			$this->col[] = ['label'=>'Waktu Pelaksanaan End','name'=>'waktu_pelaksanaan_end'];
+			$this->col[] = ["label"=>"Lama Pekerjaan","name"=>"lama_pekerjaan"];
+			$this->col[] = ["label"=>"Posisi Penugasan","name"=>"uraian_tugas"];
+			$this->col[] = ["label"=>"Uraian Pekerjaan","name"=>"uraian_tugas"];
 			$this->col[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian'];
 			$this->col[] = ['label'=>'Surat Referensi','name'=>'surat_referensi'];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			// $this->form[] = ['label'=>'Nama Pekerja','name'=>'nama_pekerjaan','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10', 'datatable'=>'tenaga_kerja,nama'];
+			$this->form[] = ['label'=>'Nama Pekerja','name'=>'nama_pekerjaan','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10', 'datatable'=>'tenaga_kerja,nama'];
+			$this->form[] = ['label'=>'Nama Perusahaan','name'=>'nama_perusahaan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','value'=>'PT. Surveyor Indonesia'];
+			$this->form[] = ['label'=>'Tanggal Lahir','name'=>'ttl','type'=>'date','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Pendidikan Formal','name'=>'pendidikan_formal','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Pendidikan Non Formal','name'=>'pendidikan_non_formal','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Penguasaan Bahasa','name'=>'penguasaan_bahasa','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','value'=>'Baik'];
 			$this->form[] = ['label'=>'Posisi Yang Diusulkan','name'=>'posisi_yang_diusulkan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Tahun','name'=>'tahun','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Nama Proyek','name'=>'nama_proyek','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Lokasi Proyek','name'=>'lokasi_proyek','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Pengguna Jasa','name'=>'pengguna_jasa_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KategoriPenggunaJasa\''];
-			$this->form[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Surat Referensi','name'=>'surat_referensi','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Waktu Pelaksanaan Start','name'=>'waktu_pelaksanaan_start','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Waktu Pelaksanaan End','name'=>'waktu_pelaksanaan_end','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Uraian Tugas','name'=>'uraian_tugas','type'=>'textarea','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+
+			$columns_pengalaman_perusahaan[] = ['label'=>'Pengalaman Perusahaan','name'=>'pengalaman_perusahaan_id','type'=>'select', 'datatable' => 'pengalaman_perusahaan,nama_paket_perusahaan'];
+			$columns_pengalaman_perusahaan[] = ['label'=>'Uraian Tugas','name'=>'daftar_uraian_tugas_id','type'=>'select', 'datatable' => 'daftar_uraian_tugas,uraian_tugas'];
+			$this->form[] = ['label'=>'Pengalaman Perusahaan','name'=>'pengalaman_perusahaan','type'=>'child','columns'=>$columns_pengalaman_perusahaan,'table'=>'tenaga_kerja_pengalaman_perusahaan','foreign_key'=>'tenaga_kerja_id'];
+			// $this->form[] = ['label'=>'Tahun','name'=>'tahun','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			// $this->form[] = ['label'=>'Nama Proyek','name'=>'nama_proyek','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			// $this->form[] = ['label'=>'Lokasi Proyek','name'=>'lokasi_proyek','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			// $this->form[] = ['label'=>'Pengguna Jasa','name'=>'pengguna_jasa_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'KategoriPenggunaJasa\''];
+			// $this->form[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			// $this->form[] = ['label'=>'Surat Referensi','name'=>'surat_referensi','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			// $this->form[] = ['label'=>'Waktu Pelaksanaan Start','name'=>'waktu_pelaksanaan_start','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
+			// $this->form[] = ['label'=>'Waktu Pelaksanaan End','name'=>'waktu_pelaksanaan_end','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
+			// $this->form[] = ['label'=>'Uraian Tugas','name'=>'uraian_tugas','type'=>'textarea','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
@@ -178,7 +191,16 @@
 	        | $this->script_js = "function() { ... }";
 	        |
 	        */
-	        $this->script_js = NULL;
+	        $this->script_js = "$(function(){
+				$('[name=nama_pekerjaan').change(function(){
+					$.ajax({
+						url: '/api/tenaga_kerja?id='+$(this).val()
+					}).done(function(msg){
+						$('[name=ttl').val(msg.tanggal_lahir);
+						$('[name=pendidikan_formal').val(msg.pendidikan_formal);
+					});
+				})	
+			});";
 
 
             /*
@@ -241,7 +263,6 @@
 
 
 	    }
-
 
 	    /*
 	    | ----------------------------------------------------------------------
