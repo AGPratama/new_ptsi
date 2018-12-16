@@ -63,7 +63,12 @@
 			$this->form[] = ['label'=>'Posisi Yang Diusulkan','name'=>'posisi_yang_diusulkan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 
 			$columns_pengalaman_perusahaan[] = ['label'=>'Pengalaman Perusahaan','name'=>'pengalaman_perusahaan_id','type'=>'select', 'datatable' => 'pengalaman_perusahaan,nama_paket_perusahaan'];
-			$columns_pengalaman_perusahaan[] = ['label'=>'Uraian Tugas','name'=>'daftar_uraian_tugas_id','type'=>'select', 'datatable' => 'daftar_uraian_tugas,uraian_tugas'];
+			$columns_pengalaman_perusahaan[] = ['label'=>'Lokasi Proyek','name'=>'lokasi_proyek','type'=>'text'];
+			$columns_pengalaman_perusahaan[] = ['label'=>'Pengguna Jasa','name'=>'nama_pengguna_jasa','type'=>'text'];
+			$columns_pengalaman_perusahaan[] = ['label'=>'Waktu Pelaksaan Start','name'=>'periode_kerja_dari','type'=>'date'];
+			$columns_pengalaman_perusahaan[] = ['label'=>'Waktu Pelaksaan End','name'=>'periode_kerja_sampai','type'=>'date'];
+			$columns_pengalaman_perusahaan[] = ['label'=>'Uraian Tugas','name'=>'daftar_uraian_tugas_id','type'=>'select', 'datatable' => 'daftar_uraian_tugas,nama_posisi'];
+			$columns_pengalaman_perusahaan[] = ['label'=>'Uraian Tugas Detail','name'=>'uraian_tugas','type'=>'text'];
 			$this->form[] = ['label'=>'Pengalaman Perusahaan','name'=>'pengalaman_perusahaan','type'=>'child','columns'=>$columns_pengalaman_perusahaan,'table'=>'tenaga_kerja_pengalaman_perusahaan','foreign_key'=>'tenaga_kerja_id'];
 			// $this->form[] = ['label'=>'Tahun','name'=>'tahun','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			// $this->form[] = ['label'=>'Nama Proyek','name'=>'nama_proyek','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
@@ -196,10 +201,28 @@
 					$.ajax({
 						url: '/api/tenaga_kerja?id='+$(this).val()
 					}).done(function(msg){
-						$('[name=ttl').val(msg.tanggal_lahir);
-						$('[name=pendidikan_formal').val(msg.pendidikan_formal);
+						$('#ttl').val(msg.tanggal_lahir);
+						$('#pendidikan_formal').val(msg.pendidikan_formal);
 					});
 				})	
+				$('#pengalamanperusahaanpengalaman_perusahaan_id').change(function(){
+					$.ajax({
+						url: '/api/pengalaman_perusahaan?id='+$(this).val()
+					}).done(function(msg){
+						$('#pengalamanperusahaanlokasi_proyek').val(msg.lokasi_proyek);
+						$('#pengalamanperusahaannama_pengguna_jasa').val(msg.nama_pengguna_jasa);
+						$('#pengalamanperusahaanperiode_kerja_dari').val(msg.periode_kerja_dari);
+						$('#pengalamanperusahaanperiode_kerja_sampai').val(msg.periode_kerja_sampai);
+					});
+				});
+
+				$('#pengalamanperusahaandaftar_uraian_tugas_id').change(function(){
+					$.ajax({
+						url: '/api/daftar_uraian_tugas?id='+$(this).val()
+					}).done(function(msg){
+						$('#pengalamanperusahaanuraian_tugas').val(msg.uraian_tugas);
+					});
+				});
 			});";
 
 
