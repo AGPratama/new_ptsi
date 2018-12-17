@@ -114,7 +114,6 @@ set_time_limit(120);
 			$sert_training[] = ['label'=>'Masa Berlaku Sertifikat','name'=>'sertifikat_end_date','type'=>'date','validation'=>'date'];
 			$sert_training[] = ['label'=>'Attachment','name'=>'sertifikat','type'=>'upload'];
 			$this->form[] = ['label'=>'Sertifikat Training','name'=>'tenaga_kerja_sertifikat_training','type'=>'child','columns'=>$sert_training,'table'=>'tenaga_kerja_sertifikat_training','foreign_key'=>'tenaga_kerja_id'];
-
 			$this->form[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'radio','validation'=>'min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'StatusKepegawaian\''];
 			//$this->form[] = ['label'=>'Sertifikat','name'=>'sertifikat','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			// $this->form[] = ['label'=>'Sertifikat Training','name'=>'sertifikat_training','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];

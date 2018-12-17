@@ -40,6 +40,7 @@
                                             <th class="wd44">No</th>
                                             <th>Field Name</th>
                                             <th style="width:225px;">Input Type</th>
+                                            <th>Datatable (table name, field)</th>
                                             <th>Sequence</th>
                                             <th class="wd44">Action</th>
                                         </tr>
@@ -60,6 +61,9 @@
                                                 </ui-select>
                                             </td>
                                             <td class="input-table">
+                                                <input type="text" class="form-control" ng-model="form.details[$index].datatable" ng-readonly="!control || form.is_dokumen">
+                                            </td>
+                                            <td class="input-table">
                                                 <input type="number" class="form-control input-number" ng-model="form.details[$index].sequence" ng-readonly="!control || form.is_dokumen" required>
                                             </td>
                                             <td class="text-center v-middle" ng-class="{'no-event':!control || form.is_dokumen}">
@@ -67,7 +71,7 @@
                                             </td>
                                         </tr>
                                         <tr ng-if="form.details == undefined || form.details.length==0" class="ng-scope" style="">
-                                            <td colspan="7" class="text-center">Data Not Found</td>
+                                            <td colspan="8" class="text-center">Data Not Found</td>
                                     </tbody>
                                 </table>
                             </div>

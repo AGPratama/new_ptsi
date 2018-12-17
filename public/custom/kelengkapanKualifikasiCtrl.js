@@ -3,6 +3,12 @@
 
     //// JavaScript Code ////
     function kelengkapanKualifikasiCtrl($log,JadwalSvc,$http,KelengkapanSvc,$compile, $timeout, $scope,surveyor,$window,toastr,$loading,$sce) {
+        var baseurl = $window.location.href.split('//')[1];
+        https = $window.location.href.split('//')[0];
+        baseurl = baseurl.split('/')[0];
+        baseurl = https + '//' + baseurl;
+        var baseurlapi = baseurl + "/api/";
+
         $scope.getCurrentId = null;
         $scope.privilegeId = 0;
         $scope.getTenderData=(id)=>{
@@ -11,7 +17,6 @@
             $scope.isLoading=true;
             $loading.start('save');
             $scope.getTreeData(id);
-            console.log($scope.privilegeId,"privilegeid")
             return JadwalSvc.getById(id).then((res)=>{
                 if(res.status==200){
                     console.log(res.data);
@@ -194,7 +199,7 @@
             $scope.form={};
         }
         $scope.DetailsRow=1;
-        $scope.addDetails=()=>{
+        $scope.addDetails=async()=>{
             if($scope.form.details==undefined)$scope.form.details=[];
             for (let i = 0; i < $scope.DetailsRow; i++) {
                 var sequence = (+$scope.sequence)+1;
@@ -211,8 +216,12 @@
                     );
                 }
             }
+            await getDataDetails().then(res=>{
+                $scope.dataDetails = $sce.trustAsHtml(res);
+            });
+
         }
-        $scope.deleteRow=(sequence)=>{
+        $scope.deleteRow=async(sequence)=>{
             delete $scope.form.group_by[sequence];
             for (let i = 0; i < $scope.form.details.length; i++) {
                 if($scope.form.details[i].sequence == parseInt(sequence)){
@@ -220,6 +229,9 @@
                     i=i-1;
                 }
             }
+            await getDataDetails().then(res=>{
+                $scope.dataDetails = $sce.trustAsHtml(res);
+            });
         }
         $scope.doSend=(mode)=>{
             $loading.start('save');
@@ -248,7 +260,9 @@
                     return parseFloat(a.sequence) - parseFloat(b.sequence);
                 });
                 $scope.form.group_by = _.groupBy($scope.form.details,'sequence');
-                console.log($scope.form)
+                await getDataDetails().then(res=>{
+                    $scope.dataDetails = $sce.trustAsHtml(res);
+                });
                 $loading.finish('save');
             }).catch((err)=>{
                 $loading.finish('save');
@@ -257,7 +271,7 @@
             })
         }
         $scope.sequence = 0;
-        $scope.getDataDetails=()=>{
+        var getDataDetails=async()=>{
             var data='';
             if($scope.form != undefined){
                 let no = 1;
@@ -267,12 +281,39 @@
                     for (let x = 0; x < $scope.form.master_syarat_kualifikasi.details.length; x++) {
                         var idDetail = $scope.form.master_syarat_kualifikasi.details[x].id;
                         var index = $scope.form.details.findIndex(x => x.master_syarat_kualifikasi_detail_id == idDetail && x.sequence == $scope.sequence);
-                        data +='<td class="input-table"><input type="'+($scope.form.master_syarat_kualifikasi.details[x].field_type==26?"text":"number")+'" class="form-control free-text" ng-model="form.details['+index+'].value" ng-readonly="!control || form.master_syarat_kualifikasi.is_dokumen" required></td>';
+                        data +='<td class="input-table">';
+                        if($scope.form.master_syarat_kualifikasi.details[x].field_type==26){
+                            data += '<input type="text" class="form-control free-text" ng-model="form.details['+index+'].value" ng-readonly="!control || form.master_syarat_kualifikasi.is_dokumen" required>';
+                        } else if($scope.form.master_syarat_kualifikasi.details[x].field_type==27){
+                            data += '<input type="number" class="form-control free-text" ng-model="form.details['+index+'].value" ng-readonly="!control || form.master_syarat_kualifikasi.is_dokumen" required>';
+                        } else if($scope.form.master_syarat_kualifikasi.details[x].field_type==64){
+                            let required = "required";
+                            if($scope.form.details[index].value!=""){
+                                data += '<a href="'+ baseurl + "/uploads/tender/details/" + $scope.form.details[index].value + '" target="_blank">Download</a>';
+                                required = "";
+                            }
+                            data += '<input type="file" class="form-control free-text" upload-many-files id="'+$scope.form.details[index].master_syarat_kualifikasi_detail_id+'-'+index+'" ng-readonly="!control || form.master_syarat_kualifikasi.is_dokumen" '+required+'>';
+                        } else if($scope.form.master_syarat_kualifikasi.details[x].field_type==66){
+                            const datatable = $scope.form.master_syarat_kualifikasi.details[x].datatable.split(",");
+                            data += '<select class="form-control" ng-model="form.details['+index+'].value">';
+                            await $http.get(baseurlapi+datatable[0])
+                                .then(async(res)=>{
+                                    res.data.data.forEach((v,i)=>{
+                                        data += '<option value="'+v.id+'">'+v.nama+'</option>';
+                                    })
+                                    $loading.finish('save');
+                                }).catch((err)=>{
+                                    $loading.finish('save');                    
+                                    toastr.error(err.data.message)                        
+                                });
+                            data += '</select>';
+                        }
+                        data += "</td>";
                     }
                     data +='<td class="text-center v-middle" ng-class="{\'no-event\':!control || form.master_syarat_kualifikasi.is_dokumen}"> <i class="fa fa-trash color-red cursor-pointer" ng-click="deleteRow('+$scope.sequence+')"></i> </td></tr>';
                 }
                 console.log(data,' Thus');
-                return $sce.trustAsHtml(data);
+                return data;
             }
         }
         var update=()=>{
@@ -293,12 +334,15 @@
             })
         }
         $scope.doEdit=()=>{
+            if(!confirm('Yakin akan Simpan?')){
+                return false;
+            }
             var baseurl = $window.location.href.split('//')[1];
             https = $window.location.href.split('//')[0];
             baseurl = baseurl.split('/')[0];
             baseurl = https + '//' + baseurl + "/api/";
             $loading.start('save');
-            if(!$scope.form.master_syarat_kualifikasi.is_dokumen){
+            if(!$scope.form.master_syarat_kualifikasi.is_dokumen && !$scope.files){
                 update();
             }else{
                 if($scope.form.is_dokumen_exist){
@@ -311,13 +355,17 @@
                         method: 'POST',
                         url: baseurl+"tender-syarat-kualifikasi",
                         headers: { 'Content-Type': undefined },
+                        headers: { 'Content-Type': undefined },
                         transformRequest: function (data) {
                             var formData = new FormData();
                             formData.append("model", angular.toJson(data.model));
-                            formData.append("dokumen", $scope.files.file);
-                            return formData;
+
+                            for (const [id, files] of Object.entries($scope.files)){
+                                formData.append("file_detail["+id+"]", files);
+                            } 
+                            return formData;                               
                         },
-                        data: { model: data, dokumen: $scope.files.file }
+                        data: { model: data, file_detail: $scope.files }
                     }).then(async (res)=>{
                         if(res.status == 200){
                             $timeout(()=>{
@@ -342,6 +390,13 @@
                 $scope.form.is_dokumen_exist=false;
             });
             console.log($scope.files,'INI');
+        });
+        $scope.$on("seletedFiles", function (event, args) {  
+            $scope.$apply(function () {  
+                var id = args.event.id.split("-");
+                $scope.files[args.event.id]=args.file;  
+                $scope.form.details[id[1]].value=args.event.id+'.'+args.file.name.split(".")[args.file.name.split(".").length-1];
+            });
         });
         $scope.download_file=(value)=>{
             var url=$window.location.href.split('admin/')[0]+value;

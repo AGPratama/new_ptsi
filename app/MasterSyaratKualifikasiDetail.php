@@ -9,7 +9,7 @@ class MasterSyaratKualifikasiDetail extends Model
 {
     use SoftDeletes;
     protected $table = "master_syarat_kualifikasi_detail";
-    protected $fillable = ['field_name','sequence','field_type'];
+    protected $fillable = ['field_name','sequence','field_type','datatable'];
     protected $hidden = ['created_at','updated_at','deleted_at'];
     public function master_syarat_kualifikasi()
     {

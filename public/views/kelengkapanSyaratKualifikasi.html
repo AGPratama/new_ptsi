@@ -55,6 +55,25 @@
                             </label>
                         </div>
                     </div>
+                    <div class="col-sm-12 no-padding" ng-if="privilegeId == 4">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-3">Sesuai</label>
+                            <div class="col-md-9">
+                                <select name="sesuai" class="form-control" ng-model="form.sesuai" id="sesuai">
+                                    <option value="0" ng-selected="form.sesuai==0">Sesuai</option>
+                                    <option value="1" ng-selected="form.sesuai==1">Tidak Sesuai</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 no-padding" ng-if="privilegeId == 4">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-3">Catatan</label>
+                            <div class="col-md-9">
+                                <textarea name="catatan" id="catatan" class="form-control" ng-model="form.catatan"></textarea>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group row clearfix" ng-if="!form.master_syarat_kualifikasi.is_dokumen">
                         <label class="col-sm-3"><b>Data Of
                                 <%form.master_syarat_kualifikasi.nama%></b></label>
@@ -76,7 +95,7 @@
                                         <th class="wd44">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-bind-html="getDataDetails()" compile-template>
+                                <tbody ng-bind-html="dataDetails" compile-template>
                                 </tbody>
                                 <tbody ng-if="form.details == undefined || form.details.length==0">
                                     <tr class="ng-scope" style="">

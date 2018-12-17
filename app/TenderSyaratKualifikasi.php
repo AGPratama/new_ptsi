@@ -9,7 +9,18 @@ class TenderSyaratKualifikasi extends Model
 {
     use SoftDeletes;
     protected $table = "tender_syarat_kualifikasi";
-    protected $fillable = ['tender_id','master_syarat_kualifikasi_id','value','approved','sequence','active','verified','completed'];
+    protected $fillable = [
+        'tender_id',
+        'master_syarat_kualifikasi_id',
+        'value',
+        'approved',
+        'sequence',
+        'active',
+        'verified',
+        'completed',
+        'sesuai',
+        'catatan'
+    ];
     protected $casts = [
         "approved" => "boolean",
         "active" => "boolean",

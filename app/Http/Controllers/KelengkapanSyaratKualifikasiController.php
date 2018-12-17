@@ -85,6 +85,8 @@ class KelengkapanSyaratKualifikasiController extends Controller
                 $tender_syarat_kualifikasi = TenderSyaratKualifikasi::where('master_syarat_kualifikasi_id', $request->id)->where('tender_id',$request->tender_id)->first();
                 if ($tender_syarat_kualifikasi != null) {
                     $tender_syarat_kualifikasi->active = true;
+                    $tender_syarat_kualifikasi->sesuai = $request->sesuai;
+                    $tender_syarat_kualifikasi->catatan = $request->catatan;
                     $tender_syarat_kualifikasi->save();
                 } else {
                     $master_syarat_kualifikasi = MasterSyaratKualifikasi::findOrFail($request->id);
@@ -92,6 +94,8 @@ class KelengkapanSyaratKualifikasiController extends Controller
                     $tender_syarat_kualifikasi->active = true;
                     $tender_syarat_kualifikasi->tender_id = $request->tender_id;
                     $tender_syarat_kualifikasi->master_syarat_kualifikasi_id = $request->id;
+                    $tender_syarat_kualifikasi->sesuai = $request->sesuai;
+                    $tender_syarat_kualifikasi->catatan = $request->catatan;
                     $tender_syarat_kualifikasi->save();
                 }
                 $resource = new TenderSyaratKualifikasiResource(TenderSyaratKualifikasi::with('details')->find($tender_syarat_kualifikasi->id));
@@ -99,6 +103,8 @@ class KelengkapanSyaratKualifikasiController extends Controller
             else if ($request->mode == "deactive") {
                 $tender_syarat_kualifikasi = TenderSyaratKualifikasi::where('master_syarat_kualifikasi_id', $request->id)->where('tender_id',$request->tender_id)->first();
                 $tender_syarat_kualifikasi->active = false;
+                $tender_syarat_kualifikasi->sesuai = $request->sesuai;
+                $tender_syarat_kualifikasi->catatan = $request->catatan;
                 $tender_syarat_kualifikasi->save();
                 $resource = new TenderSyaratKualifikasiResource(TenderSyaratKualifikasi::with('details')->find($tender_syarat_kualifikasi->id));
             }else{

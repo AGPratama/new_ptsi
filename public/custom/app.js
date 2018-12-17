@@ -203,6 +203,35 @@ app.factory('MasterSyaratKualifikasiSvc', function ($http, $window) {
         }
     }
 })
+// Module APi Master Get
+app.factory('PeralatanSvc', function ($http, $window) {
+    var baseurl = $window.location.href.split('//')[1];
+    https = $window.location.href.split('//')[0];
+    baseurl = baseurl.split('/')[0];
+    baseurl = https + '//' + baseurl + "/api/";
+    return {
+        getList: function () {
+            var url = baseurl + 'peralatans';
+            return $http.get(url);
+        },
+        getById: function (id) {
+            var url = baseurl + 'peralatan/' + id;
+            return $http.get(url);
+        },
+        create: function (data) {
+            var url = baseurl + 'peralatan'
+            return $http.post(url, data)
+        },
+        update: function (data) {
+            var url = baseurl + 'peralatan/' + data.id;
+            return $http.put(url, data)
+        },
+        delete: function (id) {
+            var url = baseurl + 'peralatan/' + id;
+            return $http.delete(url)
+        }
+    }
+})
 app.factory('TenderSvc', function ($http, $window) {
     var baseurl = $window.location.href.split('//')[1];
     https = $window.location.href.split('//')[0];
@@ -335,6 +364,23 @@ app.directive('uploadFiles', function () {
                 for (var i = 0; i < files.length; i++) {
                     //emit event upward  
                     scope.$emit("seletedFile", {file: files[i], event: event});
+                }
+            });
+        }
+    };
+})
+
+app.directive('uploadManyFiles', function () {
+    return {
+        scope: true,        //create a new scope  
+        link: function (scope, el, attrs) {
+            el.bind('change', function (event) {
+                var files = event.target.files;
+                var event = event.target;
+                //iterate files since 'multiple' may be specified on the element  
+                for (var i = 0; i < files.length; i++) {
+                    //emit event upward  
+                    scope.$emit("seletedFiles", {file: files[i], event: event});
                 }
             });
         }

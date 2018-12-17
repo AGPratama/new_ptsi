@@ -97,9 +97,20 @@ class TenderSyaratKualifikasiController extends Controller
                 $resource = new TenderSyaratKualifikasiResource(TenderSyaratKualifikasi::with('details')->find($tender_syarat_kualifikasi->id));
             }else{
                 try {
+                    
+                    $file_detail = $request->file("file_detail");
+                    if ($file_detail != null) {
+                        $folder =  public_path().'/../storage/app/uploads/tender/details/'.$tender_syarat_kualifikasi->tender_id;
+                        File::isDirectory($folder) or File::makeDirectory($folder, 0777, true, true);
+                        foreach($file_detail as $k=>$v){
+                            $file_name = $k.".".$v->getClientOriginalExtension();
+                            $path = Storage::putFileAs('uploads/tender/details/'.$tender_syarat_kualifikasi->tender_id, $v, $file_name);
+                        }
+                    }
+
                     $dokumen = $request->file("dokumen");
+                    $request->model = json_decode($request->model);
                     if ($dokumen != null) {
-                        $request->model = json_decode($request->model);
                         $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details')->findOrFail($request->model->id);
                         $folder =  public_path().'/../storage/app/uploads/tender/'.$tender_syarat_kualifikasi->tender_id;
                         File::isDirectory($folder) or File::makeDirectory($folder, 0777, true, true);
@@ -107,9 +118,10 @@ class TenderSyaratKualifikasiController extends Controller
                         $request->model->value = $path;
                         $tender_syarat_kualifikasi->update((array)$request->model);
                     }else{
-                        $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details')->findOrFail($request->id);
-                        $tender_syarat_kualifikasi->update($request->all());
-                        $tender_syarat_kualifikasi->details()->sync($request->details);
+                        $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details')->findOrFail($request->model->id);
+                        $tender_syarat_kualifikasi->update((array)$request->model);
+                        $details = json_decode(json_encode($request->model->details), true);
+                        $tender_syarat_kualifikasi->details()->sync($details);
                     }
                     $tender_id = $tender_syarat_kualifikasi->tender_id;
                     $verified = TenderSyaratKualifikasi::where('tender_id',$tender_id)->where('verified',true)->count();
