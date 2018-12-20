@@ -50,6 +50,12 @@
 			$this->col[] = ["label"=>"Uraian Pekerjaan","name"=>"uraian_tugas"];
 			$this->col[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian'];
 			$this->col[] = ['label'=>'Surat Referensi','name'=>'surat_referensi'];
+			$this->col[] = ['label'=>'Generate CV','callback'=>function($row){
+				$datas['row'] = $row;
+				$datas['penggunajasa'] = DB::table('enumeration')->where('key','KategoriPenggunaJasa')->get();
+				return View('tenagakerja.generatecv', $datas);
+			}];
+
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
@@ -223,7 +229,37 @@
 						$('#pengalamanperusahaanuraian_tugas').val(msg.uraian_tugas);
 					});
 				});
-			});";
+
+				$(document).on('click','#btn-add-table-sertifikatdetail', function(e){
+					e.preventDefault();
+					if($('.sertifikat')){
+						var count = $('.sertifikat').length;
+						if(count >= 15){
+							$('#btn-add-table-sertifikatdetail').attr('disabled');
+							alert('Jumlah Maksimal Sertifikat yang Dapat Di Upload Hanya 15.');
+						}else{
+							$('#btn-add-table-sertifikatdetail').removeAttr('disabled');
+						}
+					}
+				});
+
+				function getAttachmentFile(id){
+					//alert($('#select-attachment-'+id).val());
+					var val = $('#select-attachment-'+id).val();
+					$('#modal-trigger-'+id).attr('data-target','#'+val+'-'+id);
+				}
+
+				$('#select-sertifikat').on('change', function(){
+					$('#modal-trigger-sertifikat').attr('data-target','#sertifikat-'+$(this).val())
+				})
+			});
+			function submitform(id)
+			{
+				var type = $('#typecv-'+id).val();
+				window.open('/admin/tenaga_kerja/generatecv?tenaga_kerja_id='+id+'&typecv='+type, '_blank');
+			}
+		
+			";
 
 
             /*

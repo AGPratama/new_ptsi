@@ -77,11 +77,6 @@ set_time_limit(120);
 				return View('tenagakerja.attachment2', $datas);
 			}];
 
-			$this->col[] = ['label'=>'Generate CV','callback'=>function($row){
-				$datas['row'] = $row;
-				$datas['penggunajasa'] = DB::table('enumeration')->where('key','KategoriPenggunaJasa')->get();
-				return View('tenagakerja.generatecv', $datas);
-			}];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
