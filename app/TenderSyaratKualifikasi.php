@@ -19,7 +19,8 @@ class TenderSyaratKualifikasi extends Model
         'verified',
         'completed',
         'sesuai',
-        'catatan'
+        'catatan',
+        'uraian'
     ];
     protected $casts = [
         "approved" => "boolean",
