@@ -86,7 +86,7 @@
                             @endif --}}
 
                             @if($button_save && $command != 'detail')
-                            <input type="submit" name="submit" value='Step2' class='btn btn-primary'>
+                            <input type="submit" name="submit" value='Submit' class='btn btn-primary'>
                             @endif
 
                             @endif

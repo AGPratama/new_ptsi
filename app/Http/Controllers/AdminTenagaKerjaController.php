@@ -400,7 +400,7 @@ set_time_limit(120);
 	    */
 	    public function hook_after_add($id) {
 	        //Your code here
-			$this->return_url=url('/admin/tenaga_kerja/step2?id='.$id);
+			// $this->return_url=url('/admin/tenaga_kerja/step2?id='.$id);
 	    }
 
 	    /*
@@ -426,7 +426,7 @@ set_time_limit(120);
 	    */
 	    public function hook_after_edit($id) {
 	        //Your code here
-			$this->return_url=url('/admin/tenaga_kerja/step2?id='.$id);
+			// $this->return_url=url('/admin/tenaga_kerja/step2?id='.$id);
 	    }
 
 	    /*
@@ -630,16 +630,16 @@ set_time_limit(120);
 				$typecv = $request->input('typecv');
 				$id = $request->input('tenaga_kerja_id');
 
-				$data['master'] = DB::table('tenaga_kerja')->where('id',$id)->first();
-				$data['pengalaman'] = DB::table('tenaga_kerja_pengalaman')
-				->where('tenaga_kerja_id',$id)
-				->leftJoin('pengalaman_uraian_kerja', 'pengalaman_uraian_kerja.id', '=', 'pengalaman_id')
-				->leftJoin('enumeration', 'pengalaman_uraian_kerja.pengguna_jasa_id', '=', 'enumeration.id')
-				->get();
-				$data['uraian'] = DB::table('tenaga_kerja_uraian')
-				->where('tenaga_kerja_id',$id)
-				->leftJoin('daftar_uraian_tugas', 'daftar_uraian_tugas.id', '=', 'uraian_id')
-				->get();
+				$data['master'] = DB::table('pengalaman_uraian_kerja')->where('pengalaman_uraian_kerja.id',$id)
+					->leftJoin('tenaga_kerja', 'pengalaman_uraian_kerja.nama_pekerjaan', '=', 'tenaga_kerja.id')
+					->first();
+				$data['pengalaman'] = DB::table('pengalaman_uraian_kerja')
+					->where('pengalaman_uraian_kerja.id',$id)
+					->leftJoin('tenaga_kerja_pengalaman_perusahaan', 'tenaga_kerja_pengalaman_perusahaan.tenaga_kerja_id', '=', 'pengalaman_uraian_kerja.id')
+					->leftJoin('pengalaman_perusahaan', 'pengalaman_perusahaan.id', '=', 'tenaga_kerja_pengalaman_perusahaan.pengalaman_perusahaan_id')
+					->leftJoin('daftar_uraian_tugas', 'daftar_uraian_tugas.id', '=', 'tenaga_kerja_pengalaman_perusahaan.daftar_uraian_tugas_id')
+					// ->leftJoin('enumeration', 'pengalaman_uraian_kerja.pengguna_jasa_id', '=', 'enumeration.id')
+					->get();
 				$data['sertifikat'] = DB::table('tenaga_kerja_sertifikat')->where('tenaga_kerja_id',$id)->get();
 
 				if($typecv == 2){
@@ -675,8 +675,8 @@ set_time_limit(120);
 			{
 				$row = $i+1;
 				$templateProcessor->setValue('c#'.$row, '');
-				$templateProcessor->setValue('waktu_pelaksanaan_start_end#'.$row, $data['pengalaman'][$i]->waktu_pelaksanaan_start.'-'.$data['pengalaman'][$i]->waktu_pelaksanaan_end);
-				$templateProcessor->setValue('posisi_yang_diusulkan#'.$row, $data['pengalaman'][$i]->posisi_yang_diusulkan);
+				$templateProcessor->setValue('waktu_pelaksanaan_start_end#'.$row, $data['pengalaman'][$i]->periode_kerja_dari.'-'.$data['pengalaman'][$i]->periode_kerja_sampai);
+				$templateProcessor->setValue('posisi_yang_diusulkan#'.$row, $data['master']->posisi_yang_diusulkan);
 				$templateProcessor->setValue('nama_proyek#'.$row, $data['pengalaman'][$i]->nama_proyek);
 				$templateProcessor->setValue('lokasi_proyek#'.$row, $data['pengalaman'][$i]->lokasi_proyek);
 				$templateProcessor->setValue('nama_perusahaan#'.$row, $data['pengalaman'][$i]->nama_perusahaan);
@@ -715,8 +715,8 @@ set_time_limit(120);
 			$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(__DIR__.'/../../../public/templatecv/template-k3s.docx');
 
 			$templateProcessor->setValue('nama', $data['master']->nama);
-			$templateProcessor->setValue('jabatan', $data['master']->jabatan);
-			$templateProcessor->setValue('ttl', $data['master']->tempat.','.$data['master']->tanggal_lahir);
+			$templateProcessor->setValue('jabatan', $data['master']->posisi_yang_diusulkan);
+			$templateProcessor->setValue('ttl', $data['master']->tempat_lahir.','.$data['master']->tanggal_lahir);
 			$templateProcessor->setValue('pendidikan_formal', $data['master']->pendidikan_formal);
 			$templateProcessor->setValue('nama', $data['master']->nama);
 
@@ -769,8 +769,9 @@ set_time_limit(120);
 			$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(__DIR__.'/../../../public/templatecv/template-kementrian.docx');
 
 			$templateProcessor->setValue('nama', $data['master']->nama);
-			$templateProcessor->setValue('jabatan', $data['master']->jabatan);
-			$templateProcessor->setValue('ttl', $data['master']->tempat.','.$data['master']->tanggal_lahir);
+			$templateProcessor->setValue('posisi_yang_diusulkan', $data['master']->posisi_yang_diusulkan);
+			$templateProcessor->setValue('tempat_lahir', $data['master']->tempat_lahir);
+			$templateProcessor->setValue('tanggal_lahir',$data['master']->tanggal_lahir);
 			$templateProcessor->setValue('pendidikan_formal', $data['master']->pendidikan_formal);
 			$templateProcessor->setValue('tahun', $data['master']->tahun);
 			$templateProcessor->setValue('pendidikan_non_formal', $data['master']->pendidikan_non_formal);
@@ -782,7 +783,7 @@ set_time_limit(120);
 			foreach($data['pengalaman'] as $p)
 			{
 				$templateProcessor->setValue('c#'.$r,'');
-				$templateProcessor->setValue('nama_perusahaan#'.$r,$p->nama_perusahaan);
+				$templateProcessor->setValue('nama_perusahaan#'.$r,$data['master']->nama_perusahaan);
 				$templateProcessor->setValue('nama_proyek#'.$r,$p->nama_proyek);
 				$templateProcessor->setValue('waktu_pelaksanaan#'.$r,$p->waktu_pelaksanaan_start.'-'.$p->waktu_pelaksanaan_end);
 				$templateProcessor->setValue('posisi_yang_diusulkan#'.$r,$p->posisi_yang_diusulkan);

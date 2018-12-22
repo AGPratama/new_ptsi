@@ -62,8 +62,8 @@
 			$this->form = [];
 			$this->form[] = ['label'=>'Nama Pekerja','name'=>'nama_pekerjaan','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10', 'datatable'=>'tenaga_kerja,nama'];
 			$this->form[] = ['label'=>'Nama Perusahaan','name'=>'nama_perusahaan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','value'=>'PT. Surveyor Indonesia'];
-			$this->form[] = ['label'=>'Tanggal Lahir','name'=>'ttl','type'=>'date','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Pendidikan Formal','name'=>'pendidikan_formal','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Tanggal Lahir','name'=>'ttl','type'=>'date','validation'=>'required|min:1|max:255','width'=>'col-sm-10','disabled'=>'disabled'];
+			$this->form[] = ['label'=>'Pendidikan Formal','name'=>'pendidikan_formal','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'readonly'];
 			$this->form[] = ['label'=>'Pendidikan Non Formal','name'=>'pendidikan_non_formal','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Penguasaan Bahasa','name'=>'penguasaan_bahasa','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','value'=>'Baik'];
 			$this->form[] = ['label'=>'Posisi Yang Diusulkan','name'=>'posisi_yang_diusulkan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
