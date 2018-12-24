@@ -76,7 +76,7 @@
 			$columns_pengalaman_perusahaan[] = ['label'=>'Waktu Pelaksaan Selesai','name'=>'periode_kerja_sampai','type'=>'date'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Durasi (bulan)','name'=>'durasi','type'=>'text'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Posisi Penugasan','name'=>'daftar_uraian_tugas_id','type'=>'select', 'datatable' => 'daftar_uraian_tugas,nama_posisi'];
-			$columns_pengalaman_perusahaan[] = ['label'=>'Posisi Penugasan Detail','name'=>'uraian_tugas','type'=>'text'];
+			$columns_pengalaman_perusahaan[] = ['label'=>'Posisi Penugasan Detail','name'=>'uraian_tugas','type'=>'textarea'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'text'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Surat Referensi','name'=>'surat_referensi','type'=>'upload'];
 			$this->form[] = ['label'=>'Pengalaman Kerja','name'=>'pengalaman_perusahaan','type'=>'child','columns'=>$columns_pengalaman_perusahaan,'table'=>'tenaga_kerja_pengalaman_perusahaan','foreign_key'=>'tenaga_kerja_id'];
@@ -256,7 +256,7 @@
 					$.ajax({
 						url: '/api/daftar_uraian_tugas?id='+$(this).val()
 					}).done(function(msg){
-						$('#pengalamankerjauraian_tugas').val(msg.uraian_tugas);
+						$('#pengalamankerjauraian_tugas').html(msg.uraian_tugas);
 					});
 				});
 
