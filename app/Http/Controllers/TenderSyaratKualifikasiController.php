@@ -28,12 +28,15 @@ class TenderSyaratKualifikasiController extends Controller
 
             // if pra
             if($tender->metode_kualifikasi_id==20){
-                $display_kualifikasi = ($tender->hasil_tender_text==35) ? 1 : 2;
+                $syarat = new MasterSyaratKualifikasi();
+                if($tender->hasil_tender_text!=35){
+                    $syarat = $syarat->where('display',2);
+                }
                 $text_kualifikasi = "Pra Kualifikasi";
-                $data = MasterSyaratKualifikasi::where('display', $display_kualifikasi)->get();
+                $data = $syarat->orderBy('sequence','ASC')->get();
             } else {
                 $text_kualifikasi = "Pasca Kualifikasi";
-                $data = MasterSyaratKualifikasi::all();
+                $data = MasterSyaratKualifikasi::orderBy('sequence','ASC')->get();
             }
             $data_response = [];
             foreach ($data as $row) {
@@ -155,7 +158,10 @@ class TenderSyaratKualifikasiController extends Controller
     public function show($id,Request $request)
     {
         if($request->tender_id != null && $request->master_syarat_kualifikasi_id != null){
-            $data = TenderSyaratKualifikasi::with('tender','master_syarat_kualifikasi.details','details')->where('tender_id',$request->tender_id)->where('master_syarat_kualifikasi_id',$request->master_syarat_kualifikasi_id)->first();
+            $data = TenderSyaratKualifikasi::with('tender','master_syarat_kualifikasi.details','details')
+                ->where('tender_id',$request->tender_id)
+                ->where('master_syarat_kualifikasi_id',$request->master_syarat_kualifikasi_id)
+                ->first();
             if(Storage::exists($data->value) || file_exists($data->value)){
                 $data->is_dokumen_exist = true;
             }else{

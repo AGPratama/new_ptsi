@@ -28,12 +28,15 @@ class KelengkapanSyaratKualifikasiController extends Controller
 
             // if pra
             if($tender->metode_kualifikasi_id==20){
-                $display_kualifikasi = ($tender->hasil_tender_text==35) ? 1 : 2;
+                $syarat = new MasterSyaratKualifikasi();
+                if($tender->hasil_tender_text!=35){
+                    $syarat = $syarat->where('display',2);
+                }
                 $text_kualifikasi = "Pra Kualifikasi";
-                $data = MasterSyaratKualifikasi::where('display', $display_kualifikasi)->get();
+                $data = $syarat->orderBy('sequence','ASC')->get();
             } else {
                 $text_kualifikasi = "Pasca Kualifikasi";
-                $data = MasterSyaratKualifikasi::all();
+                $data = MasterSyaratKualifikasi::orderBy('sequence','ASC')->get();
             }
             $data_response = [];
             foreach ($data as $k=>$row) {
