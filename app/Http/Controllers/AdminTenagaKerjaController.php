@@ -630,7 +630,8 @@ set_time_limit(120);
 				$typecv = $request->input('typecv');
 				$id = $request->input('tenaga_kerja_id');
 
-				$data['master'] = DB::table('pengalaman_uraian_kerja')->where('pengalaman_uraian_kerja.id',$id)
+				$data['master'] = DB::table('pengalaman_uraian_kerja')
+					->where('pengalaman_uraian_kerja.id',$id)
 					->leftJoin('tenaga_kerja', 'pengalaman_uraian_kerja.nama_pekerjaan', '=', 'tenaga_kerja.id')
 					->first();
 				$data['pengalaman'] = DB::table('pengalaman_uraian_kerja')
@@ -640,8 +641,26 @@ set_time_limit(120);
 					->leftJoin('daftar_uraian_tugas', 'daftar_uraian_tugas.id', '=', 'tenaga_kerja_pengalaman_perusahaan.daftar_uraian_tugas_id')
 					// ->leftJoin('enumeration', 'pengalaman_uraian_kerja.pengguna_jasa_id', '=', 'enumeration.id')
 					->get();
-				$data['sertifikat'] = DB::table('tenaga_kerja_sertifikat')->where('tenaga_kerja_id',$id)->get();
+				$data['sertifikat'] = DB::table('tenaga_kerja_sertifikat')->where('tenaga_kerja_id',$data['master']->id)->get();
+				$data['sertifikat_tr'] = DB::table('tenaga_kerja_sertifikat_training')->where('tenaga_kerja_id',$data['master']->id)->get();
+				$data['pendidikan_non_formal'] = DB::table('tenaga_kerja_pendidikan_non_formal')->where('tenaga_kerja_id',$data['master']->id)->get();
 
+				$pendidikan_non_formal = "";
+				foreach($data['pendidikan_non_formal'] as $k=>$v){
+					$pendidikan_non_formal .= '- '.$v->nama.'\n';
+				}
+
+				$data['pendidikan_non_formal'] = $pendidikan_non_formal;
+
+				$sertifikat_all = "";
+				foreach($data['sertifikat'] as $k=>$v){
+					$sertifikat_all .= '- '.$v->nama_sertifikat.'\n';
+				}
+
+				foreach($data['sertifikat_tr'] as $k=>$v){
+					$sertifikat_all .= '- '.$v->nama.'\n';
+				}
+				$data['sertifikat_all'] = $sertifikat_all;
 				if($typecv == 2){
 					$this->generateBumn($data);
 				}else if($typecv == 3){
@@ -658,16 +677,16 @@ set_time_limit(120);
 		{
 			//print_r($data);die();
 			$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(__DIR__.'/../../../public/templatecv/sample-template.docx');
-			$templateProcessor->setValue('jabatan', $data['master']->jabatan);
-			$templateProcessor->setValue('nama_konsultan', 'Nama Konsultan');
+			$templateProcessor->setValue('jabatan', $data['master']->posisi_yang_diusulkan);
+			$templateProcessor->setValue('nama_konsultan', $data['master']->nama_perusahaan);
 			$templateProcessor->setValue('nama', $data['master']->nama);
 			$templateProcessor->setValue('sertifikat', $data['master']->sertifikat);
-			$templateProcessor->setValue('tanggal_lahir', $data['master']->tanggal_lahir);
+			$templateProcessor->setValue('tanggal_lahir', date("d F Y", strtotime($data['master']->tanggal_lahir)));
 			$templateProcessor->setValue('lama_pengalaman_kerja', $data['master']->lama_pengalaman_kerja);
 			$templateProcessor->setValue('asosiasi', $data['master']->asosiasi);
 			$templateProcessor->setValue('uraian_tugas', $data['master']->uraian_tugas);
 			$templateProcessor->setValue('pendidikan_formal', $data['master']->pendidikan_formal);
-			$templateProcessor->setValue('pendidikan_non_formal', $data['master']->pendidikan_non_formal);
+			$templateProcessor->setValue('pendidikan_non_formal', str_replace("\\n","<w:br/>",$data['pendidikan_non_formal']));
 
 			$counter = count($data['pengalaman']);
 			$templateProcessor->cloneRow('c',$counter);
@@ -675,12 +694,13 @@ set_time_limit(120);
 			{
 				$row = $i+1;
 				$templateProcessor->setValue('c#'.$row, '');
-				$templateProcessor->setValue('waktu_pelaksanaan_start_end#'.$row, $data['pengalaman'][$i]->periode_kerja_dari.'-'.$data['pengalaman'][$i]->periode_kerja_sampai);
+				$durasi = empty($data['pengalaman'][$i]->durasi) ? "" : " (".$data['pengalaman'][$i]->durasi." Months)";
+				$templateProcessor->setValue('waktu_pelaksanaan_start_end#'.$row, date("d F Y",strtotime($data['pengalaman'][$i]->periode_kerja_dari)).' - '.date("d F Y", strtotime($data['pengalaman'][$i]->periode_kerja_sampai))." ".$durasi);
 				$templateProcessor->setValue('posisi_yang_diusulkan#'.$row, $data['master']->posisi_yang_diusulkan);
 				$templateProcessor->setValue('nama_proyek#'.$row, $data['pengalaman'][$i]->nama_proyek);
 				$templateProcessor->setValue('lokasi_proyek#'.$row, $data['pengalaman'][$i]->lokasi_proyek);
 				$templateProcessor->setValue('nama_perusahaan#'.$row, $data['pengalaman'][$i]->nama_perusahaan);
-				$templateProcessor->setValue('uraian_tugas_pengalaman#'.$row, $data['pengalaman'][$i]->uraian_tugas);
+				$templateProcessor->setValue('uraian_tugas_pengalaman#'.$row, str_replace("\n","<w:br/>",$data['pengalaman'][$i]->uraian_tugas));
 			}
 
 			$cs = count($data['sertifikat']);
@@ -716,19 +736,11 @@ set_time_limit(120);
 
 			$templateProcessor->setValue('nama', $data['master']->nama);
 			$templateProcessor->setValue('jabatan', $data['master']->posisi_yang_diusulkan);
-			$templateProcessor->setValue('ttl', $data['master']->tempat_lahir.','.$data['master']->tanggal_lahir);
+			$templateProcessor->setValue('ttl', $data['master']->tempat_lahir.','.date("F d, Y", strtotime($data['master']->tanggal_lahir)));
 			$templateProcessor->setValue('pendidikan_formal', $data['master']->pendidikan_formal);
 			$templateProcessor->setValue('nama', $data['master']->nama);
 
-			$cs = count($data['sertifikat']);
-			$templateProcessor->cloneRow('c',$cs);
-			$r = 1;
-			foreach($data['sertifikat'] as $s)
-			{
-				$templateProcessor->setValue('c#'.$r, '');
-				$templateProcessor->setValue('sertifikat_child#'.$r, $s->nama_sertifikat);
-				$r++;
-			}
+			$templateProcessor->setValue('sertifikat_all', str_replace("\\n","<w:br/>",$data['sertifikat_all']));
 
 			$cp = count($data['pengalaman']);
 			$templateProcessor->cloneRow('d',$cp);
@@ -738,9 +750,10 @@ set_time_limit(120);
 				$templateProcessor->setValue('d#'.$r,'');
 				$templateProcessor->setValue('nama_perusahaan#'.$r,$p->nama_perusahaan);
 				$templateProcessor->setValue('nama_proyek#'.$r,$p->nama_proyek);
-				$templateProcessor->setValue('waktu_pelaksanaan#'.$r,$p->waktu_pelaksanaan_start.'-'.$p->waktu_pelaksanaan_end);
+				$durasi = empty($p->durasi) ? "" : " (".$p->durasi." Months)";
+				$templateProcessor->setValue('waktu_pelaksanaan#'.$r,date("F d, Y",strtotime($p->waktu_pelaksanaan_start)).' - '.date("F d, Y",strtotime($p->waktu_pelaksanaan_end)).' '.$durasi);
 				$templateProcessor->setValue('posisi_yang_diusulkan#'.$r,$p->posisi_yang_diusulkan);
-				$templateProcessor->setValue('uraian_tugas#'.$r,$p->uraian_tugas);
+				$templateProcessor->setValue('uraian_tugas#'.$r,str_replace("\n","<w:br/>",$p->uraian_tugas));
 				$r++;
 			}
 
@@ -771,10 +784,10 @@ set_time_limit(120);
 			$templateProcessor->setValue('nama', $data['master']->nama);
 			$templateProcessor->setValue('posisi_yang_diusulkan', $data['master']->posisi_yang_diusulkan);
 			$templateProcessor->setValue('tempat_lahir', $data['master']->tempat_lahir);
-			$templateProcessor->setValue('tanggal_lahir',$data['master']->tanggal_lahir);
+			$templateProcessor->setValue('tanggal_lahir',date("d F Y",strtotime($data['master']->tanggal_lahir)));
 			$templateProcessor->setValue('pendidikan_formal', $data['master']->pendidikan_formal);
 			$templateProcessor->setValue('tahun', $data['master']->tahun);
-			$templateProcessor->setValue('pendidikan_non_formal', $data['master']->pendidikan_non_formal);
+			$templateProcessor->setValue('pendidikan_non_formal', str_replace("\\n","<w:br/>",$data['pendidikan_non_formal']));
 			$templateProcessor->setValue('status_kepegawaian', $data['master']->status_kepegawaian);
 
 			$cp = count($data['pengalaman']);
@@ -787,11 +800,11 @@ set_time_limit(120);
 				$templateProcessor->setValue('nama_proyek#'.$r,$p->nama_proyek);
 				$templateProcessor->setValue('waktu_pelaksanaan#'.$r,$p->waktu_pelaksanaan_start.'-'.$p->waktu_pelaksanaan_end);
 				$templateProcessor->setValue('posisi_yang_diusulkan#'.$r,$p->posisi_yang_diusulkan);
-				$templateProcessor->setValue('uraian_tugas#'.$r,$p->uraian_tugas);
 				$templateProcessor->setValue('pengguna_jasa#'.$r, $p->value);
 				$templateProcessor->setValue('status_kepegawaian#'.$r, $p->status_kepegawaian);
 				$templateProcessor->setValue('surat_referensi#'.$r, $p->surat_referensi);
 				$templateProcessor->setValue('lokasi_proyek#'.$r, $p->lokasi_proyek);
+				$templateProcessor->setValue('uraian_tugas#'.$r,preg_replace("/\n/",'<w:br/>',$p->uraian_tugas));
 				$r++;
 			}
 

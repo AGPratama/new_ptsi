@@ -67,7 +67,7 @@
 			$this->form[] = ['label'=>'Pendidikan Non Formal','name'=>'pendidikan_non_formal','type'=>'textarea','validation'=>'required','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Penguasaan Bahasa','name'=>'penguasaan_bahasa','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','value'=>'Baik'];
 			$this->form[] = ['label'=>'Posisi Yang Diusulkan','name'=>'posisi_yang_diusulkan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Sertifikat','name'=>'sertifikat','type'=>'textarea'];
+			$this->form[] = ['label'=>'Sertifikat','name'=>'bukan_sertifikat','type'=>'textarea'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Nama Proyek','name'=>'pengalaman_perusahaan_id','type'=>'select', 'datatable' => 'pengalaman_perusahaan,nama_paket_perusahaan'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Tahun Proyek','name'=>'tahun','type'=>'text'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Lokasi Proyek','name'=>'lokasi_proyek','type'=>'text'];
@@ -76,7 +76,7 @@
 			$columns_pengalaman_perusahaan[] = ['label'=>'Waktu Pelaksaan Selesai','name'=>'periode_kerja_sampai','type'=>'date'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Durasi (bulan)','name'=>'durasi','type'=>'text'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Posisi Penugasan','name'=>'daftar_uraian_tugas_id','type'=>'select', 'datatable' => 'daftar_uraian_tugas,nama_posisi'];
-			$columns_pengalaman_perusahaan[] = ['label'=>'Posisi Penugasan Detail','name'=>'uraian_tugas','type'=>'textarea'];
+			$columns_pengalaman_perusahaan[] = ['label'=>'Posisi Penugasan Detail','name'=>'bukan_uraian_tugas','type'=>'textarea'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'text'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Surat Referensi','name'=>'surat_referensi','type'=>'upload'];
 			$this->form[] = ['label'=>'Pengalaman Kerja','name'=>'pengalaman_perusahaan','type'=>'child','columns'=>$columns_pengalaman_perusahaan,'table'=>'tenaga_kerja_pengalaman_perusahaan','foreign_key'=>'tenaga_kerja_id'];
@@ -233,7 +233,7 @@
 								if(v.nama_sertifikat!=null)
 									html += '- ' + v.nama_sertifikat + '\\n';
 							});
-							$('#sertifikat').html(html);
+							$('#bukan_sertifikat').html(html);
 						});
 					});
 				})	
@@ -256,7 +256,8 @@
 					$.ajax({
 						url: '/api/daftar_uraian_tugas?id='+$(this).val()
 					}).done(function(msg){
-						$('#pengalamankerjauraian_tugas').html(msg.uraian_tugas);
+						$('#pengalamankerjabukan_uraian_tugas').val(msg.uraian_tugas);
+						$('#pengalamankerjabukan_uraian_tugas').trigger('change');
 					});
 				});
 
