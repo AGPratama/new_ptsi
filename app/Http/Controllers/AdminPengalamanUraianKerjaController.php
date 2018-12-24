@@ -64,7 +64,7 @@
 			$this->form[] = ['label'=>'Nama Perusahaan','name'=>'nama_perusahaan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','value'=>'PT. Surveyor Indonesia'];
 			$this->form[] = ['label'=>'Tanggal Lahir','name'=>'ttl','type'=>'date','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Pendidikan Formal','name'=>'pendidikan_formal','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'readonly'];
-			$this->form[] = ['label'=>'Pendidikan Non Formal','name'=>'pendidikan_non_formal','type'=>'textarea','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Pendidikan Non Formal','name'=>'pendidikan_non_formal','type'=>'textarea','validation'=>'required','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Penguasaan Bahasa','name'=>'penguasaan_bahasa','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','value'=>'Baik'];
 			$this->form[] = ['label'=>'Posisi Yang Diusulkan','name'=>'posisi_yang_diusulkan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Sertifikat','name'=>'sertifikat','type'=>'textarea'];
