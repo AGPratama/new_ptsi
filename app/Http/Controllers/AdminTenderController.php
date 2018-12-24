@@ -74,7 +74,7 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			$this->form[] = ['label'=>'Metode Dokumen','name'=>'metode_dokumen_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`Key` = \'MetodeDokumen\''];
 			$this->form[] = ['label'=>'Metode Evaluasi','name'=>'metode_evaluasi_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`Key` = \'MetodeEvaluasi\''];
 			$this->form[] = ['label'=>'Status Tender','name'=>'hasil_tender_text','type'=>'radio','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key` = \'HasilTender\''];
-            $this->form[] = ['label'=>'Pengumuman Hasil Tender','name'=>'pengumuman_hasil_tender','type'=>'upload','validation'=>'required','width'=>'col-sm-10'];
+            $this->form[] = ['label'=>'Pengumuman Hasil Tender','name'=>'pengumuman_hasil_tender','type'=>'upload','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Ao Name','name'=>'ao_name','type'=>'select2','validation'=>'required','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'AOName\''];
 
             $columns_lainnya[] = ['label'=>'Lainnya','name'=>'lainnya','type'=>'text'];
