@@ -296,10 +296,11 @@
                         } else if($scope.form.master_syarat_kualifikasi.details[x].field_type==66){
                             const datatable = $scope.form.master_syarat_kualifikasi.details[x].datatable.split(",");
                             data += '<select class="form-control" ng-model="form.details['+index+'].value">';
-                            await $http.get(baseurlapi+datatable[0])
+                            const condition = (datatable[2] && datatable[3]) ? "?"+datatable[2]+'='+datatable[3] : "";
+                            await $http.get(baseurlapi+datatable[0]+condition)
                                 .then(async(res)=>{
                                     res.data.data.forEach((v,i)=>{
-                                        data += '<option value="'+v.id+'">'+v.nama+'</option>';
+                                        data += '<option value="'+v.id+'">'+v[datatable[1]]+'</option>';
                                     })
                                     $loading.finish('save');
                                 }).catch((err)=>{
