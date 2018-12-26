@@ -197,7 +197,11 @@
         $scope.showPopup=()=>{
             $scope.open('../../../views/kelengkapanSyaratKualifikasi.html','lg');
             $scope.form={};
-        }
+        };
+        $scope.go_to_file=()=>{
+            window.open(baseurl+'/'+$scope.form.master_syarat_kualifikasi.file_upload)
+        };
+
         $scope.DetailsRow=1;
         $scope.addDetails=async()=>{
             if($scope.form.details==undefined)$scope.form.details=[];

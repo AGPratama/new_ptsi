@@ -179,6 +179,9 @@
             $scope.form={};
         }
         $scope.DetailsRow=1;
+        $scope.go_to_file=()=>{
+            window.open(baseurl+'/'+$scope.form.master_syarat_kualifikasi.file_upload)
+        }
         $scope.addDetails=async()=>{
             if($scope.form.details==undefined)$scope.form.details=[];
             for (let i = 0; i < $scope.DetailsRow; i++) {

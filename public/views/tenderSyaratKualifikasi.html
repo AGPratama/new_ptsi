@@ -35,6 +35,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-12 no-padding" ng-hide="!form.master_syarat_kualifikasi.file_upload">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-3">Fixed Dokumen</label>
+                            <div class="col-md-9">
+                                <a href="" ng-click="go_to_file()">Download</a>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group row clearfix" ng-if="!form.master_syarat_kualifikasi.is_dokumen">
                         <label class="col-sm-3"><b>Data Of
                                 <%form.master_syarat_kualifikasi.nama%></b></label>
