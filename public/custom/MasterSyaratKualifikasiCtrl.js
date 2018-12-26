@@ -2,8 +2,13 @@
     'use strict';
     app.controller('MasterSyaratKualifikasiCtrl', MasterSyaratKualifikasiCtrl)
     //// JavaScript Code ////
-    function MasterSyaratKualifikasiCtrl($log,MasterSyaratKualifikasiSvc, $timeout, $scope,surveyor,$compile,$uibModal,$filter,toastr,$loading) {
-        var selectedstrorage = {}
+    function MasterSyaratKualifikasiCtrl($log,MasterSyaratKualifikasiSvc, $timeout, $scope,surveyor,$compile,$uibModal,$filter,toastr,$loading,$window) {
+        var selectedstrorage = {};
+        var baseurl = $window.location.href.split('//')[1];
+        https = $window.location.href.split('//')[0];
+        baseurl = baseurl.split('/')[0];
+        $scope.baseurl = https + '//' + baseurl;
+
         selectedstrorage.state = { core: { selected: [] } }
         localStorage.setItem('jstree', JSON.stringify(selectedstrorage))
         $scope.treeEventsObj = {
@@ -74,12 +79,10 @@
                     $scope.data.push(temp);
                     $scope.treeData=$scope.data;
                     $scope.treeConfig.version++;
-                    console.log($scope.treeData,'Ini Data tree');
                     $scope.isLoading=false;
                 }
             }).catch((err)=>{
                 $scope.isLoading=false;
-                console.log(err,'Ini Errror');
             })
         }
         getTreeData();
@@ -154,6 +157,10 @@
                 $scope.form.details[i].InputType = $filter('filter')($scope.listInputType, {'id':form.details[i].field_type},true)[0] || undefined ;
             }
         }
+        $scope.go_to_file=()=>{
+            console.log($scope.form);
+            window.open($scope.baseurl+'/'+$scope.form.file_upload, '_blank');
+        };
         $scope.view_object=async ()=>{
             var index=$scope.data.findIndex(x => x.id == $scope.currentId);
             if(index !=-1){
@@ -181,7 +188,8 @@
                     $scope.form.details[i].field_type=$scope.form.details[i].InputType.id;
                 }
             }
-            MasterSyaratKualifikasiSvc.create($scope.form).then(async (res)=>{
+            $scope.form.file_upload = $scope.files.name;
+            MasterSyaratKualifikasiSvc.create($scope.form, $scope.files).then(async (res)=>{
                 if(res.status==200){
                     getTreeData();
                     $loading.finish('save');                    
@@ -204,11 +212,13 @@
             for (let i = 0; i < $scope.form.details.length; i++) {
                 $scope.form.details[i].field_type=$scope.form.details[i].InputType.id;
             }
-            MasterSyaratKualifikasiSvc.update($scope.form).then((res)=>{
+            $scope.form.file_upload = $scope.files.file.name;
+            MasterSyaratKualifikasiSvc.update($scope.form, $scope.files).then((res)=>{
                 if(res.status==200){
                     getTreeData();
                     $loading.finish('save');                    
                     toastr.success("Successfully Updated Data")
+                    $scope.form=res.data.data;
                     $timeout(()=>{
                         angular.element('#hideButton').triggerHandler('click');
                     })
@@ -239,6 +249,14 @@
                 $scope.doEdit();
             }
         }
+        $scope.files={};
+        $scope.$on("seletedFile", function (event, args) {
+            $scope.$apply(function () {
+                $scope.files.file=args.file;
+            });
+            console.log($scope.files,'INI');
+        });
+
     }   
     //// Angular Code ////
 })(angular);

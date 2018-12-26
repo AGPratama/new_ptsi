@@ -356,7 +356,6 @@
                         method: 'POST',
                         url: baseurl+"tender-syarat-kualifikasi",
                         headers: { 'Content-Type': undefined },
-                        headers: { 'Content-Type': undefined },
                         transformRequest: function (data) {
                             var formData = new FormData();
                             formData.append("model", angular.toJson(data.model));

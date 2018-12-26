@@ -20,6 +20,15 @@
                     </div>
                     <div class="col-sm-12 no-padding">
                         <div class="form-group row clearfix">
+                            <label class="col-sm-3">Fixed File</label>
+                            <div class="col-md-9">
+                                <a href="#" ng-click="go_to_file()" ng-hide="!form.file_upload">Download</a>
+                                <input type="file" upload-files class="form-control" ng-readonly="!control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 no-padding">
+                        <div class="form-group row clearfix">
                             <label class="col-sm-12">
                                 <input type="checkbox" ng-model="form.is_dokumen" ng-disabled="!control"> Document
                             </label>

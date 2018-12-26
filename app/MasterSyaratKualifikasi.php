@@ -8,7 +8,7 @@ class MasterSyaratKualifikasi extends Model
 {
     use SoftDeletes;
     protected $table = "master_syarat_kualifikasi";
-    protected $fillable = ['parent_id','nama','is_dokumen','is_leaf'];
+    protected $fillable = ['parent_id','nama','is_dokumen','is_leaf','file_upload'];
     protected $casts = [
         "is_dokumen" => "boolean",
         "is_leaf" => "boolean"

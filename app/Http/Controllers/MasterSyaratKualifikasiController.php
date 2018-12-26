@@ -9,6 +9,8 @@ use App\MasterSyaratKualifikasi;
 use App\MasterSyaratKualifikasiDetail;
 use App\Http\Resources\MasterSyaratKualifikasiResource;
 use App\Http\Requests\MasterSyaratKualifikasiRequest;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class MasterSyaratKualifikasiController extends Controller
 {
@@ -73,8 +75,15 @@ class MasterSyaratKualifikasiController extends Controller
         DB::beginTransaction();
         try {
             $data = MasterSyaratKualifikasi::with('details')->findOrFail($id);
-            $data->update($request->all());
-            $data->details()->sync($request->details);
+            $request->model = json_decode($request->model);
+            if($request->file_detail){
+                $folder =  public_path().'/../storage/app/uploads/fixedfile/';
+                File::isDirectory($folder) or File::makeDirectory($folder, 0777, true, true);
+                $path = Storage::putFile('uploads/fixedfile', $request->file_detail['file']);
+                $request->model->file_upload = $path;
+            }
+            $data->update((array)$request->model);
+            $data->details()->sync((array)$request->model->details);
             $resource = new MasterSyaratKualifikasiResource(MasterSyaratKualifikasi::with('details')->findOrFail($id));
             DB::commit();
         } catch (Exception $e) {

@@ -185,13 +185,43 @@ app.factory('MasterSyaratKualifikasiSvc', function ($http, $window) {
             var url = baseurl + 'master-syarat-kualifikasi/' + id;
             return $http.get(url);
         },
-        create: function (data) {
+        create: function (data,files) {
             var url = baseurl + 'master-syarat-kualifikasi'
-            return $http.post(url, data)
+            var files=files;
+            return $http({
+                method: 'POST',
+                url: url, 
+                headers: { 'Content-Type': undefined },
+                transformRequest: function (data) {
+                    var formData = new FormData();
+                    formData.append("model", angular.toJson(data.model));
+    
+                    for (const [id, file] of Object.entries(files)){
+                        formData.append("file_detail["+id+"]", file);
+                    } 
+                    return formData;                               
+                },
+                data: { model: data, file_detail: files }
+            })
         },
-        update: function (data) {
+        update: function (data, files) {
             var url = baseurl + 'master-syarat-kualifikasi/' + data.id;
-            return $http.put(url, data)
+            return $http({
+                method: 'POST',
+                url: url, 
+                headers: { 'Content-Type': undefined },
+                transformRequest: function (data) {
+                    var formData = new FormData();
+                    formData.append('_method','PUT');
+                    formData.append("model", angular.toJson(data.model));
+                    console.log(data);
+                    for (const [id, file] of Object.entries(data.file_detail)){
+                        formData.append("file_detail["+id+"]", file);
+                    } 
+                    return formData;                               
+                },
+                data: { model: data, file_detail: files }
+            })
         },
         delete: function (id) {
             var url = baseurl + 'master-syarat-kualifikasi/' + id;
