@@ -60,7 +60,7 @@ class TenderSyaratKualifikasiController extends Controller
                         }
                     }
 
-                    if(!empty($tender_syarat_kualifikasi->master_suyarat_kualifikasi->file_upload)){
+                    if(!empty($tender_syarat_kualifikasi->master_syarat_kualifikasi->file_upload)){
                         $row->complete = true;
                     }
 
