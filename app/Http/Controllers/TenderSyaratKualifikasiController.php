@@ -40,7 +40,7 @@ class TenderSyaratKualifikasiController extends Controller
             }
             $data_response = [];
             foreach ($data as $row) {
-                $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details')
+                $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details','master_syarat_kualifikasi')
                     ->where('master_syarat_kualifikasi_id', $row->id)
                     ->where('tender_id',$request->tender_id)
                     ->where('active',1)->first();
@@ -59,6 +59,11 @@ class TenderSyaratKualifikasiController extends Controller
                             $row->complete = true;
                         }
                     }
+
+                    if(!empty($tender_syarat_kualifikasi->master_suyarat_kualifikasi->file_upload)){
+                        $row->complete = true;
+                    }
+
                     $row->completed = $tender_syarat_kualifikasi->completed;
                     $row->verified = $tender_syarat_kualifikasi->verified;
                     $row->sequence = $tender_syarat_kualifikasi->sequence;
@@ -111,17 +116,23 @@ class TenderSyaratKualifikasiController extends Controller
                         }
                     }
 
-                    $dokumen = $request->file("dokumen");
-                    $request->model = json_decode($request->model);
-                    if ($dokumen != null) {
-                        $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details')->findOrFail($request->model->id);
+                    $dokumen = $request->file("file_detail");
+                    if($request->model){
+                        $request->model = json_decode($request->model);
+                    } else {
+                        $request->model = $request;
+                    }
+                    $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details')->findOrFail($request->model->id);
+                    if($tender_syarat_kualifikasi->master_syarat_kualifikasi->file_upload){
+                        $request->model->completed = 1;
+                    }
+                    if ($request->model->master_syarat_kualifikasi->is_dokumen) {
                         $folder =  public_path().'/../storage/app/uploads/tender/'.$tender_syarat_kualifikasi->tender_id;
                         File::isDirectory($folder) or File::makeDirectory($folder, 0777, true, true);
-                        $path = Storage::putFile('uploads/tender/'.$tender_syarat_kualifikasi->tender_id, $dokumen);
+                        $path = Storage::putFile('uploads/tender/'.$tender_syarat_kualifikasi->tender_id, $dokumen['file']);
                         $request->model->value = $path;
                         $tender_syarat_kualifikasi->update((array)$request->model);
                     }else{
-                        $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details')->findOrFail($request->model->id);
                         $tender_syarat_kualifikasi->update((array)$request->model);
                         $details = json_decode(json_encode($request->model->details), true);
                         $tender_syarat_kualifikasi->details()->sync($details);

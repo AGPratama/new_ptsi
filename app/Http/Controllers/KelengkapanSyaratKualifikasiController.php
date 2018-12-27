@@ -40,7 +40,7 @@ class KelengkapanSyaratKualifikasiController extends Controller
             }
             $data_response = [];
             foreach ($data as $k=>$row) {
-                $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details')
+                $tender_syarat_kualifikasi = TenderSyaratKualifikasi::with('details','master_syarat_kualifikasi')
                     ->where('master_syarat_kualifikasi_id', $row->id)
                     ->where('tender_id',$request->tender_id)
                     ->where('active',1)->first();
@@ -59,10 +59,15 @@ class KelengkapanSyaratKualifikasiController extends Controller
                             $row->complete = true;
                         }
                     }else{
-                        if($tender_syarat_kualifikasi->details->count() > 0){
+                        if($tender_syarat_kualifikasi->details->count() > 0
+                        || !empty($tender_syarat_kualifikasi->master_suyarat_kualifikasi->file_upload)){
                             $row->complete = true;
                         }
                     }
+                    if(!empty($tender_syarat_kualifikasi->master_syarat_kualifikasi->file_upload)){
+                        $row->complete = true;
+                    }
+            
                     $row->completed = $tender_syarat_kualifikasi->completed;
                     $row->verified = $tender_syarat_kualifikasi->verified;
                     $row->sequence = $tender_syarat_kualifikasi->sequence;
