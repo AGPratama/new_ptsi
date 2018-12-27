@@ -212,7 +212,9 @@
             for (let i = 0; i < $scope.form.details.length; i++) {
                 $scope.form.details[i].field_type=$scope.form.details[i].InputType.id;
             }
-            $scope.form.file_upload = $scope.files.file.name;
+            if($scope.files.hasOwnProperty('file')){
+                $scope.form.file_upload = $scope.files.file.name;
+            }
             MasterSyaratKualifikasiSvc.update($scope.form, $scope.files).then((res)=>{
                 if(res.status==200){
                     getTreeData();

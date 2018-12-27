@@ -35,9 +35,14 @@ class MasterSyaratKualifikasiController extends Controller
         DB::beginTransaction();
         try {
             $request->request->add(['is_leaf' => true]);
-            $master_syarat_kualifikasi = new MasterSyaratKualifikasi($request->all());
+            $request->model = json_decode($request->model);
+            $master_syarat_kualifikasi = new MasterSyaratKualifikasi((array)$request->model);
             $master_syarat_kualifikasi->save();
-            $master_syarat_kualifikasi->details()->sync($request->details);
+            $details = array();
+            foreach($request->model->details as $k=>$v){
+                $details[] = (array)$v;
+            }
+            $master_syarat_kualifikasi->details()->sync($details);
             if ($master_syarat_kualifikasi->parent_id != null) {
                 $parent = MasterSyaratKualifikasi::findOrFail($master_syarat_kualifikasi->parent_id);
                 $parent->is_leaf = false;
@@ -83,7 +88,11 @@ class MasterSyaratKualifikasiController extends Controller
                 $request->model->file_upload = $path;
             }
             $data->update((array)$request->model);
-            $data->details()->sync((array)$request->model->details);
+            $details = array();
+            foreach($request->model->details as $k=>$v){
+                $details[] = (array)$v;
+            }
+            $data->details()->sync($details);
             $resource = new MasterSyaratKualifikasiResource(MasterSyaratKualifikasi::with('details')->findOrFail($id));
             DB::commit();
         } catch (Exception $e) {
