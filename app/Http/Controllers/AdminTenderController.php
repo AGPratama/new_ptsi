@@ -41,7 +41,6 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 					return $row->id;
 				}
 			}];
-			$this->col[] = ["label"=>"No Tender","name"=>"no_tender"];
 			$this->col[] = ["label"=>"Nama Tender","name"=>"nama_tender"];
 			$this->col[] = ["label"=>"Nama Pengguna Jasa","name"=>"nama_pengguna_jasa"];
 			$this->col[] = ["label"=>"Kategori Pengguna Jasa","name"=>"pengguna_jasa_id","join"=>"enumeration,value"];
@@ -51,6 +50,7 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			$this->col[] = ["label"=>"Jadwal Tender", "name"=>"jadwal_pengumuman_pemenang"];
 			$this->col[] = ["label"=>"Metode Kualifikasi","name"=>"metode_kualifikasi_id","join"=>"enumeration,value"];
 			$this->col[] = ["label"=>"AO Name","name"=>"ao_name",'join'=>'enumeration,value'];
+			$this->col[] = ["label"=>"Status","name"=>"hasil_tender_text",'join'=>'enumeration,value'];
             //$this->col[] = ["label"=>"Bidang / Sub Bidang","name"=>"sub_bidang"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
@@ -58,7 +58,7 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			$this->form = [];
 			$this->form[] = ['label'=>'Nama Tender','name'=>'nama_tender','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'No Tender','name'=>'no_tender','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'No Berita Acara','name'=>'no_berita_acara','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'No Berita Acara','name'=>'no_berita_acara','type'=>'text','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nama Pengguna Jasa','name'=>'nama_pengguna_jasa','type'=>'text','validation'=>'required','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Kategori Pengguna Jasa','name'=>'pengguna_jasa_id','type'=>'radio','validation'=>'required','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key` = \'KategoriPenggunaJasa\''];
             $this->form[] = ['label'=>'Bidang / Sub Bidang','name'=>'sub_bidang','type'=>'radio','validation'=>'required','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key` = \'SubBidang\''];
@@ -69,16 +69,21 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
             $columns_tender_file[] = ['label'=>'File','name'=>'dokumen_tender_file','type'=>'upload'];
 			$this->form[] = ['label'=>'Tender File','name'=>'dokumen_tender_file','type'=>'child','columns'=>$columns_tender_file,'table'=>'tender_file','foreign_key'=>'tender_id'];
 
+			$this->form[] = ['label'=>'Ao Name','name'=>'ao_name','type'=>'select2','validation'=>'required','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'AOName\''];
+			$this->form[] = ['label'=>'Email Ao Name','name'=>'email_ao_name','type'=>'email','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Nama Penandatangan Surat','name'=>'signing_name','type'=>'text','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Jabatan Penandatangan Surat','name'=>'signing_jabatan','type'=>'text','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nilai Pagu','name'=>'nilai_pagu','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nilai Hps','name'=>'nilai_hps','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Metode Dokumen','name'=>'metode_dokumen_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`Key` = \'MetodeDokumen\''];
 			$this->form[] = ['label'=>'Metode Evaluasi','name'=>'metode_evaluasi_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`Key` = \'MetodeEvaluasi\''];
-			$this->form[] = ['label'=>'Status Tender','name'=>'hasil_tender_text','type'=>'radio','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key` = \'HasilTender\''];
-            $this->form[] = ['label'=>'Pengumuman Hasil Tender','name'=>'pengumuman_hasil_tender','type'=>'upload','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Ao Name','name'=>'ao_name','type'=>'select2','validation'=>'required','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'AOName\''];
 
             $columns_lainnya[] = ['label'=>'Lainnya','name'=>'lainnya','type'=>'text'];
 			$this->form[] = ['label'=>'Lainnya','name'=>'lainnya','type'=>'child','columns'=>$columns_lainnya,'table'=>'tender_lainnya','foreign_key'=>'tender_id'];
+
+            $this->form[] = ['label'=>'Status Tender','name'=>'hasil_tender_text','type'=>'radio','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key` = \'HasilTender\''];
+            $this->form[] = ['label'=>'Pengumuman Hasil Tender','name'=>'pengumuman_hasil_tender','type'=>'upload','width'=>'col-sm-10'];
+
             # END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM

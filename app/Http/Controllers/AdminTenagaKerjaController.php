@@ -46,20 +46,13 @@ set_time_limit(120);
 			$this->col[] = ["label"=>"Pendidikan","name"=>"pendidikan_formal"];
 			$this->col[] = ["label"=>"Lama Pengalaman Kerja","name"=>"lama_pengalaman_kerja"];
             $this->col[] = ["label"=>"Tahun Ijazah","name"=>"tahun_ijazah"];
-            $this->col[] = ['label'=>'Teknik / None Teknik','name'=>'teknik_id','join'=>'enumeration,value',"visible"=>false];
+            $this->col[] = ['label'=>'Teknik / Non Teknik','name'=>'teknik_id','join'=>'enumeration,value',"visible"=>false];
 			$this->col[] = ['label'=>'Strata','name'=>'strata_id','join'=>'enumeration,value',"visible"=>false];
 			$this->col[] = ['label'=>'Jurusan','name'=>'jurusan',"visible"=>false];
 			$this->col[] = ['label'=>'Institusi','name'=>'institusi',"visible"=>false];
 			$this->col[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian',"visible"=>false];
 			$this->col[] = ['label'=>'Sertifikat Training','name'=>'sertifikat_training'];
 			$this->col[] = ['label'=>'No Sertifikat','name'=>'no_sertifikat',"visible"=>false];
-			$this->col[] = ['label'=>'Nomor Sertifikat TKDN Migas','name'=>'no_sertifikat_tkdn_migas'];
-			$this->col[] = ['label'=>'Tanggal Sertifikat TKDN Migas','name'=>'tgl_sertifikat_tkdn_migas'];
-			$this->col[] = ['label'=>'Masa Berlaku Sertifikat TKDN Migas','name'=>'masa_berlaku_tkdn_migas'];
-			$this->col[] = ['label'=>'SKA/Brevet','name'=>'ska'];
-			$this->col[] = ['label'=>'Nomor SKA/Brevet','name'=>'no_ska'];
-			$this->col[] = ['label'=>'Tanggal SKA/Brevet','name'=>'tgl_ska'];
-			$this->col[] = ['label'=>'Masa Berlaku SKA/Brevet','name'=>'masa_berlaku_ska'];
 			$this->col[] = ['label'=>'Asosiasi','name'=>'asosiasi'];
 			$this->col[] = ['label'=>'Referensi','name'=>'referensi'];
 			$this->col[] = ['label'=>'TKDN/PTSI','name'=>'tkdn_ptsi',"visible"=>false];
@@ -92,13 +85,14 @@ set_time_limit(120);
 			$this->form[] = ['label'=>'NPWP','name'=>'npwp','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Bukti Pajak','name'=>'bukti_pajak','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Pendidikan Formal','name'=>'pendidikan_formal','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Lama Pengalaman Kerja','name'=>'lama_pengalaman_kerja','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Tahun Ijazah','name'=>'tahun_ijazah','type'=>'text','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Lama Pengalaman Kerja','name'=>'lama_pengalaman_kerja','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Bukti Ijasah','name'=>'bukti_ijasah','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Teknik / None Teknik','name'=>'teknik_id','type'=>'select2','validation'=>'integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'Teknik\''];
+			$this->form[] = ['label'=>'Teknik / Non Teknik','name'=>'teknik_id','type'=>'select2','validation'=>'integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'TeknikNonTeknik\''];
 			$this->form[] = ['label'=>'Strata','name'=>'strata_id','type'=>'select2','validation'=>'integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'Strata\''];
 			$this->form[] = ['label'=>'Jurusan','name'=>'jurusan','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Institusi','name'=>'institusi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'radio','validation'=>'min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'StatusKepegawaian\''];
 
 			$columns_pendidikan[] = ['label'=>'Pendidikan Non Formal','name'=>'nama','type'=>'text'];
 			$this->form[] = ['label'=>'Pendidikan Non Formal','name'=>'tenaga_kerja_pendidikan_non_formal','type'=>'child','columns'=>$columns_pendidikan,'table'=>'tenaga_kerja_pendidikan_non_formal','foreign_key'=>'tenaga_kerja_id'];
@@ -108,25 +102,14 @@ set_time_limit(120);
 			$sert_training[] = ['label'=>'Tanggal Sertifikat','name'=>'sertifikat_date','type'=>'date','validation'=>'date'];
 			$sert_training[] = ['label'=>'Masa Berlaku Sertifikat','name'=>'sertifikat_end_date','type'=>'date','validation'=>'date'];
 			$sert_training[] = ['label'=>'Attachment','name'=>'sertifikat','type'=>'upload'];
+			$sert_training[] = ['label'=>'Asosiasi','name'=>'asosiasi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
+			$sert_training[] = ['label'=>'Referensi','name'=>'referensi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Sertifikat Training','name'=>'tenaga_kerja_sertifikat_training','type'=>'child','columns'=>$sert_training,'table'=>'tenaga_kerja_sertifikat_training','foreign_key'=>'tenaga_kerja_id'];
-			$this->form[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'radio','validation'=>'min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'StatusKepegawaian\''];
 			//$this->form[] = ['label'=>'Sertifikat','name'=>'sertifikat','type'=>'upload','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			// $this->form[] = ['label'=>'Sertifikat Training','name'=>'sertifikat_training','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 			// $this->form[] = ['label'=>'No Sertifikat','name'=>'no_sertifikat','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'No Sertifikat TKDN Migas','name'=>'no_sertifikat_tkdn_migas','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Tanggal Sertifikat TKDN Migas','name'=>'tgl_sertifikat_tkdn_migas','type'=>'date','validation'=>'date','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Masa Berlaku TKDN Migas','name'=>'masa_berlaku_tkdn_migas','type'=>'date','validation'=>'date','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'SKA/Brevet','name'=>'ska','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'No SKA/Brevet','name'=>'no_ska','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Tanggal SKA/Brevet','name'=>'tgl_ska','type'=>'date','validation'=>'date','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Masa Berlaku SKA/Brevet','name'=>'masa_berlaku_ska','type'=>'date','validation'=>'date','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Asosiasi','name'=>'asosiasi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Referensi','name'=>'referensi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-10'];
 
 			# END FORM DO NOT REMOVE THIS LINE
-			$columns[] = ['label'=>'Nama Sertifikat','name'=>'nama_sertifikat','type'=>'text'];
-			$columns[] = ['label'=>'Sertifikat','name'=>'sertifikat','type'=>'upload'];
-			$this->form[] = ['label'=>'Sertifikat Detail','name'=>'tenaga_kerja_sertifikat','type'=>'child','columns'=>$columns,'table'=>'tenaga_kerja_sertifikat','foreign_key'=>'tenaga_kerja_id'];
 
 
 			# OLD START FORM
@@ -276,7 +259,13 @@ set_time_limit(120);
 				$('#select-sertifikat').on('change', function(){
 					$('#modal-trigger-sertifikat').attr('data-target','#sertifikat-'+$(this).val())
 				})
-			
+				
+				$(function(){
+					$('#tahun_ijazah').on('keyup', function(){
+						console.log('tes');
+						$('#lama_pengalaman_kerja').val((new Date()).getFullYear()-$(this).val());
+					})	
+				});
 			";
 
 

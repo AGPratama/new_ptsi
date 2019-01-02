@@ -32,7 +32,6 @@
 			$this->col = [];
 			$this->col[] = ["label"=>"Nama Pengguna Jasa","name"=>"nama_pengguna_jasa"];
 			$this->col[] = ["label"=>"Kategori Pengguna Jasa","name"=>"kategori_pengguna_jasa_id","join"=>"enumeration,value"];
-			$this->col[] = ["label"=>"Divisi","name"=>"divisi"];
 			$this->col[] = ["label"=>"Email","name"=>"email"];
 			$this->col[] = ["label"=>"No Telp","name"=>"no_telp"];
 			$this->col[] = ["label"=>"Contact Person","name"=>"contact_person"];
@@ -44,7 +43,6 @@
 			$this->form = [];
 			$this->form[] = ['label'=>'Nama Pengguna Jasa','name'=>'nama_pengguna_jasa','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Kategori Pengguna Jasa','name'=>'kategori_pengguna_jasa_id','type'=>'select2','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key` = \'KategoriPenggunaJasa\''];
-			$this->form[] = ['label'=>'Divisi','name'=>'divisi','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Email','name'=>'email','type'=>'email','validation'=>'required|min:1|max:255|email|unique:pelanggan','width'=>'col-sm-10','placeholder'=>'Please enter a valid email address'];
 			$this->form[] = ['label'=>'No Telp','name'=>'no_telp','type'=>'number','validation'=>'required|numeric','width'=>'col-sm-10','placeholder'=>'You can only enter the number only'];
 			$this->form[] = ['label'=>'Contact Person','name'=>'contact_person','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];

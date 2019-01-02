@@ -132,8 +132,13 @@ class KelengkapanSyaratKualifikasiController extends Controller
                         $tender_syarat_kualifikasi->details()->sync($request->details);
                     }
                     $tender_id = $tender_syarat_kualifikasi->tender_id;
-                    $verified = TenderSyaratKualifikasi::where('tender_id',$tender_id)->where('verified',true)->count();
-                    $total_data = TenderSyaratKualifikasi::where('tender_id',$tender_id)->count();
+                    $verified = TenderSyaratKualifikasi::where('tender_id',$tender_id)
+                        ->join('master_syarat_kualifikasi','master_syarat_kualifikasi.id','=','master_syarat_kualifikasi_id')
+                        ->where('verified',true)
+                        ->count();
+                    $total_data = TenderSyaratKualifikasi::where('tender_id',$tender_id)
+                        ->join('master_syarat_kualifikasi','master_syarat_kualifikasi.id','=','master_syarat_kualifikasi_id')
+                        ->count();
                     $persentase = ($verified/$total_data)*100;
                     $tender = Tender::findOrFail($tender_id);
                     $tender->progress_kelengkapan = $persentase;

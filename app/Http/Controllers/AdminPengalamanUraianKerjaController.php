@@ -37,7 +37,6 @@
 			$this->col[] = ["label"=>"Tanggal Lahir","name"=>"ttl"];
 			$this->col[] = ["label"=>"Pendidikan Formal","name"=>"pendidikan_formal"];
 			$this->col[] = ["label"=>"Penguasaan Bahasa","name"=>"penguasaan_bahasa"];
-			$this->col[] = ["label"=>"Pendidikan Non Formal","name"=>"pendidikan_non_formal"];
 			$this->col[] = ["label"=>"Posisi Yang Diusulkan","name"=>"posisi_yang_diusulkan"];
 			$this->col[] = ['label'=>'Tahun','name'=>'tahun'];
 			$this->col[] = ['label'=>'Nama Proyek','name'=>'nama_proyek'];
@@ -47,7 +46,6 @@
 			$this->col[] = ['label'=>'Waktu Pelaksanaan Selesai','name'=>'waktu_pelaksanaan_end'];
 			$this->col[] = ["label"=>"Lama Pekerjaan","name"=>"lama_pekerjaan"];
 			$this->col[] = ["label"=>"Posisi Penugasan","name"=>"uraian_tugas"];
-			$this->col[] = ["label"=>"Uraian Pekerjaan","name"=>"uraian_tugas"];
 			$this->col[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian'];
 			$this->col[] = ['label'=>'Surat Referensi','name'=>'surat_referensi'];
 			$this->col[] = ['label'=>'Generate CV','callback'=>function($row){
@@ -77,7 +75,8 @@
 			$columns_pengalaman_perusahaan[] = ['label'=>'Durasi (bulan)','name'=>'durasi','type'=>'text'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Posisi Penugasan','name'=>'daftar_uraian_tugas_id','type'=>'select', 'datatable' => 'daftar_uraian_tugas,nama_posisi'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Posisi Penugasan Detail','name'=>'bukan_uraian_tugas','type'=>'textarea'];
-			$columns_pengalaman_perusahaan[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'text'];
+			$columns_pengalaman_perusahaan[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'select','validation'=>'min:1|max:255','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`key`=\'StatusKepegawaian\''];
+			// $columns_pengalaman_perusahaan[] = ['label'=>'Status Kepegawaian','name'=>'status_kepegawaian','type'=>'text'];
 			$columns_pengalaman_perusahaan[] = ['label'=>'Surat Referensi','name'=>'surat_referensi','type'=>'upload'];
 			$this->form[] = ['label'=>'Pengalaman Kerja','name'=>'pengalaman_perusahaan','type'=>'child','columns'=>$columns_pengalaman_perusahaan,'table'=>'tenaga_kerja_pengalaman_perusahaan','foreign_key'=>'tenaga_kerja_id'];
 			// $this->form[] = ['label'=>'Tahun','name'=>'tahun','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
