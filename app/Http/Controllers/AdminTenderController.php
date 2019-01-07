@@ -51,6 +51,12 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			$this->col[] = ["label"=>"Metode Kualifikasi","name"=>"metode_kualifikasi_id","join"=>"enumeration,value"];
 			$this->col[] = ["label"=>"AO Name","name"=>"ao_name",'join'=>'enumeration,value'];
 			$this->col[] = ["label"=>"Status","name"=>"hasil_tender_text",'join'=>'enumeration,value'];
+			$this->col[] = ['label'=>'Update Status','callback'=>function($row){
+				$datas['row'] = $row;
+				$datas['status'] = DB::table('enumeration')->where('key','HasilTender')->get();
+				return View('tender.status', $datas);
+			}];
+
             //$this->col[] = ["label"=>"Bidang / Sub Bidang","name"=>"sub_bidang"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
@@ -211,7 +217,17 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
             | $this->script_js = "function() { ... }";
             |
          */
-        $this->script_js = null;
+        $this->script_js = "
+            function submitform(id, status, status_text)
+            {
+                $.get('/admin/tender/updatestatus?tender_id='+id+'&status='+status+'&status_text='+status_text, function(rs){
+                    if(rs==1){
+                        alert('Berhasil Diubah');
+                    }
+                    window.location.reload();
+                });
+            }
+        ";
 
 
             /*
@@ -287,6 +303,11 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
             //Your code here
     }
 
+    public function getupdatestatus(DRequest $request)
+    {
+        $rs = DB::table('tender')->where('id', $request->tender_id)->update(['hasil_tender_text'=>$request->status]);
+        return $rs;
+    }
 
         /*
         | ----------------------------------------------------------------------
