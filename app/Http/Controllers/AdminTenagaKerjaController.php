@@ -36,7 +36,24 @@ set_time_limit(120);
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Nama","name"=>"nama"];
+			$this->col[] = ["label"=>"Nama","name"=>"nama",'callback'=>function($row){
+				DB::connection()->enableQueryLog();
+				$rs = DB::table('tenaga_kerja_sertifikat_training')
+					->where('tenaga_kerja_id',$row->id)
+					->whereRaw('NOW() > DATE_ADD(sertifikat_end_date, INTERVAL -30 DAY) AND sertifikat_end_date IS NOT NULL')
+					->get();
+				$queries = DB::getQueryLog();
+				$last_query = end($queries);
+				if($rs->count()){
+					$str = "";
+					foreach($rs as $r){
+						$str .= '<br><span class="alert-danger">Training '.$r->nama.' expired '.$r->sertifikat_end_date.'</span>';
+					}
+					return $row->nama.$str;
+				}else{
+					return $row->nama;
+				}
+			}];
 			//$this->col[] = ["label"=>"Jabatan","name"=>"jabatan"];
 			$this->col[] = ["label"=>"Alamat","name"=>"alamat"];
             $this->col[] = ['label'=>'Tempat Lahir','name'=>'tempat_lahir'];
@@ -66,7 +83,7 @@ set_time_limit(120);
 
 			$this->col[] = ['label'=>'Attachment Sertf Training','callback'=>function($row){
 				$datas['row'] = $row;
-				$datas['sertifikat_training'] = DB::table('tenaga_kerja_sertifikat')->where('tenaga_kerja_id',$row->id)->get();
+				$datas['sertifikat_training'] = DB::table('tenaga_kerja_sertifikat_training')->where('tenaga_kerja_id',$row->id)->get();
 				return View('tenagakerja.attachment2', $datas);
 			}];
 

@@ -79,8 +79,9 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
 			$this->form[] = ['label'=>'Email Ao Name','name'=>'email_ao_name','type'=>'email','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Nama Penandatangan Surat','name'=>'signing_name','type'=>'text','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Jabatan Penandatangan Surat','name'=>'signing_jabatan','type'=>'text','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Nilai Pagu','name'=>'nilai_pagu','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Nilai Hps','name'=>'nilai_hps','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+            
+            $this->form[] = ['label'=>'Nilai Pagu','name'=>'nilai_pagu','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+            $this->form[] = ['label'=>'Nilai Hps','name'=>'nilai_hps','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Metode Dokumen','name'=>'metode_dokumen_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`Key` = \'MetodeDokumen\''];
 			$this->form[] = ['label'=>'Metode Evaluasi','name'=>'metode_evaluasi_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'enumeration,value','datatable_where'=>'`Key` = \'MetodeEvaluasi\''];
 
@@ -227,6 +228,30 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
                     window.location.reload();
                 });
             }
+
+            $(function(){
+                $('#form-group-nilai_pagu').hide();
+                $('#form-group-nilai_hps').hide();
+                $('#form-group-metode_dokumen_id').hide();
+                $('#form-group-metode_evaluasi_id').hide();
+                $('#form-group-lainnya').hide();
+
+                $('[name=hasil_tender_text]').change(function(){
+                    if($(this).val()==37){
+                        $('#form-group-nilai_pagu').hide();
+                        $('#form-group-nilai_hps').hide();
+                        $('#form-group-metode_dokumen_id').hide();
+                        $('#form-group-metode_evaluasi_id').hide();
+                        $('#form-group-lainnya').hide();
+                    }else{
+                        $('#form-group-nilai_pagu').show();
+                        $('#form-group-nilai_hps').show();
+                        $('#form-group-metode_dokumen_id').show();
+                        $('#form-group-metode_evaluasi_id').show();
+                        $('#form-group-lainnya').show();
+                    }
+                });
+            });
         ";
 
 

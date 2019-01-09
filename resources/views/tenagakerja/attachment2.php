@@ -12,7 +12,7 @@
         <option value="">--Sertifikat--</option>
         <?php if(!empty($sertifikat_training)){
             foreach ($sertifikat_training as $val): ?>
-                <option value="<?=$val->id ?>"><?= $val->nama_sertifikat ?></option>
+                <option value="<?=$val->id ?>"><?= $val->nama ?></option>
             <?php endforeach; ?>
         <?php } ?>
     </select>
