@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 Route::get('/admin/tender/step2?id={$id}', 'AdminTenderController@getStep2')->name('getStep2AddTender');
 Route::get('/admin/tender/step3?id={$id}', 'AdminTenderController@getStep3')->name('getStep3AddTender');
+Route::get('/admin/syarat_kualifikasi/cetak/{$id}', 'AdminSyaratKualifikasiController@cetak')->name('cetakDokumen');

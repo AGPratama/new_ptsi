@@ -83,7 +83,7 @@ use Illuminate\Support\Facades\Storage;
 	        | @showIf 	   = If condition when action show. Use field alias. e.g : [id] == 1
 	        |
 	        */
-	        $this->addaction = array();
+	        $this->addaction = array(['label'=>'Print','url'=>'syarat_kualifikasi/cetak/[id]']);
 
 
 	        /*
@@ -154,7 +154,13 @@ use Illuminate\Support\Facades\Storage;
 	        | $this->script_js = "function() { ... }";
 	        |
 	        */
-	        $this->script_js = NULL;
+			$this->script_js = "
+				$(function(){
+					$('.clickcetak').click(function(){
+						$('#downloaded-'+$(this).data('cetak')).attr('checked',true);
+					});
+				});
+			";
 
 
             /*
@@ -360,6 +366,66 @@ use Illuminate\Support\Facades\Storage;
 
             $this->cbView('syaratkualifikasi.custom_add', $data);
         }
+
+		public function getCetak($id){
+            $data['page_menu'] = 'Cetak Dokumen';
+			$data['page_title'] = 'Cetak Dokumen';
+			$data['cetak'] = DB::table('tender_syarat_kualifikasi')
+				->where('tender_syarat_kualifikasi.tender_id',$id)
+				->where(function($query){
+					$query->orWhere('master_syarat_kualifikasi.is_dokumen',1);
+					$query->orWhere('master_syarat_kualifikasi_detail.field_type',64);
+					return $query;
+				})
+				->leftJoin(
+					'tender_syarat_kualifikasi_detail',
+					'tender_syarat_kualifikasi_detail.tender_syarat_kualifikasi_id',
+					'=',
+					'tender_syarat_kualifikasi.id'
+				)
+				->leftJoin(
+					'master_syarat_kualifikasi_detail',
+					'master_syarat_kualifikasi_detail.id',
+					'=',
+					'tender_syarat_kualifikasi_detail.master_syarat_kualifikasi_detail_id'
+				)
+				->leftJoin(
+					'master_syarat_kualifikasi',
+					'master_syarat_kualifikasi.id',
+					'=',
+					'tender_syarat_kualifikasi.master_syarat_kualifikasi_id'
+				)
+				->select(
+					DB::raw('
+						CASE WHEN master_syarat_kualifikasi_detail.field_name<>""
+						THEN CONCAT(master_syarat_kualifikasi.nama," - ",master_syarat_kualifikasi_detail.field_name)
+						ELSE master_syarat_kualifikasi.nama
+						END AS nama
+					'),
+					DB::raw('
+						CASE WHEN master_syarat_kualifikasi_detail.field_name<>""
+						THEN CONCAT("uploads/tender/details/",tender_syarat_kualifikasi_detail.value)
+						ELSE tender_syarat_kualifikasi.value
+						END AS value
+					')
+				)
+				->orderBy('tender_syarat_kualifikasi.sequence', 'ASC')
+				->orderBy('tender_syarat_kualifikasi_detail.sequence','ASC')
+				->get();
+
+			$surat = DB::table('tender_surat_korespondensi')
+				->select('name as nama','location as value')
+				->where('tender_id', $id)
+				->Join(
+					'surat_korespondensi',
+					'surat_korespondensi.id',
+					'=',
+					'tender_surat_korespondensi.surat_id'
+				)
+				->get();
+			$data['cetak'] = $data['cetak']->merge($surat);
+			$this->cbView('syaratkualifikasi.cetak', $data);
+		}
 
 		public function postSave_surat(DRequest $request){
 			$this->cbLoader();

@@ -66,6 +66,45 @@ class TenderController extends Controller
         return response()->json(['error_code' => 0,'message' => 'Successfully Notification']);
     }
 
+    public function by_instansi(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $tender = Tender::where('pengguna_jasa_id',$request->instansi)->get();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+        return response()->json(['total' => $tender->count()]);
+    }
+
+    public function by_bidang(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $tender = Tender::where('sub_bidang',$request->bidang)->get();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+        return response()->json(['total' => $tender->count()]);
+    }
+
+    public function by_status(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $tender = Tender::where('hasil_tender_text',$request->status)->get();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
+        return response()->json(['total' => $tender->count()]);
+    }
+
     /**
      * Display a listing of the resource.
      *

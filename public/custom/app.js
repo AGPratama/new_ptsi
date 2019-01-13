@@ -359,6 +359,21 @@ app.factory('DashboardSvc', function ($http, $window) {
         update: function (data) {
             var url = baseurl + 'tender/' + data.id;
             return $http.put(url, data)
+        },
+        getDataByInstansi: async function(instansi){
+            var url = baseurl + 'tender/by_instansi/' + instansi;
+            data = await $http.get(url);
+            return data.data.total;
+        },
+        getDataByBidang: async function(bidang){
+            var url = baseurl + 'tender/by_bidang/' + bidang;
+            data = await $http.get(url);
+            return data.data.total;
+        },
+        getDataByStatus: async function(status){
+            var url = baseurl + 'tender/by_status/' + status;
+            data = await $http.get(url);
+            return data.data.total;
         }
     }
 })

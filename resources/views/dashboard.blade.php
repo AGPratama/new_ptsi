@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="panel panel-default">
-                <div class="panel-heading">INTANSI</div>
+                <div class="panel-heading">INSTANSI</div>
                 <div class="panel-body">
                 <canvas id="pieChart" width="400" height="400"></canvas>
                 </div>
@@ -15,7 +15,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">BIDANG/SUB BIDANG</div>
                 <div class="panel-body">
-                    <canvas id="barChart" width="400" height="400"></canvas>
+                    <canvas id="pieChartBidang" width="400" height="400"></canvas>
                 </div>
             </div>
         </div>
