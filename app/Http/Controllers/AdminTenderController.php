@@ -334,6 +334,39 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
         return $rs;
     }
 
+    public function getSurat(DRequest $request)
+    {
+        //print_r($data);die();
+        $data = DB::table('tender')
+            ->where('tender.id', $request->id)
+            ->join('enumeration','enumeration.id','=','tender.sub_bidang')
+            ->get();
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
+        // exit();
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(__DIR__.'/../../../storage/app/'.$request->file);
+        $templateProcessor->setValue('signing_name', $data[0]->signing_name);
+        $templateProcessor->setValue('signing_jabatan', $data[0]->signing_jabatan);
+        $templateProcessor->setValue('sub_bidang', $data[0]->value);
+        $templateProcessor->setValue('email_ao_name', $data[0]->email_ao_name);
+        $day = [1 => "Senin", 2 => "Selasa", 3 => "Rabu", 4 => "Kamis", 5 => "Jum'at", 6 => "Sabtu", 7 => "Minggu"];
+        $templateProcessor->setValue('hari', $day[date("N")]);
+        $templateProcessor->setValue('date_now', date("d F, Y"));
+
+        $filename = $data[0]->nama_tender.'.docx';
+        $templateProcessor->saveAs(__DIR__.'/../../../public/'.$filename);
+        header ( "Expires: Mon, 1 Apr 1974 05:00:00 GMT" );
+        header ( "Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT" );
+        header ( "Cache-Control: no-cache, must-revalidate" );
+        header ( "Pragma: no-cache" );
+        header ('Content-type: application/vnd.openxmlformats-officedocument.wordprocessingml.document;');
+        header ( "Content-Disposition: attachment; filename=".$filename);
+        readfile($filename);
+        //return redirect('admin/tenaga_kerja');
+    }
+
+
         /*
         | ----------------------------------------------------------------------
         | Hook for manipulate query of index result

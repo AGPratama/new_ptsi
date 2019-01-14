@@ -424,6 +424,7 @@ use Illuminate\Support\Facades\Storage;
 				)
 				->get();
 			$data['cetak'] = $data['cetak']->merge($surat);
+			$data['id'] = $id;
 			$this->cbView('syaratkualifikasi.cetak', $data);
 		}
 

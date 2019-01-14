@@ -45,7 +45,11 @@
                                             $i++;
                                         ?>
                                         <div id="control-{{$ls->nama}}">
-                                            <a href="{{$url}}" target="_blank" id="click-{{$i}}" data-cetak="{{$i}}" class="clickcetak btn btn-success style {{$disabled}}">View</a>
+                                            @if(strpos($ls->value,'suratkorespondensi')===FALSE)
+                                                <a href="{{$url}}" target="_blank" id="click-{{$i}}" data-cetak="{{$i}}" class="clickcetak btn btn-success style {{$disabled}}">View</a>
+                                            @else
+                                                <a href="/admin/tender/surat?file={{$ls->value}}&id={{$id}}" target="_blank" id="click-{{$i}}" data-cetak="{{$i}}" class="clickcetak btn btn-success style {{$disabled}}">View Surat</a>
+                                            @endif
                                             <input type="checkbox" id="downloaded-{{$i}}" disabled />Downloaded
                                         </div>
 
