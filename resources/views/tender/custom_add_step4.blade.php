@@ -60,7 +60,7 @@
                                             <td><input type="text" value="{{$arr_seq[$ut->id]}}" name="sequence[{{$ut->id}}]"></td>
                                             <td>
                                                 <div id="download-{{$ut->id}}">
-                                                    <a href="{{url($ut->location)}}" class="btn btn-default">Download</a>
+                                                    <a href="/admin/tender/surat?file={{$ut->location}}&id={{$tender_id}}" class="btn btn-default">Download</a>
                                                 </div>
                                             </td>
                                         </tr>

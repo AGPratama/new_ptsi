@@ -418,17 +418,6 @@ use Illuminate\Support\Facades\Storage;
 				->orderBy('tender_syarat_kualifikasi_detail.sequence','ASC')
 				->get();
 
-			$surat = DB::table('tender_surat_korespondensi')
-				->select('name as nama','location as value')
-				->where('tender_id', $id)
-				->Join(
-					'surat_korespondensi',
-					'surat_korespondensi.id',
-					'=',
-					'tender_surat_korespondensi.surat_id'
-				)
-				->get();
-			$data['cetak'] = $data['cetak']->merge($surat);
 			$data['id'] = $id;
 			$this->cbView('syaratkualifikasi.cetak', $data);
 		}
