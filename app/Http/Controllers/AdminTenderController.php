@@ -341,10 +341,11 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
             ->where('tender.id', $request->id)
             ->join('enumeration','enumeration.id','=','tender.sub_bidang')
             ->get();
-        // echo '<pre>';
-        // print_r($data);
-        // echo '</pre>';
-        // exit();
+
+        $direktur = DB::table('pengurus_badan_usaha')
+            ->where('jabatan', 'Direktur')
+            ->get();
+
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(__DIR__.'/../../../storage/app/'.$request->file);
         $templateProcessor->setValue('signing_name', $data[0]->signing_name);
         $templateProcessor->setValue('signing_jabatan', $data[0]->signing_jabatan);
@@ -353,6 +354,9 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
         $day = [1 => "Senin", 2 => "Selasa", 3 => "Rabu", 4 => "Kamis", 5 => "Jum'at", 6 => "Sabtu", 7 => "Minggu"];
         $templateProcessor->setValue('hari', $day[date("N")]);
         $templateProcessor->setValue('date_now', date("d F, Y"));
+
+        $templateProcessor->setValue('nama_direktur', $direktur[0]->nama);
+        $templateProcessor->setValue('jabatan_direktur', 'Direktur');
 
         $filename = $data[0]->nama_tender.'.docx';
         $templateProcessor->saveAs(__DIR__.'/../../../public/'.$filename);

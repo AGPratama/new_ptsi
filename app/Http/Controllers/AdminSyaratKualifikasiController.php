@@ -373,6 +373,7 @@ use Illuminate\Support\Facades\Storage;
 			$data['cetak'] = DB::table('tender_syarat_kualifikasi')
 				->where('tender_syarat_kualifikasi.tender_id',$id)
 				->where(function($query){
+					$query->orWhere('master_syarat_kualifikasi.file_upload','<>','');
 					$query->orWhere('master_syarat_kualifikasi.is_dokumen',1);
 					$query->orWhere('master_syarat_kualifikasi_detail.field_type',64);
 					return $query;
@@ -397,13 +398,17 @@ use Illuminate\Support\Facades\Storage;
 				)
 				->select(
 					DB::raw('
-						CASE WHEN master_syarat_kualifikasi_detail.field_name<>""
+						CASE WHEN master_syarat_kualifikasi.file_upload<>""
+						THEN master_syarat_kualifikasi.nama
+						WHEN master_syarat_kualifikasi_detail.field_name<>""
 						THEN CONCAT(master_syarat_kualifikasi.nama," - ",master_syarat_kualifikasi_detail.field_name)
 						ELSE master_syarat_kualifikasi.nama
 						END AS nama
 					'),
 					DB::raw('
-						CASE WHEN master_syarat_kualifikasi_detail.field_name<>""
+						CASE WHEN master_syarat_kualifikasi.file_upload<>""
+						THEN master_syarat_kualifikasi.file_upload
+						WHEN master_syarat_kualifikasi_detail.field_name<>""
 						THEN CONCAT("uploads/tender/details/",tender_syarat_kualifikasi_detail.value)
 						ELSE tender_syarat_kualifikasi.value
 						END AS value
