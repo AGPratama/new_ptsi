@@ -346,6 +346,11 @@ class AdminTenderController extends \crocodicstudio\crudbooster\controllers\CBCo
             ->where('jabatan', 'Direktur')
             ->get();
 
+        echo '<pre>';
+        print_r($data);
+        print_r($direktur);
+        echo '</pre>';
+        exit();
         $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(__DIR__.'/../../../storage/app/'.$request->file);
         $templateProcessor->setValue('signing_name', $data[0]->signing_name);
         $templateProcessor->setValue('signing_jabatan', $data[0]->signing_jabatan);
