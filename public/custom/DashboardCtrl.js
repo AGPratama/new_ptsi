@@ -52,42 +52,32 @@
             data: {
                 datasets: [{
                     data: [
-                        await DashboardSvc.getDataByBidang(28), 
-                        await DashboardSvc.getDataByBidang(29), 
-                        await DashboardSvc.getDataByBidang(30),
-                        await DashboardSvc.getDataByBidang(31),
-                        await DashboardSvc.getDataByBidang(32),
-                        await DashboardSvc.getDataByBidang(33),
-                        await DashboardSvc.getDataByBidang(34)
+                        await DashboardSvc.getDataByBidang(72), 
+                        await DashboardSvc.getDataByBidang(73), 
+                        await DashboardSvc.getDataByBidang(74),
+                        await DashboardSvc.getDataByBidang(75)
                     ],
                     backgroundColor: [
                         '#d34836',
                         '#f4c20d',
                         '#367fa9',
-                        '#d36863',
-                        '#fc402d',
-                        '#3fa936',
+                        '#d36863'
                     ],
                     borderColor: [
                         'rgba(255,99,132,1)',
                         'rgba(255, 206, 86, 1)',
                         'rgba(54, 162, 235, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
+                        'rgba(75, 192, 192, 1)'
                     ],
                     borderWidth: 1
                 }],
 
                 // These labels appear in the legend and in the tooltips when hovering different arcs
                 labels: [
-                    'TKDN',
-                    'Review Design',
-                    'Studi Kelayakan',
-                    'Pengawasan',
-                    'Survey Kepuasan Pelanggan',
-                    'Konsultasi',
-                    'Survey'
+                    'P3DN',
+                    'Infrastruktur',
+                    'Sertifikasi',
+                    'Konsultasi dan Engineering Services'
                 ]
             },
             options: {

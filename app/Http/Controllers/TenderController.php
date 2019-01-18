@@ -83,7 +83,10 @@ class TenderController extends Controller
     {
         DB::beginTransaction();
         try {
-            $tender = Tender::where('sub_bidang',$request->bidang)->get();
+            $tender = Tender::Join('enumeration as e','e.id','=','tender.sub_bidang')
+                ->Join('enumeration as e2','e2.id','=','e.parent_id')
+                ->where('e2.id',$request->bidang)
+                ->get();
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
